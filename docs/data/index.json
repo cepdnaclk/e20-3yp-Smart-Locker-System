@@ -28,5 +28,6 @@
             "email": "isurunawinne@eng.pdn.ac.lk"
         }
     ],
+    "description": "The SmartSecure Locker System is an IoT-based solution for secure storage in shared spaces like universities, gyms, and offices. It features real-time locker availability, biometric access, and alternative location suggestions when lockers are full. Users can manage lockers via a mobile app, ensuring convenience and security.",
     "tags": ["Web", "Embedded Systems"]
 }
