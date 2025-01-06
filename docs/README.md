@@ -3,20 +3,21 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and project title
-repository-name: eYY-3yp-project-template
-title: Project Template
+repository-name: e20-3yp-Smart-Locker-System
+title: Locker System
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
 
-# Project Title
+# Smart Locker System
 
 ---
 
 ## Team
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
+-  E/20/036, K.G.R.I. Bandara, [email](mailto:e20036@eng.pdn.ac.lk)
+-  E/20/212, R.M.S.H. Kumarasinghe , [email](mailto:e20212@eng.pdn.ac.lk)
+-  E/20/350, J.P.D.N. Sandamali, [email](mailto:e20350@eng.pdn.ac.lk)
+-  E/20/377, V.P.H. Sidantha, [email](mailto:e20377@eng.pdn.ac.lk)
 
 <!-- Image (photo/drawing of the final hardware) should be here -->
 
