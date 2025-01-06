@@ -2,10 +2,10 @@ ___
 # Smart Locker System
 
 Team members
-- E/20/036 Bandara K.G.R.I.
-- E/20/212 Kumarasinghe R.M.S.H.
-- E/20/350 Sandamali J.P.D.N.
-- E/20/377 Sidantha V.P.H.
+-  E/20/036, K.G.R.I. Bandara, [email](mailto:e20036@eng.pdn.ac.lk)
+-  E/20/212, R.M.S.H. Kumarasinghe , [email](mailto:e20212@eng.pdn.ac.lk)
+-  E/20/350, J.P.D.N. Sandamali, [email](mailto:e20350@eng.pdn.ac.lk)
+-  E/20/377, V.P.H. Sidantha, [email](mailto:e20377@eng.pdn.ac.lk)
 ---
 ___
 
