@@ -11,10 +11,10 @@ title: Smart Locker System
 
 # Secure X Smart Locker System
 <!-- -->
-![Secure X Smart Locker System](docs/images/logo.png)
+![Secure X Smart Locker System](images/logo.png)
 ---
 <!--  -->
-![Secure X Smart Locker System](docs/images/logo.png)
+![Secure X Smart Locker System](images/logo.png)
 ---
 
 ## Team
