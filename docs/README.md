@@ -11,7 +11,7 @@ title: Smart Locker System
 
 # Secure X Smart Locker System
 <!-- -->
-![Secure X Smart Locker System](docs/image/logo.png)
+![Secure X Smart Locker System](docs/images/logo.png)
 ---
 
 ## Team
