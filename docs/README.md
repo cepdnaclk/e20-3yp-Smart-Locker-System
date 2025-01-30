@@ -9,8 +9,9 @@ title: Smart Locker System
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
 
-# Smart Locker System
-
+# Secure X Smart Locker System
+<!-- -->
+![Secure X Smart Locker System](docs/image/logo.png)
 ---
 
 ## Team
@@ -55,12 +56,21 @@ Testing done on hardware and software, detailed + summarized results
 
 ## Detailed budget
 
-All items and costs
-
-| Item          | Quantity  | Unit Cost  | Total  |
-| ------------- |:---------:|:----------:|-------:|
-| Sample item   | 5         | 10 LKR     | 50 LKR |
-
+| Item                     | Quantity  | Unit Cost  | Total    |
+| ------------------------ |:---------:|:----------:|:--------:|
+| ESP 32 board             | 1         | 1790 LKR   | 1790 LKR |
+| Ultrasonic Sensor        | 3         | 1090 LKR   | 3270 LKR |
+| Solenoid lock            | 3         | 1950 LKR   | 5850 LKR |
+| LED(Red,Green)           | 6         | 5 LKR      | 30 LKR   |
+| Relay Module             | 3         | 845 LKR    | 2535 LKR |
+| 20x4 LCD Display         | 1         | 990 LKR    | 990 LKR  |
+| R305 Fingerprint Sensor  | 1         | 9950 LKR   | 9950 LKR |
+| 4x4 Keypad               | 1         | 220 LKR    | 220 LKR  |
+| I2C module (Keypad)      | 1         | 900 LKR    | 900 LKR  |
+| I2C module (LCD Display) | 1         | 250 LKR    | 250 LKR  |
+| 5V SMPC Power supply     | 1         | 1390 LKR   | 1390 LKR |
+| 12V SMPC Power supply    | 1         | 3290 LKR   | 3290 LKR |
+| Total                    |           |            | 30465 LKR|
 ## Conclusion
 
 What was achieved, future developments, commercialization plans
