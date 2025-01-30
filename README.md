@@ -1,6 +1,8 @@
 ___
-# Smart Locker System
-
+# Secure X Smart Locker System
+<!--  -->
+![Secure X Smart Locker System](docs/images/logo.png)
+---
 Team members
 -  E/20/036, K.G.R.I. Bandara, [email](mailto:e20036@eng.pdn.ac.lk)
 -  E/20/212, R.M.S.H. Kumarasinghe , [email](mailto:e20212@eng.pdn.ac.lk)
