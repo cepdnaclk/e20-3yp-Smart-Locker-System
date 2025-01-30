@@ -13,6 +13,9 @@ title: Smart Locker System
 <!-- -->
 ![Secure X Smart Locker System](docs/images/logo.png)
 ---
+<!--  -->
+![Secure X Smart Locker System](docs/images/logo.png)
+---
 
 ## Team
 -  E/20/036, K.G.R.I. Bandara, [email](mailto:e20036@eng.pdn.ac.lk)
