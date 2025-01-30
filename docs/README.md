@@ -72,6 +72,9 @@ Testing done on hardware and software, detailed + summarized results
 | 5V SMPC Power supply     | 1         | 1390 LKR   | 1390 LKR |
 | 12V SMPC Power supply    | 1         | 3290 LKR   | 3290 LKR |
 | Total                    |           |            | 30465 LKR|
+
+
+
 ## Conclusion
 
 What was achieved, future developments, commercialization plans
