@@ -12,7 +12,7 @@ title: Smart Locker System
 # Secure X Smart Locker System
 <!-- -->
 ![Secure X Smart Locker System](images/logo.png)
----
+
 
 
 ## Team
@@ -56,6 +56,8 @@ Detailed designs with many sub-sections
 Testing done on hardware and software, detailed + summarized results
 
 ## Detailed budget
+<!-- -->
+![Detailed budget](images/budget.png)
 
 | Item                     | Quantity  | Unit Cost  | Total    |
 | ------------------------ |:---------:|:----------:|:--------:|
