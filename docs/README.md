@@ -59,9 +59,8 @@ All items and costs
 
 | Item          | Quantity  | Unit Cost  | Total  |
 | ------------- |:---------:|:----------:|-------:|
-| Sample item   | 5         | 10 LKR     | 50 LKR |
-| ------------- |:---------:|:----------:|-------:|
-| Sample item   | 5         | 10 LKR     | 50 LKR |
+| ESP 32 board   | 1         | 1790 LKR     | 1790 LKR |
+| Ultrasonic Sensor   | 3         | 1090 LKR     | 3270 LKR |
 
 ## Conclusion
 
