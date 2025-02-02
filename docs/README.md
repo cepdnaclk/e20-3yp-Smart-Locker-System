@@ -69,7 +69,7 @@ Workflow
 Testing done on hardware and software, detailed + summarized results
 
 ## Time Line
-![Locker Diagram](images/TimeLine.jpg)
+![Timeline](images/Timeline.jpg)
 
 ## Detailed budget
 <!-- -->
