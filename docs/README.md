@@ -62,14 +62,14 @@ Workflow
 
 ## Hardware and Software Designs
 
-![Technology Stack](images/TecjStack.jpg)
+![Technology Stack](images/TechStack.jpg)
 
 ## Testing
 
 Testing done on hardware and software, detailed + summarized results
 
-##Time Line
-![Locker Diagram](images/TecjStack.jpg)
+## Time Line
+![Locker Diagram](images/TimeLine.jpg)
 
 ## Detailed budget
 <!-- -->
