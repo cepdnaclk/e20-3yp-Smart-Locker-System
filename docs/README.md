@@ -45,21 +45,35 @@ Access is secured through a figerprint sensor, ensuring safety and convenience. 
 
 ## Solution Architecture
 
-High level diagram + description
+![High level diagram](images/HighLevelArchitecture.jpg)
+
+This architecture integrates Web & Mobile Apps, a Cloud Database, and Locker Hardware to ensure secure and efficient locker management.
+
+- Web App – Allows admins and users to manage lockers, track usage, and register users.
+- Mobile App – Enables students to unlock lockers, check availability, and authenticate securely.
+- Database (Cloud Storage) – Stores user data, locker status, and authentication credentials, ensuring real-time synchronization.
+- Locker System (Hardware) – Equipped with microcontrollers and biometric scanners to authenticate users and unlock lockers.
+
+Workflow
+
+- Users register via the Web or Mobile App.
+- The Locker System verifies users via biometrics and communicates with the Database.
+- If authenticated, the locker unlocks, updating the status across all systems.
 
 ## Hardware and Software Designs
 
-Detailed designs with many sub-sections
+![Technology Stack](images/TecjStack.jpg)
 
 ## Testing
 
 Testing done on hardware and software, detailed + summarized results
 
+##Time Line
+![Locker Diagram](images/TecjStack.jpg)
+
 ## Detailed budget
 <!-- -->
 ![Detailed budget](images/budget.png)
-
-
 
 
 ## Conclusion
