@@ -1,0 +1,12 @@
+com.example.secure_x.app-core-1.6.0-0 C:\Users\Dharani\.gradle\caches\transforms-3\284a410c767ad6c7a2b0ffc8d8d85981\transformed\core-1.6.0\res
+com.example.secure_x.app-jetified-window-java-1.0.0-beta04-1 C:\Users\Dharani\.gradle\caches\transforms-3\2a215381204751055df81b6269e717b7\transformed\jetified-window-java-1.0.0-beta04\res
+com.example.secure_x.app-jetified-annotation-experimental-1.1.0-2 C:\Users\Dharani\.gradle\caches\transforms-3\3d2f03fc996c2e0aa3dee5cfa3002cd1\transformed\jetified-annotation-experimental-1.1.0\res
+com.example.secure_x.app-jetified-window-1.0.0-beta04-3 C:\Users\Dharani\.gradle\caches\transforms-3\f302e75fb7efd781bcf1a29281c188da\transformed\jetified-window-1.0.0-beta04\res
+com.example.secure_x.app-debug-4 D:\ACADEMIC\SEM 5\3YP\secure_x\android\app\src\debug\res
+com.example.secure_x.app-main-5 D:\ACADEMIC\SEM 5\3YP\secure_x\android\app\src\main\res
+com.example.secure_x.app-pngs-6 D:\ACADEMIC\SEM 5\3YP\secure_x\build\app\generated\res\pngs\debug
+com.example.secure_x.app-resValues-7 D:\ACADEMIC\SEM 5\3YP\secure_x\build\app\generated\res\resValues\debug
+com.example.secure_x.app-rs-8 D:\ACADEMIC\SEM 5\3YP\secure_x\build\app\generated\res\rs\debug
+com.example.secure_x.app-mergeDebugResources-9 D:\ACADEMIC\SEM 5\3YP\secure_x\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
+com.example.secure_x.app-mergeDebugResources-10 D:\ACADEMIC\SEM 5\3YP\secure_x\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+com.example.secure_x.app-merged_res-11 D:\ACADEMIC\SEM 5\3YP\secure_x\build\app\intermediates\merged_res\debug
