@@ -60,6 +60,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>6.2.2.Final</version>
+		</dependency>
+
+		<dependency>
 			<groupId>io.opencensus</groupId>
 			<artifactId>opencensus-api</artifactId>
 			<version>0.31.1</version> <!-- Or the latest compatible version -->
