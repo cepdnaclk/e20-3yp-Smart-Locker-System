@@ -14,7 +14,7 @@
 //import java.util.Optional;
 //
 //@Controller
-//@RequestMapping("/api/auth")
+//@RequestMapping("/api/authentication")
 //public class AuthController {
 //
 //    private final NewUserRepository newUserRepository;
