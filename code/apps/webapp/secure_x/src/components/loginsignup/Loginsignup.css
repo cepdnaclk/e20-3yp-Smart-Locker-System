@@ -1,0 +1,106 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    background-color: #fdfdfd;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Container */
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Form Box */
+  .form-box {
+    background: #111;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    width: 500px;
+    text-align: center;
+  }
+  
+  /* Heading */
+  h2 {
+    margin-bottom: 20px;
+    font-size: 30px;
+  }
+  
+  /* Input Groups */
+  .input-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .input-group label {
+    display: block;
+    font-size: 25px;
+    margin-bottom: 5px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #fff;
+    background: transparent;
+    color: #fff;
+    border-radius: 5px;
+  }
+  
+  .input-group input:focus {
+    outline: none;
+    border-color: #aaa;
+  }
+  
+  /* Button */
+  button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #fff;
+    color: #000;
+    font-size: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: background 0.3s;
+  }
+  
+  button:hover {
+    background: #484747;
+  }
+  
+  /* Toggle Text */
+  .toggle-text {
+    margin-top: 15px;
+    font-size: 20px;
+  }
+  
+  .toggle-btn {
+    background: none;
+    color: #6c55ea;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 5px;
+    text-decoration: underline;
+  }
+  
+  .toggle-btn:hover {
+    color: #ccc;
+  }
+  
