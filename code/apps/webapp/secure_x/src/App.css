@@ -13,7 +13,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    /*animation: App-logo-spin infinite 20s linear;*/
+    animation: App-logo-Zoom-in-out infinite 10s linear;
   }
 }
 
@@ -32,11 +32,14 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes App-logo-Zoom-in-out {
+  0% {
+    scale: 80%;
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    scale: 120%;
+  }
+  100% {
+    scale: 80%;
   }
 }
