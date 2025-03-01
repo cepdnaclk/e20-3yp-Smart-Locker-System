@@ -3,6 +3,7 @@ import logo from './img/logo.png';
 import './App.css';
 import Loginsignup from './components/loginsignup/Loginsignup.js'; // Capitalize component names
 import NavigateButton from './components/Button/NavigateButton.js';
+import Success from './components/loginsignup/Success.js';
 
 function Home() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Loginsignup />} />
+        <Route path="/success" element={<Success />} />
       </Routes>
     </Router>
   );
