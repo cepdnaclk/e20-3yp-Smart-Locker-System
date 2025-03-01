@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:secure_x/create_user.dart';
 import 'package:secure_x/custom_app_bar.dart';
 import 'package:secure_x/main_screen.dart';
+import 'package:secure_x/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LogIn extends StatefulWidget {
@@ -72,7 +73,7 @@ class _LogInState extends State<LogIn> {
     double screenWidth=MediaQuery.of(context).size.width;
     double screenHeight=MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppColors.mainColor,
       appBar:const CustomAppBar(),
       body:SingleChildScrollView(
         child: Column(
@@ -101,7 +102,7 @@ class _LogInState extends State<LogIn> {
               child: Container(
                 padding: EdgeInsets.all(screenHeight*0.03),
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: AppColors.boxColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
@@ -112,7 +113,7 @@ class _LogInState extends State<LogIn> {
                       decoration: const InputDecoration(
                         hintText: 'User Name or Email',
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: AppColors.formFieldColor,
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -126,7 +127,7 @@ class _LogInState extends State<LogIn> {
                       decoration:const InputDecoration(
                         hintText: 'Password',
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: AppColors.formFieldColor,
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -139,8 +140,8 @@ class _LogInState extends State<LogIn> {
                         _isLoading? null: _login();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
+                        backgroundColor: AppColors.buttonBackgroundColor1,
+                        foregroundColor: AppColors.buttonForegroundColor2,
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                       ), 
                       child: _isLoading? const CircularProgressIndicator():
@@ -158,7 +159,7 @@ class _LogInState extends State<LogIn> {
                         MaterialPageRoute(builder: (context) => const CreateUser(),));
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.blue,
+                        foregroundColor: AppColors.textColor2,
                       ),
                       child: const Text('CREATE ACCOUNT')
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:secure_x/utils/colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -6,26 +7,28 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.grey[400],
+      backgroundColor: AppColors.appBarColor,
         leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.black,),
+          icon: const Icon(Icons.menu, color: AppColors.iconColor,),
           onPressed: () {
           },
         ),
-        title: ColorFiltered(
-          colorFilter:ColorFilter.mode(
-            Colors.grey[400]!,
-            BlendMode.modulate ,
+        title: Center(
+          child: ColorFiltered(
+            colorFilter:ColorFilter.mode(
+              Colors.grey[400]!,
+              BlendMode.modulate ,
+            ),
+            child: Image.asset(
+            'assets/img/logo.png',
+            height: 100,
+            width: 800,
           ),
-          child: Image.asset(
-          'assets/img/logo.png',
-          height: 100,
-          width: 800,
-        ),
+          ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.message_outlined, color: Colors.black,),
+            icon: const Icon(Icons.message_outlined, color: AppColors.iconColor,),
             onPressed: () {
             },
           ),
