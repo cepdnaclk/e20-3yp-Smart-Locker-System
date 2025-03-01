@@ -4,6 +4,7 @@ import './App.css';
 import Loginsignup from './components/loginsignup/Loginsignup.js'; // Capitalize component names
 import NavigateButton from './components/Button/NavigateButton.js';
 import Success from './components/loginsignup/Success.js';
+import Dashboard from './components/Dashboard/Dashboard.js'
 
 function Home() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Loginsignup />} />
         <Route path="/success" element={<Success />} />
+        <Route path="/dashnoard " element={<Dashboard/>}/>
       </Routes>
     </Router>
   );
