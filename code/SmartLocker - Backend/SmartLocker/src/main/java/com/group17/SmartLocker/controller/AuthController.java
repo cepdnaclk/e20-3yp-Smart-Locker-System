@@ -1,55 +1,60 @@
-//package com.group17.SmartLocker.controller;
-//
-//import com.group17.SmartLocker.model.NewUser;
-//import com.group17.SmartLocker.model.RegisteredUser;
-//import com.group17.SmartLocker.repository.NewUserRepository;
-//import com.group17.SmartLocker.repository.RegisteredUserRepository;
-//import com.group17.SmartLocker.security.JwtUtil;
-//import jakarta.servlet.http.HttpSession;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.Optional;
-//
-//@Controller
-//@RequestMapping("/api/authentication")
-//public class AuthController {
-//
-//    private final NewUserRepository newUserRepository;
-//    private final JwtUtil jwtUtil;
+package com.group17.SmartLocker.controller;
+
+import com.group17.SmartLocker.config.JwtUtil;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+import com.group17.SmartLocker.DTO.AuthRequest;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController{
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+//    private final UserRepository userRepository;
 //    private final PasswordEncoder passwordEncoder;
-//
-//    public AuthController(NewUserRepository newUserRepository, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
-//        this.newUserRepository = newUserRepository;
-//        this.jwtUtil = jwtUtil;
-//        this.passwordEncoder = passwordEncoder;
-//    }
-//
+
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+    }
+
 //    @GetMapping("/login")
-//    public String showLoginPage() {
-//        return "login"; // Returns login.html
-//    }
+//    public ResponseEntity<String> login() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //
-//    @PostMapping("/login")
-//    public String login(@RequestParam String username,
-//                        @RequestParam String password,
-//                        HttpSession session,
-//                        Model model) {
-//        Optional<NewUser> userOpt = newUserRepository.findByUsername(username);
-//
-//        if (userOpt.isPresent()) {
-//            NewUser user = userOpt.get();
-//
-//            if (passwordEncoder.matches(password, user.getPassword()) && user.getRole().equals("ROLE_ADMIN")) {
-//                String token = jwtUtil.generateToken(username);
-//                session.setAttribute("jwtToken", token);
-//                return "redirect:/api/users/pending"; // Redirect to pending users page
-//            }
+//        if (authentication.isAuthenticated()) {
+//            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+//            return ResponseEntity.ok("Login successful for user: " + userPrincipal.getUsername());
 //        }
-//
-//        model.addAttribute("error", "Invalid username or password");
-//        return "login"; // Show login page again with error
+//        return ResponseEntity.status(401).body("Login failed");
 //    }
-//}
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Authentication failed: " + e.getMessage());
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String jwt = jwtUtil.generateToken(userDetails);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("token", jwt);
+
+        return ResponseEntity.ok(jwt);
+    }
+
+}
