@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import './Success.css';
 import { useNavigate } from "react-router-dom";
 
+
 const Success = () =>{
   const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/dashnoard"); // Redirect to home after 5 seconds
+      navigate("/dashboard"); // Redirect to home after 5 seconds
     }, 5000);
 
     return () => clearTimeout(timer); // Cleanup timeout on unmount
