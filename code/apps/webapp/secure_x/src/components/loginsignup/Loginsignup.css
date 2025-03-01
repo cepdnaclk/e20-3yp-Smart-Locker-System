@@ -1,26 +1,13 @@
-/* General Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
-  
-  body {
-    background-color: #fdfdfd;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  /* Container */
+   /* Container */
   .container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   
   /* Form Box */
@@ -31,6 +18,7 @@
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     width: 500px;
     text-align: center;
+    
   }
   
   /* Heading */

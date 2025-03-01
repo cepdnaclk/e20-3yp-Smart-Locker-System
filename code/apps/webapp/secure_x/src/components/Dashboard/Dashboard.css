@@ -1,0 +1,19 @@
+.dashboard-container {
+    display:flex;
+    flex-direction: column;
+    
+    
+  }
+  
+  .dashboard-content {
+    display: flex;
+    flex: 1;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background: #ffffff;
+    color: #000;
+  }
+  
