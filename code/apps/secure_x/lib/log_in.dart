@@ -69,101 +69,107 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth=MediaQuery.of(context).size.width;
+    double screenHeight=MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.blue[100],
       appBar:const CustomAppBar(),
-      body:Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [         
-          Center(
-            child: Container(
-              width: 800,
-              height:350,
-              alignment: Alignment.center,
-              child:ClipRect(
-                child: Align(
-                  alignment: Alignment.center,
-                  heightFactor: 0.5,
-                  child: Image.asset('assets/img/logo.png',
-                  fit: BoxFit.cover,             
-                ),
-                ),
-              )             
-            ),
-          ),
-          const SizedBox(height: 10,),
-          Padding(
-            padding:const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(20),
+      body:SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [         
+            Center(
+              child: Container(
+                width: screenWidth*0.95,
+                height:screenHeight*0.35,
+                alignment: Alignment.center,
+                child:ClipRect(
+                  child: Align(
+                    alignment: Alignment.center,
+                    heightFactor: 0.5,
+                    widthFactor: 1,
+                    child: Image.asset('assets/img/logo.png',
+                    fit: BoxFit.contain,             
+                  ),
+                  ),
+                ),            
               ),
-              child: Column(
-                mainAxisAlignment:MainAxisAlignment.center,
-                children: [
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      hintText: 'User Name or Email',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
+            ),
+            SizedBox(height: 0.01*screenHeight,),
+            Padding(
+              padding:EdgeInsets.symmetric(horizontal: screenHeight*0.02),
+              child: Container(
+                padding: EdgeInsets.all(screenHeight*0.03),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  mainAxisAlignment:MainAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        hintText: 'User Name or Email',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      keyboardType: TextInputType.emailAddress,
                     ),
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(height: 10,),
-                  TextFormField(
-                    obscureText: true,
-                    controller: _passwordController,
-                    decoration:const InputDecoration(
-                      hintText: 'Password',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
+                    SizedBox(height: screenHeight*0.01,),
+                    TextFormField(
+                      obscureText: true,
+                      controller: _passwordController,
+                      decoration:const InputDecoration(
+                        hintText: 'Password',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      keyboardType: TextInputType.text,
                     ),
-                    keyboardType: TextInputType.text,
-                  ),
-                  const SizedBox(height: 10,),
-                  ElevatedButton(
-                    onPressed:(){
-                      _isLoading? null: _login();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                    ), 
-                    child: _isLoading? const CircularProgressIndicator():
-                    const Text('LOG IN',style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                    SizedBox(height: screenHeight*0.01,),
+                    ElevatedButton(
+                      onPressed:(){
+                        _isLoading? null: _login();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                      ), 
+                      child: _isLoading? const CircularProgressIndicator():
+                      const Text('LOG IN',style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10,),
-                  const Text('or'),
-                  TextButton(onPressed: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CreateUser(),));
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.blue,
+                    SizedBox(height: screenHeight*0.01,),
+                    const Text('or'),
+                    TextButton(onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CreateUser(),));
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.blue,
+                      ),
+                      child: const Text('CREATE ACCOUNT')
                     ),
-                    child: const Text('CREATE ACCOUNT')
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          )
-        ]
+            )
+          ]
+        ),
       ),
     );
   }
+
 }
