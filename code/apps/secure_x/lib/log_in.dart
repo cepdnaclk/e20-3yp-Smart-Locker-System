@@ -26,7 +26,7 @@ class _LogInState extends State<LogIn> {
       _errorMsg=null;
     });
 
-    final String endpointUrl='';
+    final String endpointUrl='http://10.0.2.2:8080/api/lockerUser';
     final headers={'Content-Type':'application/json'};
     final Map<String,String> requestBody={
       'email':_emailController.text,
