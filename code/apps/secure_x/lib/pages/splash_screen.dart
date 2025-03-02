@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secure_x/pages/log_in.dart';
+import 'package:secure_x/pages/main_screen.dart';
 import 'package:secure_x/utils/colors.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 2),(){
       Navigator.pushReplacement(
         context, 
-        MaterialPageRoute(builder: (context) => LogIn(),)
+        MaterialPageRoute(builder: (context) => MainScreen(),)
       );
     });
   }

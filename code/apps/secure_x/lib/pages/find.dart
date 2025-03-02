@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
+import 'package:secure_x/utils/custom_navigation_bar.dart';
 
-class Find extends StatelessWidget {
+class Find extends StatefulWidget {
   const Find({super.key});
 
+  @override
+  State<Find> createState() => _FindState();
+}
+
+class _FindState extends State<Find> {
+  int _selectedIndex=0;
+  void _onTabSelected(int index){
+    setState(() {
+      _selectedIndex=index;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +65,10 @@ class Find extends StatelessWidget {
           ),
           const SizedBox(height: 10),
         ],
+      ),
+      bottomNavigationBar: CustomNavigationBar(
+        selectedIndex: _selectedIndex, 
+        onTabSelected: _onTabSelected,
       ),
     );
   }
