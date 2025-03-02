@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:secure_x/pages/log_in.dart';
 import 'package:secure_x/utils/custom_navigation_bar.dart';
 import 'package:secure_x/pages/find.dart';
-import 'package:secure_x/pages/unlock.dart';
 import 'package:secure_x/pages/user.dart';
 
 class MainScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages=[
     Find(),
-    Unlock(),
+    LogIn(),
     User(),
   ];
 
