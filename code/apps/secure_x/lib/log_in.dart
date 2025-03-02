@@ -144,7 +144,7 @@ class _LogInState extends State<LogIn> {
                         foregroundColor: AppColors.buttonForegroundColor2,
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                       ), 
-                      child: _isLoading? const CircularProgressIndicator():
+                      child: //_isLoading? const CircularProgressIndicator():
                       const Text('LOG IN',style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
