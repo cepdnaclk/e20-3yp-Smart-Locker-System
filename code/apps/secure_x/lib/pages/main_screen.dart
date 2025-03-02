@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:secure_x/custom_navigation_bar.dart';
-import 'package:secure_x/find.dart';
-import 'package:secure_x/home.dart';
-import 'package:secure_x/user.dart';
+import 'package:secure_x/utils/custom_navigation_bar.dart';
+import 'package:secure_x/pages/find.dart';
+import 'package:secure_x/pages/unlock.dart';
+import 'package:secure_x/pages/user.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages=[
     Find(),
-    Home(),
+    Unlock(),
     User(),
   ];
 

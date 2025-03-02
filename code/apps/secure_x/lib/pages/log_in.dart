@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:secure_x/create_user.dart';
-import 'package:secure_x/custom_app_bar.dart';
-import 'package:secure_x/main_screen.dart';
+import 'package:secure_x/pages/create_user.dart';
+import 'package:secure_x/utils/custom_app_bar.dart';
+import 'package:secure_x/pages/main_screen.dart';
 import 'package:secure_x/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
