@@ -1,6 +1,110 @@
-.Um1{
+/* Main Container */
+.Um1 {
     flex-grow: 1;
-    padding: 20px;
-    background: #ffffff;
+    padding-left: 20%;
+    padding-top: 2%;
+    background: hsl(0, 0%, 100%);
     color: #000;
+    min-height: 100vh; /* Ensures full-page height */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers content horizontally */
+}
+
+/* Header Section */
+.header {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin-bottom: 15px;
+}
+
+/* Search Bar */
+input[type="text"] {
+    padding: 8px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Add User Button */
+.add-user {
+    background-color: #000000;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.add-user:hover {
+    background-color: #218838;
+}
+
+/* Table Styling */
+.Um1 table {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.Um1 th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.Um1 th {
+    background-color: #000000;
+    color: white;
+    font-weight: bold;
+}
+
+/* Action Buttons */
+.edit {
+    background-color: #00aaff;
+    color: black;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.delete {
+    background-color: #000000;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.edit:hover {
+    background-color: #7b7b7b;
+}
+
+.delete:hover {
+    background-color: #000000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    table {
+        width: 100%;
+    }
 }

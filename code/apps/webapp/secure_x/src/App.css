@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
+  
 }
 
 body {
@@ -12,7 +13,9 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+
 }
+
 .App {
   text-align: center;
 }
