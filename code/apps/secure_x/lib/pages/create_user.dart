@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:secure_x/custom_app_bar.dart';
-import 'package:secure_x/log_in.dart';
+import 'package:secure_x/utils/custom_app_bar.dart';
+import 'package:secure_x/pages/log_in.dart';
 import 'package:secure_x/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

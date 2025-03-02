@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:secure_x/custom_app_bar.dart';
+import 'package:secure_x/utils/custom_app_bar.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class Unlock extends StatelessWidget {
+  const Unlock({super.key});
 
   @override
   Widget build(BuildContext context) {
