@@ -1,0 +1,21 @@
+.TabWhite{
+    display: flex;
+    height: 20%;
+    color: #000000;
+    padding-top: 10px;
+    
+
+}
+.Tab_boxW{
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2);
+    border-color: #000000;
+    border-width: 20px;
+    width: auto;
+    text-align: center;
+    font-size: 130%;
+    height: 20%;
+
+}
