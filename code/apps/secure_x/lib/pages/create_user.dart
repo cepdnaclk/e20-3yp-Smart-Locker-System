@@ -126,7 +126,6 @@ class _CreateUserState extends State<CreateUser> {
                     const SizedBox(height: 10,),
                     TextFormField(
                       controller: _userNameController,
-                      obscureText: true,
                       decoration:const InputDecoration(
                         hintText: 'User Name',
                         filled: true,
@@ -140,7 +139,6 @@ class _CreateUserState extends State<CreateUser> {
                     const SizedBox(height: 10,),
                     TextFormField(
                       controller: _mobileNoController,
-                      obscureText: true,
                       decoration:const InputDecoration(
                         hintText: 'Mobile No.',
                         filled: true,
