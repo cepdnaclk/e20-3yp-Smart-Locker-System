@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 //import 'package:secure_x/find.dart';
-import 'package:secure_x/main_screen.dart';
+import 'package:secure_x/pages/main_screen.dart';
+import 'package:secure_x/pages/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:secure_x/sign_in.dart';
 //import 'package:secure_x/create_user.dart';
-import 'package:secure_x/log_in.dart';
+import 'package:secure_x/pages/log_in.dart';
 //import 'package:secure_x/home.dart';
 //import 'package:secure_x/sign_in.dart';
 //import 'package:secure_x/user.dart';
@@ -21,24 +22,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool isAuthenticated=false;
-  @override
-  void initState(){
-    super.initState();
-    checkLoginStatus();
-  }
-
-  Future<void> checkLoginStatus() async{
-    SharedPreferences preferences=await SharedPreferences.getInstance();
-    String? token=preferences.getString('authentication_token');
-    setState(() {
-      isAuthenticated=token!=null;
-    });
-  }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: isAuthenticated? const MainScreen():const LogIn(),);
+    return const MaterialApp(
+      home: SplashScreen()
+    );
   }
 }
 

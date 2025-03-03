@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:secure_x/create_user.dart';
-import 'package:secure_x/custom_app_bar.dart';
-import 'package:secure_x/log_in.dart';
+import 'package:secure_x/pages/create_user.dart';
+import 'package:secure_x/utils/custom_app_bar.dart';
+import 'package:secure_x/pages/log_in.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});

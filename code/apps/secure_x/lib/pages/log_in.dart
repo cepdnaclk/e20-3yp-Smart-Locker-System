@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:secure_x/create_user.dart';
-import 'package:secure_x/custom_app_bar.dart';
-import 'package:secure_x/main_screen.dart';
+import 'package:secure_x/pages/create_user.dart';
+import 'package:secure_x/pages/login_success.dart';
+import 'package:secure_x/utils/custom_app_bar.dart';
+import 'package:secure_x/pages/main_screen.dart';
 import 'package:secure_x/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +27,7 @@ class _LogInState extends State<LogIn> {
       _errorMsg=null;
     });
 
-    final String endpointUrl='';
+    final String endpointUrl='http://10.0.2.2:8080/api/lockerUser';
     final headers={'Content-Type':'application/json'};
     final Map<String,String> requestBody={
       'email':_emailController.text,
@@ -138,13 +139,16 @@ class _LogInState extends State<LogIn> {
                     ElevatedButton(
                       onPressed:(){
                         _isLoading? null: _login();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const LoginSuccess(),));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.buttonBackgroundColor1,
                         foregroundColor: AppColors.buttonForegroundColor2,
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                       ), 
-                      child: _isLoading? const CircularProgressIndicator():
+                      child: //_isLoading? const CircularProgressIndicator():
                       const Text('LOG IN',style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,

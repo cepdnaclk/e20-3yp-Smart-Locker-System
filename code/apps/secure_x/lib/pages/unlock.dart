@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:secure_x/custom_app_bar.dart';
+import 'package:secure_x/pages/login_success.dart';
+import 'package:secure_x/utils/custom_app_bar.dart';
+import 'package:secure_x/utils/custom_navigation_bar.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class Unlock extends StatelessWidget {
+  const Unlock({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,9 @@ class Home extends StatelessWidget {
                   padding: const EdgeInsets.all(60),
                 ),
                 onPressed: () {
+                  Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginSuccess(),));
                 },
                 child: const Text('Unlock', style: TextStyle(
                   fontSize: 22)),
