@@ -13,8 +13,8 @@ const Loginsignup = () => {
   // Handle Login
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const response = await login(username, password); // Use username here
+    try { 
+      const response =  await login(username, password); // Use username here
       localStorage.setItem("token", response.data);
       alert("Login Successful!");
       navigate("/success");
