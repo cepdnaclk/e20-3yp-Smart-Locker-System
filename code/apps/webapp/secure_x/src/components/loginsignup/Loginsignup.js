@@ -1,23 +1,61 @@
 import React, { useState } from "react";
 import "./Loginsignup.css";
+import { login } from "../Services/api.js"; // Import login API
 import { useNavigate } from "react-router-dom";
 
 const Loginsignup = () => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+  const [username, setUsername] = useState(""); // Username instead of email
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const toggleForm = () => {
-    setIsLogin(!isLogin);
+  // Handle Login
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await login(username, password); // Use username here
+      localStorage.setItem("token", response.data);
+      alert("Login Successful!");
+      navigate("/success");
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("Invalid credentials");
+    }
   };
 
-  const handleSubmit = (e) => {
+  // Handle Signup
+  const handleSignup = async (e) => {
     e.preventDefault();
-    if (isLogin) {
-      navigate("/success"); // Redirect to success page after login
-    } else {
-      alert("Account created successfully! You can now log in.");
-      setIsLogin(true);
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
     }
+    try {
+      // Call your backend signup API
+      const response = await fetch("http://localhost:8080/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }), // Send username instead of email
+      });
+
+      if (response.ok) {
+        alert("Account created successfully! You can now log in.");
+        setIsLogin(true); // Switch to login mode
+      } else {
+        alert("Signup failed. Try again.");
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("Error creating account.");
+    }
+  };
+
+  // Toggle Login/Signup Form
+  const toggleForm = () => {
+    setIsLogin(!isLogin);
   };
 
   return (
@@ -25,28 +63,39 @@ const Loginsignup = () => {
       <div className="form-box">
         <h2>{isLogin ? "Login" : "Sign Up"}</h2>
 
-        <form onSubmit={handleSubmit}>
-          {!isLogin && (
-            <div className="input-group">
-              <label>Full Name</label>
-              <input type="text" placeholder="Enter your name" /*required*/ />
-            </div>
-          )}
-
+        <form onSubmit={isLogin ? handleLogin : handleSignup}>
           <div className="input-group">
-            <label>Email</label>
-            <input type="email" placeholder="Enter your email" /*required*/ />
+            <label>Username</label>
+            <input
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
           </div>
 
           <div className="input-group">
             <label>Password</label>
-            <input type="password" placeholder="Enter your password" /*required*/ />
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
           {!isLogin && (
             <div className="input-group">
               <label>Confirm Password</label>
-              <input type="password" placeholder="Re-enter Password" /*required*/ />
+              <input
+                type="password"
+                placeholder="Re-enter Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
             </div>
           )}
 

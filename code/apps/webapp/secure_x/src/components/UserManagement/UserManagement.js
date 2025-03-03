@@ -31,7 +31,7 @@ const UserManagement = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           /></div>
-          <div><button className="add-user">+ Add New User</button></div>
+          <div className="addbtn"><button className="add-user">+ Add New User</button></div>
 
         </div>
 
