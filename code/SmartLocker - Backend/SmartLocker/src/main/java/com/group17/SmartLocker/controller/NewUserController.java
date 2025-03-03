@@ -1,6 +1,6 @@
 package com.group17.SmartLocker.controller;
 
-import com.group17.SmartLocker.DTO.NewUserRegistrationDto;
+import com.group17.SmartLocker.dto.NewUserRegistrationDto;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.model.NewUser;
 import com.group17.SmartLocker.service.NewUserService;

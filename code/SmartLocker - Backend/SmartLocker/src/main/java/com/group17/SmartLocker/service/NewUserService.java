@@ -1,6 +1,6 @@
 package com.group17.SmartLocker.service;
 
-import com.group17.SmartLocker.DTO.NewUserRegistrationDto;
+import com.group17.SmartLocker.dto.NewUserRegistrationDto;
 import com.group17.SmartLocker.enums.Role;
 import com.group17.SmartLocker.enums.Status;
 import com.group17.SmartLocker.model.User;
