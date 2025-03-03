@@ -13,33 +13,39 @@ import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/User")
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping
+
+    // get all registered users
+    @GetMapping("/admin/getAllUsers")
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
 
-    @PostMapping
+    // create a new user
+    @PostMapping("/admin/createNewUser")
     public User createUser(@RequestBody User user){
         return userService.createUser(user);
     }
 
-    @GetMapping("{id}")
+    // find user by id
+    @GetMapping("/admin/findUserById/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id){
         return userService.getUserById(id);
     }
 
-    @PutMapping("{id}")
+    // update a user details by id
+    @PutMapping("/admin/updateUserById/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User userDetails){
         return userService.updateUser(id, userDetails);
     }
 
-    @DeleteMapping("{id}")
+    // delete users
+    @DeleteMapping("/admin/deleteUserByID/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable String id){
         return userService.deleteUser(id);
     }

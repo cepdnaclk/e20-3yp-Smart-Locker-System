@@ -1,4 +1,4 @@
-package com.group17.SmartLocker.DTO;
+package com.group17.SmartLocker.dto;
 
 import lombok.Data;
 
