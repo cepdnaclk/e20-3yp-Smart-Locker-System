@@ -1,0 +1,33 @@
+
+.dashboard-container {
+    display:flex;
+    flex-direction: column;
+    padding-left: 18%;
+    
+  }
+  
+  .dashboard-content {
+    display: flex;
+    flex: 1;
+    
+    
+  }
+  
+  .main-content {
+    flex-grow: 2;
+    padding: 2%;
+    background: #ffffff;
+    color: #000;
+  }
+  
+  .Tablist{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 2%;
+    
+  }
+
+  .dashboard-content h2{
+    padding-top: 2%;
+  }
