@@ -25,13 +25,14 @@ const UserManagement = () => {
       <div className="Um1">
         <h1>User Management Page</h1>
         <div className="header">
-          <input
+          <div><input
             type="text"
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-          />
-          <button className="add-user">+ Add New User</button>
+          /></div>
+          <div><button className="add-user">+ Add New User</button></div>
+
         </div>
 
         <table>
