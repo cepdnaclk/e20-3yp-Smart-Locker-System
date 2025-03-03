@@ -1,6 +1,6 @@
 .NavigationBtn {
     padding: 10px 20px;
-    background-color: #3b3c3e;
+    background-color: #000000;
     color: white;
     font-size: 25px;
     font-weight: bold;
@@ -9,10 +9,8 @@
     cursor: pointer;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     transition: background 0.3s ease-in-out, transform 0.2s;
+    width: auto;
   }
   
-  .NavigationBtn:hover {
-    background-color: #010101;
-    transform: scale(1.05);
-  }
+  
   

@@ -2,7 +2,6 @@ package com.group17.SmartLocker.model;
 
 
 import com.group17.SmartLocker.enums.Role;
-import com.group17.SmartLocker.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,8 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "lockerUser")
-public class LockerUser {
+@Table(name = "User")
+public class User {
 
     @Id
     private String id;
