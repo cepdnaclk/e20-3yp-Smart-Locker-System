@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/controllers/user_controller.dart';
 //import 'package:secure_x/find.dart';
 import 'package:secure_x/pages/navigation.dart';
+=======
+//import 'package:secure_x/pages/create_user.dart';
+//import 'package:secure_x/find.dart';
+//import 'package:secure_x/pages/main_screen.dart';
+>>>>>>> Stashed changes
 import 'package:secure_x/pages/splash_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:secure_x/sign_in.dart';
 //import 'package:secure_x/create_user.dart';
-import 'package:secure_x/pages/log_in.dart';
+//import 'package:secure_x/pages/log_in.dart';
 //import 'package:secure_x/home.dart';
-//import 'package:secure_x/sign_in.dart';
 //import 'package:secure_x/user.dart';
 import 'helper/dependencies.dart' as dep;
 
@@ -24,6 +29,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+<<<<<<< Updated upstream
     Get.find<AuthController>();
     Get.find<UserController>();
 
@@ -32,6 +38,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       home: SplashScreen(),
       //home: HomePage(),
+=======
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen(),
+>>>>>>> Stashed changes
     );
   }
 }

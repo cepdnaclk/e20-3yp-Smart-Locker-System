@@ -33,6 +33,7 @@ class _CreateUserState extends State<CreateUser> {
     super.dispose();
   }
 
+<<<<<<< Updated upstream
   // VALIDATE INPUT
   bool _validateInputs(String email, String username,String phoneno, String password) {
     if (email.isEmpty) {
@@ -57,6 +58,51 @@ class _CreateUserState extends State<CreateUser> {
       return false;
     } else {
       return true;
+=======
+    const String endpointUrl='http://10.0.2.16:8080/api/newUsers/register';
+    final headers={'Content-Type':'application/json'};
+
+    final Map<String,String> userData={
+      'email':_emailController.text,
+      'userName':_userNameController.text,
+      'mobileNo':_mobileNoController.text,
+      'password':_passwordController.text,
+      'reEnterPassword':_reEnterPasswordController.text,
+    };
+
+    try{
+      final response=await http.post(
+        Uri.parse(endpointUrl), 
+        headers : headers,
+        body: jsonEncode(userData),
+      );
+
+      if (response.statusCode==200){
+        final responses=jsonDecode(response.body);
+        String token=responses['token'];
+
+        SharedPreferences preferences=await SharedPreferences.getInstance();
+        await preferences.setString('authentication_token', token);
+        print('User created successfully! Token: $token');
+        Navigator.push(context,
+        MaterialPageRoute(builder: (context) => LogIn(),));
+      }else{
+        print('Failed to create user: $response');
+        final responses=jsonDecode(response.body);
+        setState(() {
+          _errorMsg=responses['message'];
+        });
+
+      }
+
+
+      }catch(e){
+        print('Error:$e');
+      }finally{
+        setState(() {
+          _isLoading=false;
+        });
+>>>>>>> Stashed changes
     }
   }
 
@@ -204,6 +250,7 @@ class _CreateUserState extends State<CreateUser> {
                           return null;
                         },
                       ),
+<<<<<<< Updated upstream
                       const SizedBox(height: 10,),
                       ElevatedButton(
                         onPressed: (){
@@ -219,6 +266,30 @@ class _CreateUserState extends State<CreateUser> {
                           fontWeight: FontWeight.bold,
                           color: AppColors.textColor2,
                           ),
+=======
+                      keyboardType: TextInputType.text,
+                      validator: (value){
+                        if(value!=_passwordController.text){
+                          return'Passwords do not match';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10,),
+                    ElevatedButton(
+                      onPressed: (){
+                        _createUser();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.buttonBackgroundColor1,
+                        foregroundColor: AppColors.buttonForegroundColor2,
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                      ), 
+                      child: const Text('CREATE',style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textColor2,
+>>>>>>> Stashed changes
                         ),
                       ),
                       const SizedBox(height: 10,),

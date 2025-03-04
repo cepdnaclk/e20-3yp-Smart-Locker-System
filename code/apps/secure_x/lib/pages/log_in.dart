@@ -28,6 +28,7 @@ class _LogInState extends State<LogIn> {
     super.dispose();
   }
 
+<<<<<<< Updated upstream
   // VALIDATE INPUT
   bool _validateInputs(String username, String password) {
     if (username.isEmpty) {
@@ -42,6 +43,15 @@ class _LogInState extends State<LogIn> {
       return true;
     }
   }
+=======
+    final String endpointUrl='http://10.0.2.16:8080/api/lockerUser';
+    //final String endpointUrl='http://192.168.8.185/api/lockerUser';
+    final headers={'Content-Type':'application/json'};
+    final Map<String,String> requestBody={
+      'email':_emailController.text,
+      'password':_passwordController.text,
+    };
+>>>>>>> Stashed changes
 
   // SIGN IN USER
   Future<void> _login() async {
