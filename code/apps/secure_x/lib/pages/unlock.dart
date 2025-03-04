@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secure_x/pages/login_success.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
-import 'package:secure_x/utils/custom_navigation_bar.dart';
 
 class Unlock extends StatelessWidget {
   const Unlock({super.key});
