@@ -43,7 +43,7 @@ public class DashboardController {
         // Admin-specific response
         DashboardResponse response = new DashboardResponse(
                 "Admin Dashboard",
-                "Welcome, Admin! You can manage users, view logs, and configure settings."
+                "Welcome, " + user.getFirstName()
         );
         return ResponseEntity.ok(response);
     }
@@ -67,7 +67,7 @@ public class DashboardController {
         // User-specific response
         DashboardResponse response = new DashboardResponse(
                 "User Dashboard",
-                "Welcome! You can unlock lockers and view access logs."
+                "Welcome! " + user.getFirstName()
         );
         return ResponseEntity.ok(response);
     }
