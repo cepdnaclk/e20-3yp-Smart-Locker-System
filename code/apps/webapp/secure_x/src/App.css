@@ -1,6 +1,4 @@
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
   
@@ -8,12 +6,8 @@
 
 body {
   background-color: #fdfdfd;
-  color: #fff;
-  /*display: flex;*/
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-
+  color: #000000;
+  height: 100%;
 }
 
 .App {
@@ -24,10 +18,7 @@ body {
   height: 40vmin;
   pointer-events: none;
 }
-.App-banner{
-  height: 60vmin;
-  
-}
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -37,7 +28,7 @@ body {
 
 .App-header {
   background-color: #ffffff;
-  min-height: 100vh;
+  min-height: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -60,4 +51,14 @@ body {
   100% {
     scale: 80%;
   }
+}
+
+.Home_buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  justify-content: center; 
+  align-items: center; 
+  width: 100%; 
+  
 }
