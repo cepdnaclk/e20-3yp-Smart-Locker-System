@@ -12,7 +12,11 @@ const api = axios.create({
 export const login = async (username, password) => {
     return api.post("/login", { username, password });
 };
- 
+
+export const signup = async (regNo,firstName,lastName,contactNumber,email,password) => {
+    return api.post("/api/newUsers/register", { regNo,firstName,lastName,contactNumber,email,password});
+};
+
 export const getProtectedData = async () => {
     return api.get("/api/protected", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }

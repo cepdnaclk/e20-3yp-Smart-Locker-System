@@ -14,7 +14,7 @@ const Login = () => {
       const response = await login(username, password);
       localStorage.setItem("token", response.data);
       alert("Login Successful!");
-      navigate("/dashboard"); // Change the route as needed
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
       alert("Invalid credentials");
@@ -24,8 +24,9 @@ const Login = () => {
   return (
     <div className="container_login">
       <div className="form-box">
+        <h2>SIGN IN</h2>
         <form onSubmit={handleLogin}>
-          <h2>SIGN IN</h2>
+          
 
           <div className="input-group">
             <label>Username</label>
@@ -48,6 +49,7 @@ const Login = () => {
               required
             />
           </div>
+          
 
           <button type="submit">Sign In</button>
         </form>
