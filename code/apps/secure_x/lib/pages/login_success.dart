@@ -17,7 +17,7 @@ class LoginSuccess extends StatelessWidget {
         children: [
           const SizedBox(height: 20,), 
           const Center(
-            child: Text('Welcome to', style: TextStyle(
+            child: Text('Welcome!', style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
             ),

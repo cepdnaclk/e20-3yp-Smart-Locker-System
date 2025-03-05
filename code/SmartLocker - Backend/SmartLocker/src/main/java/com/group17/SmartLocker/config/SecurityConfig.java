@@ -34,7 +34,8 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login","/api/newUsers/register").permitAll()
+                        .requestMatchers("/login", "/api/newUsers/register").permitAll()
+
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/user/**").hasRole("USER")
                         .anyRequest().authenticated()
@@ -56,8 +57,6 @@ public class SecurityConfig {
     }
 
 }
-
-
 
 // spring security architecture: https://www.youtube.com/watch?v=qoYcmw43mdU
 // spring jwt authentication and authorization https://www.youtube.com/watch?v=RnZmeczS_DI
