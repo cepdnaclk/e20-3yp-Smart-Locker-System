@@ -13,7 +13,7 @@ const Login = () => {
     try {
       const response = await login(username, password);
       localStorage.setItem("token", response.data);
-      alert("Login Successful!");
+      alert(`Login succsess: Token ${localStorage.getItem("token")}`);
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);

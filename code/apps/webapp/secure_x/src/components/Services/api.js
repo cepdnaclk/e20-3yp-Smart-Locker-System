@@ -22,3 +22,25 @@ export const getProtectedData = async () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     });
 };
+
+export const getPendingUsresData = async () => {
+    return await api.get("/api/admin/pending", {
+        headers: { Authorization: `Bearer${localStorage.getItem("token")}`,"Content-Type": "application/json", }
+    });
+};
+export const putLockeUsresData = async (id) => {
+    if (!localStorage.getItem("token")) {
+        console.error("JWT Token is missing! Check localStorage.");
+        return;
+    }
+    return await api.put(
+        `api/admin/approve/${id}`, 
+        {},  // Empty request body
+        {
+            headers: { 
+                Authorization: `Bearer${localStorage.getItem("token")?.trim()}`, 
+                "Content-Type": "application/json"
+            }
+        }
+    );
+};
