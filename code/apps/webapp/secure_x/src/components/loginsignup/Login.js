@@ -15,6 +15,8 @@ const Login = () => {
       localStorage.setItem("token", response.data);
       alert(`Login succsess: Token ${localStorage.getItem("token")}`);
       navigate("/dashboard");
+      localStorage.setItem("hasVisited", 0);
+      localStorage.setItem("User", username);
     } catch (error) {
       console.error("Login failed:", error);
       alert("Invalid credentials");

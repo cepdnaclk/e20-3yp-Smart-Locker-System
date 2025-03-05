@@ -44,3 +44,25 @@ export const putLockeUsresData = async (id) => {
         }
     );
 };
+
+export const getLockerUsresData = async () => {
+    return await api.get("/api/admin/getAllUsers", {
+        headers: { Authorization: `Bearer${localStorage.getItem("token")}`,"Content-Type": "application/json", }
+    });
+};
+export const deletLockeUsresData = async (id) => {
+    if (!localStorage.getItem("token")) {
+        console.error("JWT Token is missing! Check localStorage.");
+        return;
+    }
+    return await api.put(
+        `api/admin/deleteUserByID/${id}`, 
+        {},  // Empty request body
+        {
+            headers: { 
+                Authorization: `Bearer${localStorage.getItem("token")?.trim()}`, 
+                "Content-Type": "application/json"
+            }
+        }
+    );
+};

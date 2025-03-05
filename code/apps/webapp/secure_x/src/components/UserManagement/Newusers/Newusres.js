@@ -10,6 +10,9 @@ const Newusers = () => {
     try {
       const response = await getPendingUsresData();
       setUsers(response.data);
+      if(users == null){
+        alert('No pending users');
+      }
     } catch (error) {
       console.error('Error fetching users:', error);
       alert(`Invalid Request: Token ${localStorage.getItem("token")}`);
@@ -28,6 +31,7 @@ const Newusers = () => {
       alert(`Error accepting user: ${id}`);
     }
   };
+  
 
   return (
     <div>
@@ -36,7 +40,7 @@ const Newusers = () => {
 
       <table border="1" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
         <thead>
-          <tr>
+          <tr> 
             <th>ID</th>
             <th>Reg No</th>
             <th>First Name</th>
