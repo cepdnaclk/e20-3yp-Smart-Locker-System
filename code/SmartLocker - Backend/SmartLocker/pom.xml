@@ -112,12 +112,25 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-admin -->
 		<dependency>
-			<groupId>com.google.firebase</groupId>
-			<artifactId>firebase-admin</artifactId>
-			<version>8.0.1</version>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>iot</artifactId>
+			<version>2.20.10</version> <!-- Use latest version -->
 		</dependency>
+
+		<!-- Eclipse Paho MQTT Client -->
+		<dependency>
+			<groupId>org.eclipse.paho</groupId>
+			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+			<version>1.2.5</version>
+		</dependency>
+
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/com.google.firebase/firebase-admin &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>com.google.firebase</groupId>-->
+<!--			<artifactId>firebase-admin</artifactId>-->
+<!--			<version>8.0.1</version>-->
+<!--		</dependency>-->
 
 
 		<dependency>
@@ -125,6 +138,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
