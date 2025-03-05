@@ -12,9 +12,35 @@ const api = axios.create({
 export const login = async (username, password) => {
     return api.post("/login", { username, password });
 };
- 
+
+export const signup = async (regNo,firstName,lastName,contactNumber,email,password) => {
+    return api.post("/api/newUsers/register", { regNo,firstName,lastName,contactNumber,email,password});
+};
+
 export const getProtectedData = async () => {
     return api.get("/api/protected", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     });
+};
+
+export const getPendingUsresData = async () => {
+    return await api.get("/api/admin/pending", {
+        headers: { Authorization: `Bearer${localStorage.getItem("token")}`,"Content-Type": "application/json", }
+    });
+};
+export const putLockeUsresData = async (id) => {
+    if (!localStorage.getItem("token")) {
+        console.error("JWT Token is missing! Check localStorage.");
+        return;
+    }
+    return await api.put(
+        `api/admin/approve/${id}`, 
+        {},  // Empty request body
+        {
+            headers: { 
+                Authorization: `Bearer${localStorage.getItem("token")?.trim()}`, 
+                "Content-Type": "application/json"
+            }
+        }
+    );
 };
