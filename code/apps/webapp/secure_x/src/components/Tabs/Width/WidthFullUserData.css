@@ -1,0 +1,30 @@
+.Admin_info{
+    display: flex;
+    height: 20%;
+    color: #000000;
+    padding-top: 10px;
+    align-items: flex-start;
+    
+
+}
+.Tab_boxW{
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2);
+    border-color: #000000;
+    border-width: 20px;
+    width: auto;
+    font-size: 130%;
+    height: 20%;
+
+}
+.Tab_boxW th{
+    border: none;
+    text-align: left;
+}
+
+.trs{
+    border: none;
+    text-align: left;
+}

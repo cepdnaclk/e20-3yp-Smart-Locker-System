@@ -1,6 +1,11 @@
 .Am1{
     flex-grow: 1;
-    padding: 20px;
-    background: #ffffff;
+    padding-left: 20%;
+    padding-top: 2%;
+    background: hsl(0, 0%, 100%);
     color: #000;
+    min-height: 100vh; /* Ensures full-page height */
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;
 }
