@@ -37,10 +37,7 @@ title: Smart Locker System
 7. [Links](#links)
 
 ## Introduction
-<video width="600" controls>
-  <source src="sdf.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![Video Title](sfd.mp4)
 
 The SmartSecure Locker System is a versatile and scalable IoT-based solution designed to provide secure and efficient storage in a variety of shared environments such as universities, gyms, offices and libraries. The system connects multiple locker locations, allowing users to check real-time availability via a mobile or web application. If lockers at a preferred location are fully occupied, the system intelligently suggests the nearest alternative location, offering a seamless and flexible user experience.
 
