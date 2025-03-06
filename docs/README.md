@@ -73,7 +73,7 @@ Testing done on hardware and software, detailed + summarized results
 
 ## Detailed budget
 <!-- -->
-![Detailed budget](images/budget.png)
+![Detailed budget](images/budget1.png)
 
 
 ## Conclusion
