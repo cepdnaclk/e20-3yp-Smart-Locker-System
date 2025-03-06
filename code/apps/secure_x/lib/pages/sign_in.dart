@@ -56,7 +56,7 @@ class SignIn extends StatelessWidget {
                         onPressed:(){
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const LogIn(),));
+                            MaterialPageRoute(builder: (context) => LogIn(),));
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,

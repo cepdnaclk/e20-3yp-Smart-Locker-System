@@ -1,153 +1,120 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/response_model.dart';
-import 'package:secure_x/routes/route_helper.dart';
-import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/utils/colors.dart';
+import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
-import 'package:secure_x/utils/loading_indicator.dart';
 
 class CreateUser extends StatefulWidget {
-  const CreateUser({super.key});
+  const CreateUser({Key? key}) : super(key: key);
 
   @override
   State<CreateUser> createState() => _CreateUserState();
 }
 
-class _CreateUserState extends State<CreateUser> { 
-  final TextEditingController _emailController=TextEditingController();
-  final TextEditingController _userNameController=TextEditingController();
-  final TextEditingController _mobileNoController=TextEditingController();
-  final TextEditingController _passwordController=TextEditingController();
-  final TextEditingController _reEnterPasswordController=TextEditingController();
+class _CreateUserState extends State<CreateUser> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _regNoController = TextEditingController();
+  final TextEditingController _mobileNoController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _reEnterPasswordController = TextEditingController();
+
+  final AuthController _authController = Get.find(); // Get the AuthController instance
 
   @override
   void dispose() {
     _emailController.dispose();
-    _userNameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _regNoController.dispose();
     _mobileNoController.dispose();
     _passwordController.dispose();
     _reEnterPasswordController.dispose();
     super.dispose();
   }
 
-<<<<<<< Updated upstream
-  // VALIDATE INPUT
-  bool _validateInputs(String email, String username,String phoneno, String password) {
+  // Validate user inputs
+  bool _validateInputs(String email, String firstName, String lastName, String regNo, String phoneNo, String password) {
     if (email.isEmpty) {
-      CustomSnackBar('Type in your email', title: 'Email', iserror: false);
+      CustomSnackBar('Type in your email', title: 'Email', iserror: true);
       return false;
-    } else if (username.isEmpty) {
-      CustomSnackBar('Type in your username',
-          title: 'Username', iserror: false);
+    } else if (firstName.isEmpty) {
+      CustomSnackBar('Type in your first name', title: 'First Name', iserror: true);
+      return false;
+    } else if (lastName.isEmpty) {
+      CustomSnackBar('Type in your last name', title: 'Last Name', iserror: true);
+      return false;
+    } else if (regNo.isEmpty) {
+      CustomSnackBar('Type in your registration number', title: 'Reg No.', iserror: true);
+      return false;
+    } else if (phoneNo.isEmpty) {
+      CustomSnackBar('Type in your phone number', title: 'Phone No.', iserror: true);
       return false;
     } else if (password.isEmpty) {
-      CustomSnackBar('Type in your password',
-          title: 'Password', iserror: false);
+      CustomSnackBar('Type in your password', title: 'Password', iserror: true);
+      return false;
+    } else if (password != _reEnterPasswordController.text) {
+      CustomSnackBar('Passwords do not match', iserror: true);
       return false;
     } else if (!GetUtils.isEmail(email)) {
-      CustomSnackBar('Invalid Email');
+      CustomSnackBar('Invalid email format', iserror: true);
       return false;
-    } else if (username.length < 3 || username.length > 20) {
-      CustomSnackBar('Username must be at least 3 characters.');
-      return false;
-    } else if (password.length < 6 || password.length > 20) {
-      CustomSnackBar('Password must be at least 6 characters.');
+    } else if (password.length < 6) {
+      CustomSnackBar('Password must be at least 6 characters', iserror: true);
       return false;
     } else {
       return true;
-=======
-    const String endpointUrl='http://10.0.2.16:8080/api/newUsers/register';
-    final headers={'Content-Type':'application/json'};
-
-    final Map<String,String> userData={
-      'email':_emailController.text,
-      'userName':_userNameController.text,
-      'mobileNo':_mobileNoController.text,
-      'password':_passwordController.text,
-      'reEnterPassword':_reEnterPasswordController.text,
-    };
-
-    try{
-      final response=await http.post(
-        Uri.parse(endpointUrl), 
-        headers : headers,
-        body: jsonEncode(userData),
-      );
-
-      if (response.statusCode==200){
-        final responses=jsonDecode(response.body);
-        String token=responses['token'];
-
-        SharedPreferences preferences=await SharedPreferences.getInstance();
-        await preferences.setString('authentication_token', token);
-        print('User created successfully! Token: $token');
-        Navigator.push(context,
-        MaterialPageRoute(builder: (context) => LogIn(),));
-      }else{
-        print('Failed to create user: $response');
-        final responses=jsonDecode(response.body);
-        setState(() {
-          _errorMsg=responses['message'];
-        });
-
-      }
-
-
-      }catch(e){
-        print('Error:$e');
-      }finally{
-        setState(() {
-          _isLoading=false;
-        });
->>>>>>> Stashed changes
     }
   }
 
-  // REGISTER USER
+  // Register user
   Future<void> _registration() async {
-    // hide the keyboard
-    FocusScope.of(context).unfocus();
+    final String email = _emailController.text.trim();
+    final String firstName = _firstNameController.text.trim();
+    final String lastName = _lastNameController.text.trim();
+    final String regNo = _regNoController.text.trim();
+    final String phoneNo = _mobileNoController.text.trim();
+    final String password = _passwordController.text.trim();
 
-    String email = _emailController.text.trim();
-    String username = _userNameController.text.trim();
-    String phoneNo = _mobileNoController.text.trim();
-    String password = _passwordController.text.trim();
-    print('$email $username $phoneNo $password');
-
-    // validate input
-    if (_validateInputs(email, username,phoneNo,password)) {
-      CreateUserModel createUserModel = CreateUserModel(
+    if (_validateInputs(email, firstName, lastName, regNo, phoneNo, password)) {
+      // Create a CreateUserModel
+      final CreateUserModel createUserModel = CreateUserModel(
         email: email,
-        userName: username,
+        firstName: firstName,
+        lastName: lastName,
+        regNo: regNo,
         phoneNo: phoneNo,
         password: password,
       );
-      ResponseModel apiResponse =
-          await Get.find<AuthController>().registraion(createUserModel);
 
-      if (apiResponse.isSuccess == true) {
-        CustomSnackBar(apiResponse.message,
-            iserror: false, title: 'Success');
-        Get.offNamed(RouteHelper.getInitial());
+      // Call the registration method in AuthController
+      final ResponseModel response = await _authController.registration(createUserModel);
+
+      if (response.isSuccess) {
+        CustomSnackBar(response.message, iserror: false, title: 'Success');
+        Get.offAllNamed('/login'); // Navigate to the login screen after successful registration
       } else {
-        CustomSnackBar(apiResponse.message, iserror: true);
+        CustomSnackBar(response.message, iserror: true);
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      appBar:const CustomAppBar(),
-      body:GetBuilder<AuthController>(
-        builder: (authController){
-          return authController.isLoading? LoadingIndicator():
-         SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
+      appBar: const CustomAppBar(),
+      body: GetBuilder<AuthController>(
+        builder: (authController) {
+          return authController.isLoading.value // Access the value of RxBool
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [         
               Center(
@@ -175,131 +142,79 @@ class _CreateUserState extends State<CreateUser> {
                     color: AppColors.boxColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Column(
-                    mainAxisAlignment:MainAxisAlignment.center,
-                    children: [
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(
-                          hintText: 'Email',
-                          filled: true,
-                          fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      const SizedBox(height: 10,),
-                      TextFormField(
-                        controller: _userNameController,
-                        decoration:const InputDecoration(
-                          hintText: 'User Name',
-                          filled: true,
-                          fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        keyboardType: TextInputType.text,
-                      ),
-                      const SizedBox(height: 10,),
-                      TextFormField(
-                        controller: _mobileNoController,
-                        decoration:const InputDecoration(
-                          hintText: 'Mobile No.',
-                          filled: true,
-                          fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        keyboardType: TextInputType.phone,
-                      ),
-                      const SizedBox(height: 10,),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration:const InputDecoration(
-                          hintText: 'Password',
-                          filled: true,
-                          fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        keyboardType: TextInputType.text,
-                      ),
-                      const SizedBox(height: 10,),
-                      TextFormField(
-                        controller: _reEnterPasswordController,
-                        obscureText: true,
-                        decoration:const InputDecoration(
-                          hintText: 'Re enter Password',
-                          filled: true,
-                          fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        keyboardType: TextInputType.text,
-                        validator: (value){
-                          if(value!=_passwordController.text){
-                            return'Passwords do not match';
-                          }
-                          return null;
-                        },
-                      ),
-<<<<<<< Updated upstream
-                      const SizedBox(height: 10,),
-                      ElevatedButton(
-                        onPressed: (){
-                          _registration();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.buttonBackgroundColor1,
-                          foregroundColor: AppColors.buttonForegroundColor2,
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                        ), 
-                        child: const Text('CREATE',style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textColor2,
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                            border: OutlineInputBorder(),
                           ),
-=======
-                      keyboardType: TextInputType.text,
-                      validator: (value){
-                        if(value!=_passwordController.text){
-                          return'Passwords do not match';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 10,),
-                    ElevatedButton(
-                      onPressed: (){
-                        _createUser();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.buttonBackgroundColor1,
-                        foregroundColor: AppColors.buttonForegroundColor2,
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                      ), 
-                      child: const Text('CREATE',style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textColor2,
->>>>>>> Stashed changes
+                          keyboardType: TextInputType.emailAddress,
                         ),
-                      ),
-                      const SizedBox(height: 10,),
-                    ],
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _firstNameController,
+                          decoration: const InputDecoration(
+                            labelText: 'First Name',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _lastNameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Last Name',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _regNoController,
+                          decoration: const InputDecoration(
+                            labelText: 'Registration Number',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _mobileNoController,
+                          decoration:const  InputDecoration(
+                            labelText: 'Phone Number',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.phone,
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _passwordController,
+                          decoration:const  InputDecoration(
+                            labelText: 'Password',
+                            border: OutlineInputBorder(),
+                          ),
+                          obscureText: true,
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _reEnterPasswordController,
+                          decoration: const InputDecoration(
+                            labelText: 'Re-enter Password',
+                            border: OutlineInputBorder(),
+                          ),
+                          obscureText: true,
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: _registration,
+                          child: const Text('Create Account'),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              )
-            ]
-          ),
-        );
+              ]
+            ),
+          );
         },
       ),
     );

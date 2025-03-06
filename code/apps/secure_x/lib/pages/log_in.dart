@@ -1,84 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
-import 'package:secure_x/models/login_model.dart';
-import 'package:secure_x/models/response_model.dart';
 import 'package:secure_x/pages/create_user.dart';
-import 'package:secure_x/routes/route_helper.dart';
-import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/utils/colors.dart';
+import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
-import 'package:secure_x/utils/loading_indicator.dart';
 
-class LogIn extends StatefulWidget {
-  const LogIn({super.key});
+class LogIn extends StatelessWidget {
+  final AuthController _authController = Get.find(); // Get the AuthController instance
 
-  @override
-  State<LogIn> createState() => _LogInState();
-}
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-class _LogInState extends State<LogIn> {
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  void _login() {
+    final String username = _usernameController.text.trim();
+    final String password = _passwordController.text.trim();
 
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+    print('User entered username: $username'); // Debug print
+    print('User entered password: $password'); // Debug print
 
-<<<<<<< Updated upstream
-  // VALIDATE INPUT
-  bool _validateInputs(String username, String password) {
-    if (username.isEmpty) {
-      CustomSnackBar('Type in your username',
-          title: 'Username', iserror: false);
-      return false;
-    } else if (password.isEmpty) {
-      CustomSnackBar('Type in your password',
-          title: 'Password', iserror: false);
-      return false;
-    } else {
-      return true;
+    if (username.isEmpty || password.isEmpty) {
+      print('Username or password is empty'); // Debug print
+      CustomSnackBar('Username and password are required', iserror: true);
+      return;
     }
-  }
-=======
-    final String endpointUrl='http://10.0.2.16:8080/api/lockerUser';
-    //final String endpointUrl='http://192.168.8.185/api/lockerUser';
-    final headers={'Content-Type':'application/json'};
-    final Map<String,String> requestBody={
-      'email':_emailController.text,
-      'password':_passwordController.text,
-    };
->>>>>>> Stashed changes
 
-  // SIGN IN USER
-  Future<void> _login() async {
-    // hide the keyboard
-    FocusScope.of(context).unfocus();
-
-    String username = _usernameController.text.trim();
-    String password = _passwordController.text.trim();
-    print('$username $password');
-
-    // validate input
-    if (_validateInputs(username, password)) {
-      LoginModel loginModel = LoginModel(
-        username: username,
-        password: password,
-      );
-      ResponseModel apiResponse =
-          await Get.find<AuthController>().login(loginModel.username, loginModel.password);
-
-      if (apiResponse.isSuccess == true) {
-        CustomSnackBar(apiResponse.message,
-            iserror: false, title: 'Success');
-        Get.offNamed(RouteHelper.getInitial());
-      } else {
-        CustomSnackBar(apiResponse.message, iserror: true);
-      }
-    }
+    _authController.login(username, password); // Call the login method
   }
 
   @override
@@ -87,11 +34,13 @@ class _LogInState extends State<LogIn> {
     double screenHeight=MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      appBar:const CustomAppBar(),
-      body:GetBuilder<AuthController>(
-        builder: (authController){
-          return authController.isLoading? const LoadingIndicator(): SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
+      appBar: CustomAppBar(),
+      body: GetBuilder<AuthController>(
+        builder: (authController) {
+          return authController.isLoading.value
+              ? Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [         
@@ -170,9 +119,7 @@ class _LogInState extends State<LogIn> {
                       SizedBox(height: screenHeight*0.01,),
                       const Text('or'),
                       TextButton(onPressed: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const CreateUser(),));
+                        Get.to(() => CreateUser());        
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: AppColors.textColor2,
@@ -190,5 +137,4 @@ class _LogInState extends State<LogIn> {
       ),
     );
   }
-
 }
