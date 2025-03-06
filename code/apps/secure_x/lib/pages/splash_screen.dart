@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:secure_x/pages/log_in.dart';
-import 'package:secure_x/pages/navigation.dart';
+import 'package:get/get.dart';
+import 'package:secure_x/routes/route_helper.dart';
 import 'package:secure_x/utils/colors.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,13 +14,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState(){
     super.initState();
-    Future.delayed(Duration(seconds: 2),(){
-      Navigator.pushReplacement(
-        context, 
-        MaterialPageRoute(builder: (context) => Navigation(),)
-      );
-    });
+
+    Future.delayed(const Duration(seconds: 2),()=>
+      Get.offNamed(RouteHelper.getInitial()),
+    );
   }
+
  
   @override
   Widget build(BuildContext context) {

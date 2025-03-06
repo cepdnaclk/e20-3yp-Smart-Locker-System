@@ -1,51 +1,29 @@
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
-import 'package:secure_x/controllers/user_controller.dart';
-//import 'package:secure_x/find.dart';
-import 'package:secure_x/pages/navigation.dart';
-=======
-//import 'package:secure_x/pages/create_user.dart';
-//import 'package:secure_x/find.dart';
-//import 'package:secure_x/pages/main_screen.dart';
->>>>>>> Stashed changes
-import 'package:secure_x/pages/splash_screen.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:secure_x/sign_in.dart';
-//import 'package:secure_x/create_user.dart';
-//import 'package:secure_x/pages/log_in.dart';
-//import 'package:secure_x/home.dart';
-//import 'package:secure_x/user.dart';
+import 'package:secure_x/routes/route_helper.dart';
+import 'package:secure_x/utils/resources.dart';
 import 'helper/dependencies.dart' as dep;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dep.init();
+  await dep.init(); // Initialize dependencies
+  await Resources.loadResources(); // Load resources
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-<<<<<<< Updated upstream
-    Get.find<AuthController>();
-    Get.find<UserController>();
+    Get.find<AuthController>(); // Initialize AuthController
 
-    return const GetMaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: SplashScreen(),
-      //home: HomePage(),
-=======
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
->>>>>>> Stashed changes
+      initialRoute: RouteHelper.getSplashScreen(),
+      getPages: RouteHelper.routes,
     );
   }
 }
-
-
-
