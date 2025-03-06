@@ -6,14 +6,15 @@
 #include <ArduinoJson.h>
 #include <base64.h> 
 
-#define AWS_IOT_PUBLISH_TOPIC   "esp32/Fingerprintdata"
-#define AWS_IOT_SUBSCRIBE_TOPIC "esp32/sub"
-#define AWS_IOT_PASSWORD_TOPIC "esp32/password" 
+#define AWS_IOT_PUBLISH_TOPIC   "esp32/fingerprintdata"
+#define AWS_IOT_REGISTRAIONID_TOPIC "esp32/registrationID"
+#define AWS_IOT_PASSWORD_TOPIC "esp32/password"
 
 WiFiClientSecure net;
-PubSubClient client(net);
+PubSubClient client(net); 
 
 // Global variable to store the password
+bool passwordReceived = false; // Flag to indicate password reception
 String PassWord = "";  
 
 // Initialize WiFi
@@ -27,7 +28,6 @@ void initWiFi() {
     Serial.println("\nConnected! IP Address: " + WiFi.localIP().toString());
 }
 
-// MQTT Callback Function
 void messageHandler(char* topic, byte* payload, unsigned int length) {
     Serial.print("Incoming message from: ");
     Serial.println(topic);
@@ -52,7 +52,8 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
 
         // Extract the password
         if (doc.containsKey("password")) {
-            PassWord = doc["password"].as<String>();
+            PassWord= doc["password"].as<String>();
+            passwordReceived = true; // Set the flag to true
             Serial.println("Password updated: " + PassWord);
         } else {
             Serial.println("No password found in the message.");
@@ -61,7 +62,6 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
         Serial.println("Received message: " + message);
     }
 }
-
 // Connect to AWS IoT
 void connectAWS() {
     Serial.println("Initializing AWS Connection...");
@@ -91,7 +91,7 @@ void connectAWS() {
     }
 
     Serial.println("\nAWS IoT Connected!");
-    client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
+    //client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
     client.subscribe(AWS_IOT_PASSWORD_TOPIC);
     Serial.println("Subscribed to password topic");
 }
@@ -112,8 +112,13 @@ void publishMessage(int metricsValue) {
     client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
 }
 
-// Publish Fingerprint Data to MQTT Topic
 void publishFingerprintData(uint8_t fingerprintID, String templateBase64) {
+    // Check if MQTT client is connected
+    if (!client.connected()) {
+        Serial.println("MQTT Client not connected! Attempting to reconnect...");
+        connectAWS(); // Reconnect to AWS IoT
+    }
+
     // Create JSON payload
     StaticJsonDocument<512> doc;
     doc["fingerprint_id"] = fingerprintID;
@@ -122,10 +127,29 @@ void publishFingerprintData(uint8_t fingerprintID, String templateBase64) {
     char jsonBuffer[1024];
     serializeJson(doc, jsonBuffer);
 
+    // Debug: Print payload size
+    Serial.print("Payload size: ");
+    Serial.println(strlen(jsonBuffer));
+
     // Publish to MQTT topic
     if (client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer)) {
         Serial.println("Fingerprint data published to MQTT topic.");
     } else {
         Serial.println("Failed to publish fingerprint data.");
+        Serial.println("Error code: " + String(client.state()));
+    }
+}
+
+void publishIDMessage(String registrationID) {
+    StaticJsonDocument<200> doc;
+    doc["registrationID"] = registrationID;
+
+    char jsonBuffer[512];
+    serializeJson(doc, jsonBuffer);
+
+    if (client.publish(AWS_IOT_REGISTRAIONID_TOPIC, jsonBuffer)) {
+        Serial.println("Registration ID is published to MQTT topic.");
+    } else {
+        Serial.println("Failed to publish test message.");
     }
 }
