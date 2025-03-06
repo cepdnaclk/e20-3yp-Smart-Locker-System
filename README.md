@@ -46,7 +46,7 @@ Access is secured through a figerprint sensor, ensuring safety and convenience. 
 
 ## Solution Architecture
 
-![High level diagram](docs/images/HighLevelArchitecture.jpg)
+![High level diagram](docs/images/HL2.png)
 
 This architecture integrates Web & Mobile Apps, a Cloud Database, and Locker Hardware to ensure secure and efficient locker management.
 
