@@ -1,7 +1,11 @@
+
 #include <Keypad.h>
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 #include <Adafruit_Fingerprint.h>
+#include <Arduino_BuiltIn.h>
+#include "utils.h"
+#include <PubSubClient.h>
 
 #define ROWS  4
 #define COLS  4
@@ -20,9 +24,10 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial2);
 uint8_t rowPins[ROWS] = {14, 27, 26, 25}; // GPIO14, GPIO27, GPIO26, GPIO25
 uint8_t colPins[COLS] = {33, 32, 18, 19}; // GPIO33, GPIO32, GPIO18, GPIO19
 uint8_t LCD_CursorPosition = 0;
-String PassWord = "134679";
+
 String InputStr = "";
-String idS = "";
+uint8_t idS = 1;
+String user = "";
 uint8_t id;
 
 Keypad keypad = Keypad(makeKeymap(keyMap), rowPins, colPins, ROWS, COLS);
@@ -33,13 +38,14 @@ void startScreen() {
   I2C_LCD.setCursor(0, 0);
   I2C_LCD.print("Choose an option");
   I2C_LCD.setCursor(0, 1);
-  I2C_LCD.print("A .Code  B .Unlock");
+  I2C_LCD.print("A .Register  B .Unlock");
 }
  
 
 
 void setup(){
   Serial.begin(115200);
+  connectAWS();
   // Initialize The I2C LCD
   I2C_LCD.init();
   // Turn ON The Backlight
@@ -68,13 +74,32 @@ void setup(){
 
 
 void loop(){
+  client.loop();
   
   char key = keypad.getKey();
   
   if(key == 'A'){
     I2C_LCD.clear();
     I2C_LCD.setCursor(0, 0);
-    I2C_LCD.print("Enter PassWord:");
+    I2C_LCD.print("Enter ID: ");
+    LCD_CursorPosition = 0;
+    while (true) {
+        char passKey = keypad.getKey();
+        if (passKey) {
+          if (passKey == 'D') {  // Press '#' to submit password
+            break;
+          }
+          user += passKey;
+          I2C_LCD.setCursor(LCD_CursorPosition++, 1);
+          //Serial.print("*");  // Mask password input
+          I2C_LCD.print(passKey);
+        }
+    }
+    I2C_LCD.clear();
+    I2C_LCD.print(PassWord);
+    delay(1000);
+    I2C_LCD.clear();
+    I2C_LCD.print("Enter Code: ");
     LCD_CursorPosition = 0;
     while (true) {
         char passKey = keypad.getKey();
@@ -99,7 +124,7 @@ void loop(){
       I2C_LCD.print("Ready to register a fingerprint!");
       I2C_LCD.clear();
       I2C_LCD.setCursor(0, 0);
-      I2C_LCD.print("Please enter the ID # (from 1 to 127)");
+      /*I2C_LCD.print("Please enter the ID # (from 1 to 127)");
       while (true) {
         key = keypad.getKey();
         if (key) {
@@ -111,22 +136,23 @@ void loop(){
           //Serial.print("*");  // Mask password input
           I2C_LCD.print(key);
         }
-      }
-      id = idS.toInt();
+      }*/
       I2C_LCD.clear();
       I2C_LCD.setCursor(0, 0);
-      I2C_LCD.print("Registering ID #");
-      I2C_LCD.print(id);
+      //I2C_LCD.print("Registering ID #");
+      //I2C_LCD.print(id);
       I2C_LCD.clear();
       I2C_LCD.setCursor(0, 0);
-      while (!getFingerprintEnroll());
+      while (!getFingerprintEnroll(idS));
+      //sendFingerprint(id); 
+      idS++;
     }
     else {
       I2C_LCD.print("Wrong PassWord!");
     }
     delay(5000);
     InputStr = "";
-    idS = "";
+
     startScreen();
     digitalWrite(RELAY_PIN, HIGH);
   }
@@ -141,7 +167,7 @@ void loop(){
 }
 
 
-uint8_t getFingerprintEnroll() {
+uint8_t getFingerprintEnroll(uint8_t id) {
 
   int p = -1;
   I2C_LCD.print("Waiting Fingerprint"); 
@@ -309,3 +335,38 @@ uint8_t getFingerprintEnroll() {
 
   return true;
 }
+
+/*
+void sendFingerprint(uint8_t id) {
+    uint8_t templateData[512];  // Buffer for fingerprint template
+    uint16_t templateLength = 0;
+    String templateBase64 = "";  // Base64-encoded fingerprint template
+
+    // Load the fingerprint template
+    if (finger.loadModel(id) == FINGERPRINT_OK) {
+        Serial.println("Fingerprint template loaded successfully!");
+
+        // Upload the fingerprint template to a buffer
+        templateLength = finger.uploadModel(templateData, sizeof(templateData));
+        if (templateLength > 0) {
+            Serial.println("Fingerprint template uploaded successfully!");
+
+            // Convert to Base64
+            templateBase64 = base64::encode(templateData, templateLength);
+        } else {
+            Serial.println("Failed to upload fingerprint template.");
+            return;  // Exit the function if the template cannot be uploaded
+        }
+    } else {
+        Serial.println("Failed to load fingerprint template.");
+        return;  // Exit the function if the template cannot be loaded
+    }
+
+    // Publish the fingerprint data
+    publishFingerprintData(id, templateBase64);
+
+    // Ensure MQTT client loops for incoming messages
+    client.loop();
+    delay(1000);  // Wait for 1 second
+}
+*/

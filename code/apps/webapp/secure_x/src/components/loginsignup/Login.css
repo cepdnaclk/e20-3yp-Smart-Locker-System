@@ -48,12 +48,7 @@
     border-radius: 5px;
   }
   .input-groupt{
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #fff;
-    background: transparent;
-    color: #fff;
-    border-radius: 5px;
+    
   }
   
   .input-group input:focus {
