@@ -11,7 +11,7 @@ title: Smart Locker System
 
 # Secure X Smart Locker System
 <!-- -->
-![Secure X Smart Locker System](images/logo.png)
+![Secure X Smart Locker System](docs/images/logo.png)
 
 
 
@@ -46,7 +46,7 @@ Access is secured through a figerprint sensor, ensuring safety and convenience. 
 
 ## Solution Architecture
 
-![High level diagram](images/HighLevelArchitecture.jpg)
+![High level diagram](docs/images/HighLevelArchitecture.jpg)
 
 This architecture integrates Web & Mobile Apps, a Cloud Database, and Locker Hardware to ensure secure and efficient locker management.
 
@@ -63,18 +63,18 @@ Workflow
 
 ## Hardware and Software Designs
 
-![Technology Stack](images/TechStack.jpg)
+![Technology Stack](docs/images/TechStack.jpg)
 
 ## Testing
 
 Testing done on hardware and software, detailed + summarized results
 
 ## Time Line
-![Timeline](images/Timeline.jpg)
+![Timeline](docs/images/Timeline.jpg)
 
 ## Detailed budget
 <!-- -->
-![Detailed budget](images/bget23.png)
+![Detailed budget](docs/images/bget23.png)
 
 
 ## Conclusion
