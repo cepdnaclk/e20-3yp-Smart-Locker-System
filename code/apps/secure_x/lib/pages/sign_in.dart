@@ -8,6 +8,8 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth=MediaQuery.of(context).size.width;
+    double screenHeight=MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.blue[100],
       appBar:const CustomAppBar(),
@@ -16,30 +18,23 @@ class SignIn extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),            
-              child:Center(
-                child: CircleAvatar(
-                  radius:80,
-                  backgroundColor:Colors.white,
-                  child:ClipOval(
-                    child: Image.asset('assets/img/userImage.png',
-                    width:160,
-                    height:160,
-                    fit:BoxFit.cover,
-                    )
-                  )
-                ),
-              )
-            ),
-            const Padding(
-              padding:EdgeInsets.all(10),
-              child:Text('XX/XX/XXX',style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold
+            Center(
+                child: Container(
+                  width: screenWidth*0.95,
+                  height:screenHeight*0.35,
+                  alignment: Alignment.center,
+                  child:ClipRect(
+                    child: Align(
+                      alignment: Alignment.center,
+                      heightFactor: 0.5,
+                      widthFactor: 1,
+                      child: Image.asset('assets/img/logo.png',
+                      fit: BoxFit.contain,             
+                    ),
+                    ),
+                  ),            
                 ),
               ),
-            ),
             const SizedBox(height: 50,),
             Padding(
                 padding:const EdgeInsets.symmetric(horizontal: 20),

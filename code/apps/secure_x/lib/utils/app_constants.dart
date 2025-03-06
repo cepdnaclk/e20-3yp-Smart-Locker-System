@@ -10,4 +10,5 @@ class AppConstants {
   static const String LOG_IN_URI = '/login';
   static const String CREATE_USER_URI = '/api/newUsers/register';
   static const String USER_INFO_URI='/api/user/dashboard';
+  static const String UNLOCK_LOCKER_URI='';
 }

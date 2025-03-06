@@ -1,8 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
-class User extends StatelessWidget {
+class User extends StatefulWidget {
   const User({super.key});
+
+  @override
+  State<User> createState() => _UserState();
+}
+
+class _UserState extends State<User> {
+  // Variable to store the formatted registration number
+  String formattedRegNo = "XX/XX/XXX";
+  
+  // Get the AuthController instance
+  final AuthController _authController = Get.find<AuthController>();
+  
+  @override
+  void initState() {
+    super.initState();
+    // Retrieve registration number when screen loads
+    _loadUserRegNo();
+  }
+  
+  // Method to format registration number (E20002 -> E/20/002)
+  String _formatRegNo(String regNo) {
+    if (regNo == null || regNo.isEmpty) return "XX/XX/XXX";
+    
+    // For registration number in format 'E20002'
+    if (regNo.length >= 6 && regNo[0].toUpperCase() == 'E') {
+      return '${regNo[0]}/${regNo.substring(1, 3)}/${regNo.substring(3)}';
+    }
+    
+    // If it doesn't match the expected format, return as is
+    return regNo;
+  }
+
+  // Load user data from AuthController
+  void _loadUserRegNo() {
+    // Access the regNo from the userModel in AuthController
+    final userRegNo = _authController.userModel.value.regNo;
+    
+    if (userRegNo != null && userRegNo.isNotEmpty) {
+      setState(() {
+        formattedRegNo = _formatRegNo(userRegNo);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +87,9 @@ class User extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text('XX/XX/XXX',style: TextStyle(
+                      Text(
+                        formattedRegNo,
+                        style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold
                         ),

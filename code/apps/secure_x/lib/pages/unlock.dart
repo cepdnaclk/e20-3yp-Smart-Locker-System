@@ -1,9 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/pages/login_success.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
+import 'package:secure_x/utils/custom_snackbar.dart';
 
 class Unlock extends StatelessWidget {
   const Unlock({super.key});
+
+  // Method to handle unlocking the locker
+  void _unlockLocker(BuildContext context) async {
+    final AuthController authController = Get.find(); // Get the AuthController instance
+    final String? token = await authController.getUserToken(); // Retrieve the token
+
+    // Debug: Print the token
+    print('Token: $token');
+
+    if (token == null) {
+      // Debug: Print error if token is missing
+      print('Error: User not authenticated');
+      CustomSnackBar('User not authenticated', iserror: true); // Show error if token is missing
+      return;
+    }
+
+    try {
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()),
+      );
+
+      // Debug: Print sending unlock request
+      print('Sending unlock request...');
+
+      // Send the unlock request to the backend
+      final response = await authController.unlockLocker(token);
+
+      // Debug: Print API response
+      print('API Response: ${response.message}');
+
+      // Close the loading indicator
+      Navigator.of(context).pop();
+
+      if (response.isSuccess) {
+        // Debug: Print success message
+        print('Locker unlocked successfully');
+
+        // Show success message
+        CustomSnackBar(response.message, iserror: false, title: 'Success');
+
+        // Navigate to the LoginSuccess page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginSuccess()),
+        );
+      } else {
+        // Debug: Print error message
+        print('Failed to unlock locker: ${response.message}');
+
+        // Show error message
+        CustomSnackBar(response.message, iserror: true);
+      }
+    } catch (e) {
+      // Debug: Print unexpected error
+      print('Unexpected error: $e');
+
+      // Close the loading indicator
+      Navigator.of(context).pop();
+
+      // Show error message
+      CustomSnackBar('An unexpected error occurred: $e', iserror: true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +108,7 @@ class Unlock extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.all(60),
                 ),
-                onPressed: () {
-                  Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginSuccess(),));
-                },
+                onPressed: () => _unlockLocker(context),
                 child: const Text('Unlock', style: TextStyle(
                   fontSize: 22)),
           ),
