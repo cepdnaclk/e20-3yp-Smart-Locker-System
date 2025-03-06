@@ -74,7 +74,7 @@ Testing done on hardware and software, detailed + summarized results
 
 ## Detailed budget
 <!-- -->
-![Detailed budget](images/bget23)
+![Detailed budget](images/bget23.png)
 
 
 ## Conclusion
