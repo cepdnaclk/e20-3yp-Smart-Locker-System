@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/response_model.dart';
+import 'package:secure_x/pages/log_in.dart';
 import 'package:secure_x/utils/colors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
@@ -119,8 +120,8 @@ class _CreateUserState extends State<CreateUser> {
             children: [         
               Center(
                 child: Container(
-                  width: 800,
-                  height:350,
+                  width: 1000,
+                  height:200,
                   alignment: Alignment.center,
                   child:ClipRect(
                     child: Align(
@@ -133,9 +134,8 @@ class _CreateUserState extends State<CreateUser> {
                   )             
                 ),
               ),
-              const SizedBox(height: 10,),
               Padding(
-                padding:const EdgeInsets.symmetric(horizontal: 20),
+                padding:const EdgeInsets.symmetric(horizontal: 5),
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -144,68 +144,112 @@ class _CreateUserState extends State<CreateUser> {
                   ),
                     child: Column(
                       children: [
-                        TextField(
-                          controller: _emailController,
-                          decoration: const InputDecoration(
-                            labelText: 'Email',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.emailAddress,
+                        TextFormField(
+                        controller: _emailController,
+                        decoration: const InputDecoration(
+                          hintText: 'Email',
+                          filled: true,
+                          fillColor: AppColors.formFieldColor,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                         ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _firstNameController,
-                          decoration: const InputDecoration(
-                            labelText: 'First Name',
-                            border: OutlineInputBorder(),
-                          ),
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      const SizedBox(height: 10,),
+                      TextFormField(
+                        controller: _firstNameController,
+                        decoration:const InputDecoration(
+                          hintText: 'First Name',
+                          filled: true,
+                          fillColor: AppColors.formFieldColor,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                         ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _lastNameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Last Name',
-                            border: OutlineInputBorder(),
-                          ),
+                        keyboardType: TextInputType.text,
+                      ),
+                      const SizedBox(height: 10,),
+                      TextFormField(
+                        controller: _lastNameController,
+                        decoration:const InputDecoration(
+                          hintText: 'Last Name',
+                          filled: true,
+                          fillColor: AppColors.formFieldColor,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                         ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _regNoController,
-                          decoration: const InputDecoration(
-                            labelText: 'Registration Number',
-                            border: OutlineInputBorder(),
-                          ),
+                        keyboardType: TextInputType.text,
+                      ),
+                      const SizedBox(height: 10,),
+                      TextFormField(
+                        controller: _regNoController,
+                        decoration:const InputDecoration(
+                          hintText: 'Registration Number',
+                          filled: true,
+                          fillColor: AppColors.formFieldColor,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                         ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _mobileNoController,
-                          decoration:const  InputDecoration(
-                            labelText: 'Phone Number',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.phone,
+                        keyboardType: TextInputType.text,
+                      ),
+                      const SizedBox(height: 10,),
+                      TextFormField(
+                        controller: _mobileNoController,
+                        decoration:const InputDecoration(
+                          hintText: 'Phone Number',
+                          filled: true,
+                          fillColor: AppColors.formFieldColor,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                         ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _passwordController,
-                          decoration:const  InputDecoration(
-                            labelText: 'Password',
-                            border: OutlineInputBorder(),
-                          ),
-                          obscureText: true,
+                        keyboardType: TextInputType.phone,
+                      ),
+                      const SizedBox(height: 10,),
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration:const InputDecoration(
+                          hintText: 'Password',
+                          filled: true,
+                          fillColor: AppColors.formFieldColor,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                         ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _reEnterPasswordController,
-                          decoration: const InputDecoration(
-                            labelText: 'Re-enter Password',
-                            border: OutlineInputBorder(),
-                          ),
-                          obscureText: true,
+                        keyboardType: TextInputType.text,
+                      ),
+                      const SizedBox(height: 10,),
+                      TextFormField(
+                        controller: _reEnterPasswordController,
+                        obscureText: true,
+                        decoration:const InputDecoration(
+                          hintText: 'Re enter Password',
+                          filled: true,
+                          fillColor: AppColors.formFieldColor,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                         ),
+                        keyboardType: TextInputType.text,
+                        validator: (value){
+                          if(value!=_passwordController.text){
+                            return'Passwords do not match';
+                          }
+                          return null;
+                        },
+                      ),
                         const SizedBox(height: 24),
                         ElevatedButton(
-                          onPressed: _registration,
+                          onPressed: (){
+                            _registration;
+                            Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LogIn(),));
+                          },
                           child: const Text('Create Account'),
                         ),
                       ],

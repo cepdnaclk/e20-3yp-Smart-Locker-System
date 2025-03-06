@@ -176,4 +176,46 @@ class AuthRepo {
       );
     }
   }
+
+  // Method to unlock the locker
+  Future<ResponseModel> unlockLocker(String token) async {
+    try {
+      // Debug: Print updating headers with token
+      print('Updating headers with token: $token');
+
+      // Update headers with the token
+      dioClient.updateHeader(token);
+
+      // Debug: Print sending POST request
+      print('Sending POST request to: ${AppConstants.UNLOCK_LOCKER_URI}');
+
+      // Send the POST request to the backend
+      final response = await dioClient.postData(
+        AppConstants.UNLOCK_LOCKER_URI, // Define this constant in AppConstants
+        {}, // Add any required request body here
+      );
+
+      // Debug: Print API response
+      print('Received API response: ${response.statusCode} - ${response.data}');
+
+      if (response.statusCode == 200) {
+        return ResponseModel(
+          isSuccess: true,
+          message: 'Locker unlocked successfully',
+        );
+      } else {
+        return ResponseModel(
+          isSuccess: false,
+          message: 'Failed to unlock locker: ${response.data}',
+        );
+      }
+    } catch (e) {
+      // Debug: Print network error
+      print('Network error during unlock: $e');
+      return ResponseModel(
+        isSuccess: false,
+        message: 'Network error: $e',
+      );
+    }
+  }
 }

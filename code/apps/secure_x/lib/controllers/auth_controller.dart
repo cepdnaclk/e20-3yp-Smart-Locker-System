@@ -9,6 +9,7 @@ import 'package:secure_x/models/user_model.dart';
 import 'package:secure_x/pages/login_success.dart';
 import 'package:secure_x/utils/app_constants.dart';
 import 'package:secure_x/data/api/dio_client.dart';
+import 'package:secure_x/utils/custom_snackbar.dart';
 
 class AuthController extends GetxController {
   final AuthRepo authRepo;
@@ -39,7 +40,8 @@ class AuthController extends GetxController {
 
         print('Login successful: ${response.message}'); // Debug print
         print('Token: $token'); // Debug print
-        Get.snackbar('Success', response.message); // Show a success message
+        //Get.snackbar('Success', response.message); // Show a success message
+        CustomSnackBar(response.message,iserror: false, title:'Login successful',duration: Duration(seconds: 4));
         // Fetch the signed-in user's details
         await getSignedInUser();
         // Navigate to the LoginSuccess page
@@ -149,6 +151,42 @@ class AuthController extends GetxController {
     } catch (e) {
       print('Error fetching user token: $e'); // Debug print
       return null;
+    }
+  }
+
+  // Method to unlock the locker
+  Future<ResponseModel> unlockLocker(String token) async {
+    isLoading.value = true; // Start loading
+    try {
+      // Debug: Print sending unlock request
+      print('Sending unlock request to backend...');
+
+      // Send the unlock request to the backend
+      final response = await authRepo.unlockLocker(token);
+
+      // Debug: Print API response
+      print('API Response: ${response.message}');
+
+      if (response.isSuccess) {
+        return ResponseModel(
+          isSuccess: true,
+          message: 'Locker unlocked successfully',
+        );
+      } else {
+        return ResponseModel(
+          isSuccess: false,
+          message: 'Failed to unlock locker: ${response.message}',
+        );
+      }
+    } catch (e) {
+      // Debug: Print unexpected error
+      print('Unexpected error during unlock: $e');
+      return ResponseModel(
+        isSuccess: false,
+        message: 'An unexpected error occurred: $e',
+      );
+    } finally {
+      isLoading.value = false; // Stop loading
     }
   }
 }

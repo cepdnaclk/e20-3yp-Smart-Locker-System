@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:secure_x/pages/user.dart';
 import 'package:secure_x/utils/colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -13,6 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: AppColors.boxColor,
           onSelected: (value) {
             if(value== 'View Profile'){
+              Get.to(() => const User());
             }else if(value=='Settings'){
             }else if(value=='History'){
             }else if(value=='Log Out'){            
