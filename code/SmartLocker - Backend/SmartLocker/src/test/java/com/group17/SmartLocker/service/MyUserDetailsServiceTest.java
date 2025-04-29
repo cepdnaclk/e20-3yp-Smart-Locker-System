@@ -2,7 +2,6 @@ package com.group17.SmartLocker.service;
 
 
 import com.group17.SmartLocker.model.User;
-import com.group17.SmartLocker.model.UserPrincipal;
 import com.group17.SmartLocker.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

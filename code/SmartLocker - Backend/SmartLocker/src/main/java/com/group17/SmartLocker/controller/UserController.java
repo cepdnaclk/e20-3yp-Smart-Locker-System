@@ -2,7 +2,7 @@ package com.group17.SmartLocker.controller;
 
 
 import com.group17.SmartLocker.model.User;
-import com.group17.SmartLocker.service.UserService;
+import com.group17.SmartLocker.service.lockerUser.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

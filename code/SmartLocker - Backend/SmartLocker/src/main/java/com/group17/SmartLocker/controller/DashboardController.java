@@ -1,12 +1,10 @@
 package com.group17.SmartLocker.controller;
 
-import com.group17.SmartLocker.model.DashboardResponse;
+import com.group17.SmartLocker.repsponse.DashboardResponse;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.UserRepository;
-import com.group17.SmartLocker.service.JwtService;
+import com.group17.SmartLocker.service.jwt.JwtService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;

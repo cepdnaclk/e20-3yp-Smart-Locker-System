@@ -1,8 +1,10 @@
 package com.group17.SmartLocker.service;
 
-import com.group17.SmartLocker.model.AuthenticationResponse;
+import com.group17.SmartLocker.repsponse.AuthenticationResponse;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.UserRepository;
+import com.group17.SmartLocker.service.authentication.AuthenticationService;
+import com.group17.SmartLocker.service.jwt.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

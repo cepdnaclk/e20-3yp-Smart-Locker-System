@@ -1,18 +1,18 @@
 package com.group17.SmartLocker.service;
 
-import com.group17.SmartLocker.dto.NewUserRegistrationDto;
+import com.group17.SmartLocker.dto.NewUserDto;
 import com.group17.SmartLocker.enums.Role;
-import com.group17.SmartLocker.enums.Status;
+import com.group17.SmartLocker.enums.NewUserStatus;
 import com.group17.SmartLocker.model.NewUser;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.NewUserRepository;
 import com.group17.SmartLocker.repository.UserRepository;
+import com.group17.SmartLocker.service.newUser.NewUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -40,11 +40,11 @@ class NewUserServiceTest {
 
     private NewUser newUser;
     private User user;
-    private NewUserRegistrationDto newUserDto;
+    private NewUserDto newUserDto;
 
     @BeforeEach
     void setUp() {
-        newUserDto = new NewUserRegistrationDto();
+        newUserDto = new NewUserDto();
         newUserDto.setRegNo("E20002");
         newUserDto.setFirstName("John");
         newUserDto.setLastName("Doe");
@@ -61,7 +61,7 @@ class NewUserServiceTest {
         newUser.setEmail("john.doe@example.com");
         newUser.setPassword("encodedPassword");
         newUser.setRole(Role.NEW_USER);
-        newUser.setStatus(Status.PENDING);
+        newUser.setStatus(NewUserStatus.PENDING);
 
         user = new User();
         user.setId("E20002");
@@ -84,7 +84,7 @@ class NewUserServiceTest {
         assertNotNull(savedUser);
         assertEquals("E20002", savedUser.getRegNo());
         assertEquals("John", savedUser.getFirstName());
-        assertEquals(Status.PENDING, savedUser.getStatus());
+        assertEquals(NewUserStatus.PENDING, savedUser.getStatus());
 
         verify(passwordEncoder, times(1)).encode("password");
         verify(newUserRepository, times(1)).save(any(NewUser.class));
@@ -93,14 +93,14 @@ class NewUserServiceTest {
     // Test Get Pending Users
     @Test
     void testGetPendingUsers() {
-        when(newUserRepository.findByStatus(Status.PENDING)).thenReturn(Arrays.asList(newUser));
+        when(newUserRepository.findByStatus(NewUserStatus.PENDING)).thenReturn(Arrays.asList(newUser));
 
         List<NewUser> pendingUsers = newUserService.getPendingUsers();
 
         assertEquals(1, pendingUsers.size());
         assertEquals("E20002", pendingUsers.get(0).getRegNo());
 
-        verify(newUserRepository, times(1)).findByStatus(Status.PENDING);
+        verify(newUserRepository, times(1)).findByStatus(NewUserStatus.PENDING);
     }
 
     // Test Approve User

@@ -2,7 +2,7 @@ package com.group17.SmartLocker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group17.SmartLocker.model.User;
-import com.group17.SmartLocker.service.UserService;
+import com.group17.SmartLocker.service.lockerUser.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.CrossOrigin;
 

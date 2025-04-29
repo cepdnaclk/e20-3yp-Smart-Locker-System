@@ -1,14 +1,13 @@
-package com.group17.SmartLocker.service;
+package com.group17.SmartLocker.service.authentication;
 
 import com.group17.SmartLocker.model.User;
-import com.group17.SmartLocker.model.AuthenticationResponse;
+import com.group17.SmartLocker.repsponse.AuthenticationResponse;
 import com.group17.SmartLocker.repository.UserRepository;
+import com.group17.SmartLocker.service.jwt.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AuthenticationService {

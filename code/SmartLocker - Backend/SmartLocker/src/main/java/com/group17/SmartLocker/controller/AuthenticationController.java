@@ -1,8 +1,8 @@
 package com.group17.SmartLocker.controller;
 
-import com.group17.SmartLocker.model.AuthenticationResponse;
+import com.group17.SmartLocker.repsponse.AuthenticationResponse;
 import com.group17.SmartLocker.model.User;
-import com.group17.SmartLocker.service.AuthenticationService;
+import com.group17.SmartLocker.service.authentication.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

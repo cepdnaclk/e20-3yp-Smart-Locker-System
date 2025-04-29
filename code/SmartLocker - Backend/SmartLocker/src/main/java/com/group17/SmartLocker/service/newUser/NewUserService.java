@@ -1,8 +1,8 @@
-package com.group17.SmartLocker.service;
+package com.group17.SmartLocker.service.newUser;
 
-import com.group17.SmartLocker.dto.NewUserRegistrationDto;
+import com.group17.SmartLocker.dto.NewUserDto;
 import com.group17.SmartLocker.enums.Role;
-import com.group17.SmartLocker.enums.Status;
+import com.group17.SmartLocker.enums.NewUserStatus;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.model.NewUser;
 import com.group17.SmartLocker.repository.UserRepository;
@@ -26,7 +26,7 @@ public class NewUserService {
     }
 
     // new user registration process
-    public NewUser registerUser(NewUserRegistrationDto newUserDto) {
+    public NewUser registerUser(NewUserDto newUserDto) {
         NewUser newUser = new NewUser();
 
         newUser.setRegNo(newUserDto.getRegNo());
@@ -36,7 +36,7 @@ public class NewUserService {
         newUser.setEmail(newUserDto.getEmail());
         newUser.setPassword(passwordEncoder.encode(newUserDto.getPassword())); // Encrypt password
         newUser.setRole(Role.NEW_USER); // Default status
-        newUser.setStatus(Status.PENDING);
+        newUser.setStatus(NewUserStatus.PENDING);
 
         newUserRepository.save(newUser);
 
@@ -47,7 +47,7 @@ public class NewUserService {
 
     // Get pending users
     public List<NewUser> getPendingUsers() {
-        return newUserRepository.findByStatus(Status.PENDING);
+        return newUserRepository.findByStatus(NewUserStatus.PENDING);
     }
 
     // Admin approves user and move the user in to the locker user table
