@@ -2,7 +2,7 @@ package com.group17.SmartLocker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group17.SmartLocker.model.User;
-import com.group17.SmartLocker.service.lockerUser.UserService;
+import com.group17.SmartLocker.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,12 +1,12 @@
 package com.group17.SmartLocker.service.newUser;
 
-import com.group17.SmartLocker.dto.NewUserDto;
 import com.group17.SmartLocker.enums.Role;
 import com.group17.SmartLocker.enums.NewUserStatus;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.model.NewUser;
 import com.group17.SmartLocker.repository.UserRepository;
 import com.group17.SmartLocker.repository.NewUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,55 +14,45 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class NewUserService {
+@RequiredArgsConstructor
+public class NewUserService implements INewUserService{
     private final NewUserRepository newUserRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public NewUserService(NewUserRepository newUserRepository, PasswordEncoder passwordEncoder, UserRepository userRepository) {
-        this.newUserRepository = newUserRepository;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
     // new user registration process
-    public NewUser registerUser(NewUserDto newUserDto) {
-        NewUser newUser = new NewUser();
+    // todo : implement the registration number and the username check when a new user registration
+    @Override
+    public NewUser registerUser(NewUser newUser) {
+        try {
+            newUser.setPassword(passwordEncoder.encode(newUser.getPassword())); // Encrypt password
+            newUser.setRole(Role.NEW_USER); // Default status
+            newUser.setStatus(NewUserStatus.PENDING);
 
-        newUser.setRegNo(newUserDto.getRegNo());
-        newUser.setFirstName(newUserDto.getFirstName());
-        newUser.setLastName(newUserDto.getLastName());
-        newUser.setContactNumber(newUserDto.getContactNumber());
-        newUser.setEmail(newUserDto.getEmail());
-        newUser.setPassword(passwordEncoder.encode(newUserDto.getPassword())); // Encrypt password
-        newUser.setRole(Role.NEW_USER); // Default status
-        newUser.setStatus(NewUserStatus.PENDING);
+            newUserRepository.save(newUser);
 
-        newUserRepository.save(newUser);
-
-        return newUser;
+            return newUser;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-
-    // Accept or reject users
 
     // Get pending users
+    @Override
     public List<NewUser> getPendingUsers() {
+        // todo : Use Dto to send only the required data to front end;
+        // todo : should handle the null array in the controller
         return newUserRepository.findByStatus(NewUserStatus.PENDING);
     }
 
     // Admin approves user and move the user in to the locker user table
+    @Override
     public Optional<User> approveUser(Long id) {
-
         Optional<NewUser> newUserOpt = newUserRepository.findById(id);
-
         if (newUserOpt.isPresent()) {
             User user = getUser(newUserOpt);
-
             userRepository.save(user); // Save approved user
-
-            // Delete from NewUser table
-            newUserRepository.deleteById(id);
-
+            newUserRepository.deleteById(id); // Delete from NewUser table
             return Optional.of(user);
         }
         return Optional.empty();
@@ -70,7 +60,6 @@ public class NewUserService {
 
     // Convert new user to a locker user after admin approval
     private static User getUser(Optional<NewUser> newUserOpt) {
-
         NewUser newUser = newUserOpt.get();
 
         // Create new LockerUser
@@ -87,6 +76,7 @@ public class NewUserService {
     }
 
     // Reject a user
+    @Override
     public void rejectUser(Long id) {
         newUserRepository.deleteById(id);
     }

@@ -1,6 +1,6 @@
 package com.group17.SmartLocker.service;
 
-import com.group17.SmartLocker.repsponse.AuthenticationResponse;
+import com.group17.SmartLocker.service.authentication.AuthenticationResponse;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.UserRepository;
 import com.group17.SmartLocker.service.authentication.AuthenticationService;

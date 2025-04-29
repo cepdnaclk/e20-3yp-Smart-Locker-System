@@ -32,12 +32,12 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/api/newUsers/register").permitAll()
+                        .requestMatchers("/api/v1/login", "/api/v1/newUsers/register").permitAll()
 
 //                        .requestMatchers("/login", "/api/**").permitAll() // this line used to manually create an admin for the system
 
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/user/**").hasRole("USER")
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/user/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService)

@@ -66,7 +66,7 @@ class NewUserControllerTest {
     // Test Register New User
     @Test
     void testRegisterUser() throws Exception {
-        when(newUserService.registerUser(any(NewUserDto.class))).thenReturn(newUser);
+        when(newUserService.registerUser(any(NewUser.class))).thenReturn(newUser);
 
         mockMvc.perform(post("/api/newUsers/register")
                         .contentType("application/json")
@@ -75,7 +75,7 @@ class NewUserControllerTest {
                 .andExpect(jsonPath("$.regNo").value("E20003"))
                 .andExpect(jsonPath("$.firstName").value("Jane"));
 
-        verify(newUserService, times(1)).registerUser(any(NewUserDto.class));
+        verify(newUserService, times(1)).registerUser(any(NewUser.class));
     }
 
     // Test Get Pending Users
