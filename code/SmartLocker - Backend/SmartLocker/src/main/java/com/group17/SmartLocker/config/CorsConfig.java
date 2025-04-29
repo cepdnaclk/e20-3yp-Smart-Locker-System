@@ -16,11 +16,11 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Apply to all API endpoints
-                        .allowedOriginPatterns("*")
-//                        .allowedOrigins("*") // Allow frontend
+//                        .allowedOriginPatterns("*")
+                        .allowedOrigins("*") // Allow frontend (put frontend address here instead of *)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowCredentials(false);
             }
         };
     }
