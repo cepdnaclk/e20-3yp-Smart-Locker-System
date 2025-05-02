@@ -1,7 +1,7 @@
 package com.group17.SmartLocker.service;
 
 import com.group17.SmartLocker.model.User;
-import com.group17.SmartLocker.model.UserPrincipal;
+import com.group17.SmartLocker.principal.UserPrincipal;
 import com.group17.SmartLocker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

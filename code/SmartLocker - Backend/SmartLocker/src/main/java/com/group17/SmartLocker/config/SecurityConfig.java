@@ -14,10 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
-@CrossOrigin(origins = "http://localhost:3000")
 @EnableWebSecurity
 public class SecurityConfig {
 
@@ -34,14 +32,12 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/api/newUsers/register").permitAll()
-
+                        .requestMatchers("/api/v1/login", "/api/v1/newUsers/register").permitAll()
 
 //                        .requestMatchers("/login", "/api/**").permitAll() // this line used to manually create an admin for the system
 
-
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/user/**").hasRole("USER")
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/user/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService)
@@ -61,6 +57,8 @@ public class SecurityConfig {
     }
 
 }
+
+
 
 // spring security architecture: https://www.youtube.com/watch?v=qoYcmw43mdU
 // spring jwt authentication and authorization https://www.youtube.com/watch?v=RnZmeczS_DI

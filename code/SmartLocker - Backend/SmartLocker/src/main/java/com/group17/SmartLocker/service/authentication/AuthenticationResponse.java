@@ -1,4 +1,4 @@
-package com.group17.SmartLocker.model;
+package com.group17.SmartLocker.service.authentication;
 
 public class AuthenticationResponse {
 

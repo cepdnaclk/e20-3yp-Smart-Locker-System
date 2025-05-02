@@ -1,4 +1,4 @@
-package com.group17.SmartLocker.service;
+package com.group17.SmartLocker.service.jwt;
 
 import com.group17.SmartLocker.model.User;
 import io.jsonwebtoken.Claims;

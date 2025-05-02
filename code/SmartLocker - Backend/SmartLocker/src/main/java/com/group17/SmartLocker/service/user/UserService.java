@@ -1,4 +1,4 @@
-package com.group17.SmartLocker.service;
+package com.group17.SmartLocker.service.user;
 
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.model.User;

@@ -1,6 +1,6 @@
 package com.group17.SmartLocker.filter;
 
-import com.group17.SmartLocker.service.JwtService;
+import com.group17.SmartLocker.service.jwt.JwtService;
 import com.group17.SmartLocker.service.MyUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

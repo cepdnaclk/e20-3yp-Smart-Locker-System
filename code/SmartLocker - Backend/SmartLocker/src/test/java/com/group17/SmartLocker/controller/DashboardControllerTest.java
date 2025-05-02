@@ -1,9 +1,8 @@
 package com.group17.SmartLocker.controller;
 
-import com.group17.SmartLocker.model.DashboardResponse;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.UserRepository;
-import com.group17.SmartLocker.service.JwtService;
+import com.group17.SmartLocker.service.jwt.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

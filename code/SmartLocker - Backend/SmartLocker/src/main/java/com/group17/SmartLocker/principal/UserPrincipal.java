@@ -1,5 +1,6 @@
-package com.group17.SmartLocker.model;
+package com.group17.SmartLocker.principal;
 
+import com.group17.SmartLocker.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

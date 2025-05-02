@@ -1,17 +1,16 @@
 package com.group17.SmartLocker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group17.SmartLocker.dto.NewUserRegistrationDto;
+import com.group17.SmartLocker.dto.NewUserDto;
 import com.group17.SmartLocker.model.NewUser;
 import com.group17.SmartLocker.model.User;
-import com.group17.SmartLocker.service.NewUserService;
+import com.group17.SmartLocker.service.newUser.NewUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -36,13 +35,13 @@ class NewUserControllerTest {
 
     private NewUser newUser;
     private User approvedUser;
-    private NewUserRegistrationDto newUserDto;
+    private NewUserDto newUserDto;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(newUserController).build();
 
-        newUserDto = new NewUserRegistrationDto();
+        newUserDto = new NewUserDto();
         newUserDto.setRegNo("E20003");
         newUserDto.setFirstName("Jane");
         newUserDto.setLastName("Smith");
@@ -67,7 +66,7 @@ class NewUserControllerTest {
     // Test Register New User
     @Test
     void testRegisterUser() throws Exception {
-        when(newUserService.registerUser(any(NewUserRegistrationDto.class))).thenReturn(newUser);
+        when(newUserService.registerUser(any(NewUser.class))).thenReturn(newUser);
 
         mockMvc.perform(post("/api/newUsers/register")
                         .contentType("application/json")
@@ -76,7 +75,7 @@ class NewUserControllerTest {
                 .andExpect(jsonPath("$.regNo").value("E20003"))
                 .andExpect(jsonPath("$.firstName").value("Jane"));
 
-        verify(newUserService, times(1)).registerUser(any(NewUserRegistrationDto.class));
+        verify(newUserService, times(1)).registerUser(any(NewUser.class));
     }
 
     // Test Get Pending Users

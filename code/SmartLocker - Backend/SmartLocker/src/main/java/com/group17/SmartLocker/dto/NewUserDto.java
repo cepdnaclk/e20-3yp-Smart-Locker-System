@@ -3,7 +3,7 @@ package com.group17.SmartLocker.dto;
 import lombok.Data;
 
 @Data
-public class NewUserRegistrationDto {
+public class NewUserDto {
 
     private String regNo;
     private String firstName;

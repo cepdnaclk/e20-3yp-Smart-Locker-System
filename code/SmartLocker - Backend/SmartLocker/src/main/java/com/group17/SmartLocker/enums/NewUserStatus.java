@@ -1,5 +1,5 @@
 package com.group17.SmartLocker.enums;
 
-public enum Status {
+public enum NewUserStatus {
     PENDING, APPROVED, REJECTED
 }
