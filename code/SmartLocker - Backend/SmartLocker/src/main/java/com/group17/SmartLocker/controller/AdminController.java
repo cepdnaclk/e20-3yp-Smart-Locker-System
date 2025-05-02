@@ -1,3 +1,5 @@
+// this comment is added to check the pull requests
+
 package com.group17.SmartLocker.controller;
 
 import com.group17.SmartLocker.model.NewUser;
