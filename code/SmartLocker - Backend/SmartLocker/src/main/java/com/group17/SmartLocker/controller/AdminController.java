@@ -1,4 +1,4 @@
-// this comment is added to check the pull requests
+// Admin controller updated
 
 package com.group17.SmartLocker.controller;
 
