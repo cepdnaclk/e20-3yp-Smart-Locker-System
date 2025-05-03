@@ -1,5 +1,3 @@
-// Admin controller updated
-
 package com.group17.SmartLocker.controller;
 
 import com.group17.SmartLocker.model.NewUser;
