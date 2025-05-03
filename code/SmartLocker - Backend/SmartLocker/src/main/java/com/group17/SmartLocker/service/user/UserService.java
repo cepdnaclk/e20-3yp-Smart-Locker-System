@@ -16,8 +16,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // CRUD operations for the user
-
     // Get all users
     public List<User> getAllUsers(){
         return userRepository.findAll();
@@ -25,7 +23,6 @@ public class UserService {
 
     // Create a user
     public User createUser(User user){
-
         return userRepository.save(user);
     }
 
