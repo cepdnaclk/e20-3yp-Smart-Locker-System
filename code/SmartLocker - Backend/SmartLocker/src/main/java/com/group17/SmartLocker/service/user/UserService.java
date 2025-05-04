@@ -3,56 +3,66 @@ package com.group17.SmartLocker.service.user;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements IUserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    // Get all users
+    @Override
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
 
-    // Create a user
+    @Override
     public User createUser(User user){
         return userRepository.save(user);
     }
 
-    // Get user by id
-    public ResponseEntity<User> getUserById(String id){
-        User user = userRepository.findById(id)
+    @Override
+    public User getUserById(String id){
+        return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
-
-        return ResponseEntity.ok(user);
     }
 
-    // Update user
-    public ResponseEntity<User> updateUser(String id, User userDetails){
+    @Override
+    public User updateUser(String id, User userDetails){
         User updateUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
-
         updateUser.setFingerPrint(userDetails.getFingerPrint());
-
         userRepository.save(updateUser);
-
-        return ResponseEntity.ok(updateUser);
+        return updateUser;
     }
 
-    // Delete user
-    public ResponseEntity<HttpStatus> deleteUser(String id) {
+    @Override
+    public User editUserDetails(String id, Map<String, Object> updates){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        updates.forEach((key, value) -> {
+            Field field = ReflectionUtils.findField(User.class, key);
+            if (field != null) {
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, user, value);
+            }
+        });
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void deleteUser(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
-
         userRepository.delete(user);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

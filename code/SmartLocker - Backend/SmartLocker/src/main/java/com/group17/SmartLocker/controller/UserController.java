@@ -1,18 +1,14 @@
 package com.group17.SmartLocker.controller;
 
-
-import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.response.ApiResponse;
 import com.group17.SmartLocker.service.jwt.JwtService;
 import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -49,36 +45,5 @@ public class UserController {
 
     }
 
-
-    // get all registered users
-    @GetMapping("/getAllUsers")
-    public List<User> getAllUsers(){
-        System.out.println("Request comes in");
-        return userService.getAllUsers();
-    }
-
-    // create a new user
-    @PostMapping("/admin/createNewUser")
-    public User createUser(@RequestBody User user){
-        return userService.createUser(user);
-    }
-
-    // find user by id
-    @GetMapping("/admin/findUserById/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id){
-        return userService.getUserById(id);
-    }
-
-    // update a user details by id
-    @PutMapping("/admin/updateUserById/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User userDetails){
-        return userService.updateUser(id, userDetails);
-    }
-
-    // delete users
-    @DeleteMapping("/admin/deleteUserByID/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String id){
-        return userService.deleteUser(id);
-    }
 
 }
