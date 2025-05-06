@@ -1,5 +1,6 @@
 package com.group17.SmartLocker.model;
 
+import com.group17.SmartLocker.enums.LockerLogStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -18,6 +19,9 @@ public class LockerLog {
     @Column(nullable = false)
     private LocalDateTime accessTime;
     private LocalDateTime releasedTime;
+
+    @Enumerated(EnumType.STRING)
+    private LockerLogStatus status;
 
     @ManyToOne
     @JoinColumn(name = "locker_id", nullable = false)

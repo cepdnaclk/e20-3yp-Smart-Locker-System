@@ -1,61 +1,115 @@
 package com.group17.SmartLocker.service.user;
 
+import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import io.micrometer.common.util.StringUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
+@RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements IUserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    // CRUD operations for the user
+    @Override
+    public List<UserDetailsDto> getAllUsers(){
+        List<User> users = userRepository.findAll();
+        List<UserDetailsDto> userDetailsDtoList = new ArrayList<>();
+        for(User user : users){
 
-    // Get all users
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+            UserDetailsDto userDetailsDto = new UserDetailsDto();
+
+            userDetailsDto.setId(user.getId());
+            userDetailsDto.setUsername(user.getUsername());
+            userDetailsDto.setFirstName(user.getFirstName());
+            userDetailsDto.setLastName(user.getLastName());
+            userDetailsDto.setContactNumber(user.getContactNumber());
+            userDetailsDto.setEmail(user.getEmail());
+            userDetailsDto.setFingerPrintExists(StringUtils.isNotBlank(user.getUsername()));
+            userDetailsDto.setLockerLogs(user.getLockerLogs());
+
+            userDetailsDtoList.add(userDetailsDto);
+        }
+
+        return userDetailsDtoList;
     }
 
-    // Create a user
+    @Override
     public User createUser(User user){
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserDetailsDto getUserById(String id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
+
+        UserDetailsDto userDetailsDto = new UserDetailsDto();
+
+        userDetailsDto.setId(user.getId());
+        userDetailsDto.setUsername(user.getUsername());
+        userDetailsDto.setFirstName(user.getFirstName());
+        userDetailsDto.setLastName(user.getLastName());
+        userDetailsDto.setContactNumber(user.getContactNumber());
+        userDetailsDto.setEmail(user.getEmail());
+        userDetailsDto.setFingerPrintExists(StringUtils.isNotBlank(user.getUsername()));
+        userDetailsDto.setLockerLogs(user.getLockerLogs());
+
+        return userDetailsDto;
+    }
+
+    @Override
+    public User updateUser(String id, User userDetails){
+        User updateUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
+
+        updateUser.setUsername(userDetails.getUsername());
+        updateUser.setFirstName(userDetails.getFirstName());
+        updateUser.setLastName(userDetails.getLastName());
+        updateUser.setContactNumber(userDetails.getContactNumber());
+        updateUser.setEmail(userDetails.getEmail());
+
+        return userRepository.save(updateUser);
+    }
+
+    @Override
+    public User editUserDetails(String id, Map<String, Object> updates){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        Set<String> allowedFields = Set.of("firstName", "lastName", "email", "contactNumber");
+
+        updates.forEach((key, value) -> {
+            if (allowedFields.contains(key)){
+                Field field = ReflectionUtils.findField(User.class, key);
+                if (field != null) {
+                    field.setAccessible(true);
+                    ReflectionUtils.setField(field, user, value);
+                }
+            }
+        });
 
         return userRepository.save(user);
     }
 
-    // Get user by id
-    public ResponseEntity<User> getUserById(String id){
+    @Override
+    public void deleteUser(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
-
-        return ResponseEntity.ok(user);
-    }
-
-    // Update user
-    public ResponseEntity<User> updateUser(String id, User userDetails){
-        User updateUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
-
-        updateUser.setFingerPrint(userDetails.getFingerPrint());
-
-        userRepository.save(updateUser);
-
-        return ResponseEntity.ok(updateUser);
-    }
-
-    // Delete user
-    public ResponseEntity<HttpStatus> deleteUser(String id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
-
         userRepository.delete(user);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @Override
+    public String getUserIdByUsername(String username){
+        User user = userRepository.findByUsername(username);
+        return user.getId();
+    }
+
 }
