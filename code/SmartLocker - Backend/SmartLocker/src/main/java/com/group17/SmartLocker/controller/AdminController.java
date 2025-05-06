@@ -1,5 +1,6 @@
 package com.group17.SmartLocker.controller;
 
+import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.model.NewUser;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.service.newUser.NewUserService;
@@ -53,9 +54,9 @@ public class AdminController {
 
     // get all registered users
     @GetMapping("/getAllUsers")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserDetailsDto>> getAllUsers(){
         try {
-            List<User> users = userService.getAllUsers();
+            List<UserDetailsDto> users = userService.getAllUsers();
             return ResponseEntity.ok(users);
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
@@ -71,9 +72,9 @@ public class AdminController {
 
     // find user by id
     @GetMapping("/findUserById/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id){
+    public ResponseEntity<UserDetailsDto> getUserById(@PathVariable String id){
         try {
-            User user = userService.getUserById(id);
+            UserDetailsDto user = userService.getUserById(id);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();

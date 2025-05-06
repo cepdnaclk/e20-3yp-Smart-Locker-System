@@ -1,6 +1,9 @@
 package com.group17.SmartLocker.controller;
 
-import com.group17.SmartLocker.response.ApiResponse;
+import com.group17.SmartLocker.dto.UserDetailsDto;
+import com.group17.SmartLocker.model.LockerLog;
+import com.group17.SmartLocker.model.User;
+import com.group17.SmartLocker.repsponse.ApiResponse;
 import com.group17.SmartLocker.service.jwt.JwtService;
 import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.user.UserService;
@@ -9,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -27,7 +33,6 @@ public class UserController {
     @GetMapping("/unlockLocker")
     public ResponseEntity<ApiResponse> unlockLocker(HttpServletRequest request, @RequestBody Long clusterId){
 
-        System.out.println("Request comes in");
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
         // There should be a token to access this endpoint ?
@@ -45,5 +50,65 @@ public class UserController {
 
     }
 
+    // to view users their user details
+    @GetMapping("/profile")
+    public ResponseEntity<UserDetailsDto> getUserById(HttpServletRequest request){
+
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        }
+
+        try {
+            UserDetailsDto user = userService.getUserById(jwtService.extractUsername(jwtToken));
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    // to edit own details of the user
+    @PatchMapping("/editProfile")
+    public ResponseEntity<User> patchUser(HttpServletRequest request, @RequestBody Map<String, Object> updates) {
+
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        }
+
+        try {
+            String id = userService.getUserIdByUsername(jwtService.extractUsername(jwtToken));
+            User user = userService.editUserDetails(id, updates);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/logs")
+    public ResponseEntity<List<LockerLog>> getUserLogs(HttpServletRequest request){
+
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        }
+
+        try {
+            UserDetailsDto user = userService.getUserById(jwtService.extractUsername(jwtToken));
+            return ResponseEntity.ok(user.getLockerLogs());
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }

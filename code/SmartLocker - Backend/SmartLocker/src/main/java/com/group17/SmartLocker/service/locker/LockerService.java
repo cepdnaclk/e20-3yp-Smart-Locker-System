@@ -1,5 +1,6 @@
 package com.group17.SmartLocker.service.locker;
 
+import com.group17.SmartLocker.dto.LockerDto;
 import com.group17.SmartLocker.enums.LockerLogStatus;
 import com.group17.SmartLocker.enums.LockerStatus;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
@@ -31,7 +32,7 @@ public class LockerService implements ILockerService{
         // todo: Users should be allowed to use a preferred username
         String userId = username;
 
-        Optional<List<Locker>> availableLockers = getAvailableLockers(clusterId);
+        Optional<List<Locker>> availableLockers = getAvailableLockersByCluster(clusterId);
         LockerLog activeLog = lockerLogService.findActiveLog(userId);
 
         if(activeLog != null){
@@ -62,8 +63,38 @@ public class LockerService implements ILockerService{
     }
 
     @Override
-    public Optional<List<Locker>> getAvailableLockers(Long clusterId){
+    public Optional<List<Locker>> getAllLockers() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<Locker>> getAllLockersByCluster(Long clusterId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<Locker>> getAvailableLockersByCluster(Long clusterId){
         List<Locker> availableLockers = lockerRepository.findByLockerClusterIdAndLockerStatus(clusterId, LockerStatus.AVAILABLE);
         return availableLockers.isEmpty() ? Optional.empty() : Optional.of(availableLockers);
+    }
+
+    @Override
+    public Optional<List<Locker>> getOccupiedLockersByCluster(Long clusterId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Locker addLockerToCluster(LockerDto locker, Long clusterId) {
+        return null;
+    }
+
+    @Override
+    public Locker updateLockerDetails(Long lockerID, LockerDto locker) {
+        return null;
+    }
+
+    @Override
+    public Locker deleterLocker(Long lockerId) {
+        return null;
     }
 }

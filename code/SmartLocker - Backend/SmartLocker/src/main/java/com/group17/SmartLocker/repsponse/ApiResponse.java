@@ -1,4 +1,4 @@
-package com.group17.SmartLocker.response;
+package com.group17.SmartLocker.repsponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
