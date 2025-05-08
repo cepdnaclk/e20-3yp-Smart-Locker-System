@@ -17,7 +17,7 @@ public class Locker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lockerId;
-    private Long displayNumber;
+    private int displayNumber;
 
     @Enumerated(EnumType.STRING)
     private LockerStatus lockerStatus;
@@ -26,7 +26,7 @@ public class Locker {
     private List<LockerLog> lockerLogs;
 
     @ManyToOne
-    @JoinColumn(name = "lockerCluster_id", nullable = false)
+    @JoinColumn(name = "lockerClusterId", nullable = false)
     private LockerCluster lockerCluster;
 
 }

@@ -9,7 +9,11 @@ import java.util.List;
 
 @Repository
 public interface LockerRepository extends JpaRepository<Locker, Long> {
+
     List<Locker> findByLockerClusterIdAndLockerStatus(Long clusterId, LockerStatus status);
 
+    List<Locker> findByLockerClusterId(Long clusterId);
+
+    int countByLockerClusterId(Long clusterId);
 
 }
