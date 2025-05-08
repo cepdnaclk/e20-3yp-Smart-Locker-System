@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class LockerDto {
-    private Long displayNumber;
+    private int displayNumber;
     private LockerStatus lockerStatus;
     private LockerCluster lockerCluster;
 }
