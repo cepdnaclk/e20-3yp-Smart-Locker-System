@@ -87,6 +87,7 @@ public class LockerService implements ILockerService{
         return lockerRepository.findByLockerClusterIdAndLockerStatus(clusterId, LockerStatus.OCCUPIED);
     }
 
+    // Todo: change this function to add multiple lockers to a cluster once
     @Override
     public Locker addLockerToCluster(Long clusterId) {
 
@@ -103,44 +104,6 @@ public class LockerService implements ILockerService{
         locker.setLockerCluster(cluster);
 
         return lockerRepository.save(locker);
-
-//        long lockerCount = (long) getAllLockersByCluster(clusterId).size();
-
-//        int lockerCount = getAllLockersByCluster(clusterId)
-//                .get(List::size)
-//                .orElse(0);
-
-//        long lockerCount = getAllLockersByCluster(clusterId)
-//                .stream()
-//                .flatMap(List::stream)
-//                .count();
-
-
-//        return Optional.of(lockerClusterRepository.findById(clusterId))
-//                .isPresent(() -> {
-//                    Locker locker = new Locker();
-//                    LockerCluster Locker = lockerClusterRepository.findById(clusterId);
-//                    long lockerCount =
-//
-//                    locker.setDisplayNumber(++lockerCount);
-//                    locker.setLockerStatus(LockerStatus.AVAILABLE);
-//                    locker.setLockerCluster();
-//
-//                    return lockerRepository.save(locker);
-//                });
-//
-//
-//        Optional<LockerCluster> lockerCluster = lockerClusterRepository.findById(clusterId);
-//
-//        try {
-//            if(lockerCluster.isPresent()){
-//
-//            }
-//        } catch (Exception e) {
-//            return ;
-//        }
-//
-
     }
 
     @Override
@@ -165,8 +128,5 @@ public class LockerService implements ILockerService{
         Locker locker = lockerRepository.findById(lockerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid locker id"));
         lockerRepository.delete(locker);
-
     }
-
-
 }

@@ -16,5 +16,4 @@ public interface LockerRepository extends JpaRepository<Locker, Long> {
 
     int countByLockerClusterId(Long clusterId);
 
-    void deleteLocker(Long lockerId);
 }

@@ -1,8 +1,15 @@
 package com.group17.SmartLocker.controller;
 
+import com.group17.SmartLocker.dto.LockerClusterDto;
+import com.group17.SmartLocker.dto.LockerDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
+import com.group17.SmartLocker.exception.ResourceNotFoundException;
+import com.group17.SmartLocker.model.Locker;
+import com.group17.SmartLocker.model.LockerCluster;
 import com.group17.SmartLocker.model.NewUser;
 import com.group17.SmartLocker.model.User;
+import com.group17.SmartLocker.service.locker.LockerService;
+import com.group17.SmartLocker.service.lockerCluster.LockerClusterService;
 import com.group17.SmartLocker.service.newUser.NewUserService;
 import com.group17.SmartLocker.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +32,8 @@ public class AdminController {
 
     private final NewUserService newUserService;
     private final UserService userService;
+    private final LockerService lockerService;
+    private final LockerClusterService lockerClusterService;
 
     // api endpoints to manage new users
 
@@ -93,6 +102,7 @@ public class AdminController {
         }
     }
 
+    // edit user details
     @PatchMapping("/editUser/{id}")
     public ResponseEntity<User> patchUser(@PathVariable String id, @RequestBody Map<String, Object> updates) {
         try {
@@ -113,5 +123,143 @@ public class AdminController {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+    // Locker management endpoints
+
+    // get all lockers in the system
+    @GetMapping("/getAllLockers")
+    public ResponseEntity<List<Locker>> getAllLockers(){
+        try {
+            List<Locker> lockers = lockerService.getAllLockers();
+            return ResponseEntity.ok(lockers);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // get all the lockers in a specific cluster
+    @GetMapping("/getLockerByCluster/{clusterId}")
+    public ResponseEntity<List<Locker>> getAllLockersByCluster(@PathVariable Long clusterId){
+        try {
+            List<Locker> lockers = lockerService.getAllLockersByCluster(clusterId);
+            return ResponseEntity.ok(lockers);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // get available lockers by cluster
+    @GetMapping("/getAvailableLockersByCluster/{clusterId}")
+    public ResponseEntity<List<Locker>> getAvailableLockersByCluster(@PathVariable Long clusterId){
+        try {
+            List<Locker> lockers = lockerService.getAvailableLockersByCluster(clusterId);
+            return ResponseEntity.ok(lockers);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // get occupied lockers by cluster
+    @GetMapping("/getOccupiedLockersByCluster/{clusterId}")
+    public ResponseEntity<List<Locker>> getOccupiedLockersByCluster(@PathVariable Long clusterId){
+        try {
+            List<Locker> lockers = lockerService.getOccupiedLockersByCluster(clusterId);
+            return ResponseEntity.ok(lockers);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // add a locker to a cluster
+    @PostMapping("/addLockerToACluster/{clusterId}")
+    public ResponseEntity<Locker> addLockerToCluster(@PathVariable Long clusterId){
+        try {
+            Locker locker = lockerService.addLockerToCluster(clusterId);
+            return ResponseEntity.ok(locker);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // update locker
+    @PutMapping("/updateLockerDetails/{lockerId}")
+    public ResponseEntity<Locker> updateLockerDetails(@PathVariable Long lockerId, @RequestBody LockerDto locker){
+        try {
+            Locker newLocker = lockerService.updateLockerDetails(lockerId, locker);
+            return ResponseEntity.ok(newLocker);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // delete locker
+    @DeleteMapping("/deleteLocker/{lockerId}")
+    public ResponseEntity<HttpStatus> deleteLocker(@PathVariable Long lockerId){
+        try {
+            lockerService.deleterLocker(lockerId);
+            return ResponseEntity.status(OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // Locker cluster management
+
+    // add a new locker cluster.
+    // when adding a new locker cluster it should be displayed in the map also
+    @PostMapping("/addLockerCluster/{clusterId}")
+    public ResponseEntity<LockerCluster> addLockerCluster(@RequestBody LockerClusterDto lockerClusterDto){
+        try {
+            LockerCluster lockerCluster = lockerClusterService.addLockerCluster(lockerClusterDto);
+            return ResponseEntity.ok(lockerCluster);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // get cluster by id
+    @GetMapping("/getClusterById/{clusterId}")
+    public ResponseEntity<LockerCluster> getLockerCluster(@PathVariable Long clusterId){
+        try {
+            LockerCluster lockerCluster = lockerClusterService.getLockerClusterById(clusterId);
+            return ResponseEntity.ok(lockerCluster);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // find all locker clusters
+    @GetMapping("/getAllLockerClusters")
+    public ResponseEntity<List<LockerCluster>> getAllLockerClusters(){
+        try {
+            List<LockerCluster> lockerClusters = lockerClusterService.getAllLockerClusters();
+            return ResponseEntity.ok(lockerClusters);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/updateLockerCluster/{clusterId}")
+    public ResponseEntity<LockerCluster> updateLockerDetails(@PathVariable Long clusterId, @RequestBody LockerClusterDto lockerClusterDto){
+        try {
+            LockerCluster newLockerCluster = lockerClusterService.updateLockerCluster(clusterId, lockerClusterDto);
+            return ResponseEntity.ok(newLockerCluster);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // delete locker
+    @DeleteMapping("/deleteLockerCluster/{lockerClusterId}")
+    public ResponseEntity<HttpStatus> deleteLockerCluster(@PathVariable Long lockerClusterId){
+        try {
+            lockerClusterService.deleteLockerClusterById(lockerClusterId);
+            return ResponseEntity.status(OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 }

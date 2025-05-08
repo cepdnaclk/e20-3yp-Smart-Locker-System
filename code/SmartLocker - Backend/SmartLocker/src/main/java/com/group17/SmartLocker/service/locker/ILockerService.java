@@ -4,7 +4,6 @@ import com.group17.SmartLocker.dto.LockerDto;
 import com.group17.SmartLocker.model.Locker;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ILockerService {
     String unlockLocker(String username, Long clusterId);
@@ -19,7 +18,7 @@ public interface ILockerService {
 
     Locker addLockerToCluster(Long clusterId);
 
-    Locker updateLockerDetails(Long lockerID, LockerDto locker);
+    Locker updateLockerDetails(Long lockerId, LockerDto locker);
 
     void deleterLocker(Long lockerId);
 
