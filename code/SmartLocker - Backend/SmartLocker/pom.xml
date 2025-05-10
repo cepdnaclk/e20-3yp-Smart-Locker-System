@@ -184,6 +184,12 @@
 			<version>1.70</version>
 		</dependency>
 
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.15</version> <!-- or latest -->
+		</dependency>
+
 		<!-- Spring Boot Test (includes Mockito & JUnit) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
