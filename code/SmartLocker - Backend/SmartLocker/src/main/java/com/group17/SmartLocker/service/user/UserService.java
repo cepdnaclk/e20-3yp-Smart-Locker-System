@@ -61,6 +61,7 @@ public class UserService implements IUserService {
         userDetailsDto.setEmail(user.getEmail());
         userDetailsDto.setFingerPrintExists(StringUtils.isNotBlank(user.getUsername()));
         userDetailsDto.setLockerLogs(user.getLockerLogs());
+        
 
         return userDetailsDto;
     }

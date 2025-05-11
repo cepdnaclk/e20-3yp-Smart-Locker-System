@@ -6,11 +6,14 @@ const Lockerusers = () => {
    
     // Fetch pending users
     const handLeockerUsers = async (e) => {
+      console.log("get all user data");
       e.preventDefault();
       try {
         const response = await getLockerUsresData();
-        const lockerUsers = response.data.filter((user) => user.role === "USER");
+        
+        const lockerUsers = response.data;//filter((user) => user.role === "USER");
         setUsers(lockerUsers);
+        console.log(response);
       } catch (error) {
         console.error('Error fetching users:', error);
         alert(`Invalid Request: Token ${localStorage.getItem("token")}`);

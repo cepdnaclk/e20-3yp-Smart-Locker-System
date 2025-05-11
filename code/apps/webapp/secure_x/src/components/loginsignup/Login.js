@@ -12,8 +12,13 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await login(username, password);
-      localStorage.setItem("token", response.data);
-      alert(`Login succsess: Token ${localStorage.getItem("token")}`);
+      const token = response.data.token?.trim(); // Access the token field and trim spaces
+      if (token) {
+         localStorage.setItem("token", token);
+         alert(`Login success: Token ${token}`);
+      } else {
+         alert("Login failed: Token not found");
+      }
       navigate("/dashboard");
       localStorage.setItem("hasVisited", 0);
       localStorage.setItem("User", username);

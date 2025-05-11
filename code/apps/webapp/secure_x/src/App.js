@@ -12,6 +12,7 @@ import UserManagement from "./components/UserManagement/UserManagement.js";
 import LockerMonitoring from "./components/LockerMonitoring/LockerMonitoring.js";
 import ReportAnaytics from "./components/ReportandAnaytics/ReportandAnaytics.js";
 import AdminManagement from "./components/AdminManagement/AdminManagement.js";
+import Map from "./components/Map/Map_page.js";
 function Home() {
   return (
     <div className="App">
@@ -39,8 +40,10 @@ function App() {
         <Route path="/usermanage" element={<UserManagement />} />
         <Route path="/lockermonitoring" element={<LockerMonitoring />} />
         <Route path="lockerconfig" element={<LockerConfiguration />} />
+        <Route path="/map" element={<Map />} />
         <Route path="/randa" element={<ReportAnaytics />} />
         <Route path="/adminmanage" element={<AdminManagement />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </Router>
   );
