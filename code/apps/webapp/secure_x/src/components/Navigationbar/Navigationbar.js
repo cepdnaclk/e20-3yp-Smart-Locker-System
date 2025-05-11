@@ -11,8 +11,10 @@ const Navbar = () => {
         <li><Link to="/usermanage">User Management</Link></li>
         <li><Link to="/lockermonitoring">Locker Monitoring</Link></li>
         <li><Link to="/lockerconfig">Locker Configuration</Link></li>
+        <li><Link to="/map">Map</Link></li>
         <li><Link to="/randa">Reports & Analytics</Link></li>
         <li><Link to="/adminmanage">Admin Management</Link></li>
+        <li><Link to="/home">Log Out</Link></li>
       </ul>
     </nav>
   );

@@ -24,12 +24,15 @@ export const getProtectedData = async () => {
 };
 
 export const getPendingUsresData = async () => {
+    
     return await api.get("/admin/pending", {
         headers: { 
             Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
-            "Content-Type": "application/json"
+            //"Content-Type": "application/json"
         }
+        
     });
+    
 };
 
 export const putLockeUsresData = async (id) => {
@@ -52,8 +55,8 @@ export const putLockeUsresData = async (id) => {
 export const getLockerUsresData = async () => {
     return await api.get("/admin/getAllUsers", {
         headers: { 
-            Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`, 
-            "Content-Type": "application/json"
+             Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
+            //"Content-Type": "application/json"
         }
     });
 };
