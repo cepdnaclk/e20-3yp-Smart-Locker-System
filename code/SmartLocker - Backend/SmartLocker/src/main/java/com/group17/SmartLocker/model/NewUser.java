@@ -1,7 +1,7 @@
 package com.group17.SmartLocker.model;
 
 import com.group17.SmartLocker.enums.Role;
-import com.group17.SmartLocker.enums.Status;
+import com.group17.SmartLocker.enums.NewUserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "New_Users")
+@Table(name = "new_users")
 public class NewUser{
 
     @Id
@@ -39,7 +39,7 @@ public class NewUser{
     private Role role = Role.NEW_USER;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.PENDING;
+    private NewUserStatus status = NewUserStatus.PENDING;
 
 }
 

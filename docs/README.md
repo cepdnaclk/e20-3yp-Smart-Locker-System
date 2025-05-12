@@ -37,6 +37,7 @@ title: Smart Locker System
 7. [Links](#links)
 
 ## Introduction
+[![Smart Locker System Video](https://img.youtube.com/vi/E2n29waAydc/0.jpg)](https://youtu.be/E2n29waAydc)
 
 The SmartSecure Locker System is a versatile and scalable IoT-based solution designed to provide secure and efficient storage in a variety of shared environments such as universities, gyms, offices and libraries. The system connects multiple locker locations, allowing users to check real-time availability via a mobile or web application. If lockers at a preferred location are fully occupied, the system intelligently suggests the nearest alternative location, offering a seamless and flexible user experience.
 
@@ -45,7 +46,7 @@ Access is secured through a figerprint sensor, ensuring safety and convenience. 
 
 ## Solution Architecture
 
-![High level diagram](images/HighLevelArchitecture.jpg)
+![High level diagram](images/HL2.png)
 
 This architecture integrates Web & Mobile Apps, a Cloud Database, and Locker Hardware to ensure secure and efficient locker management.
 
@@ -73,7 +74,7 @@ Testing done on hardware and software, detailed + summarized results
 
 ## Detailed budget
 <!-- -->
-![Detailed budget](images/budget.png)
+![Detailed budget](images/bget23.png)
 
 
 ## Conclusion
@@ -82,8 +83,8 @@ What was achieved, future developments, commercialization plans
 
 ## Links
 
-- [Project Repository](https://github.com/cepdnaclk/e20-3yp-Smart-Locker-System){:target="_blank"}
-- [Project Page](https://cepdnaclk.github.io/e20-3yp-Smart-Locker-System/){:target="_blank"}
+- [Project Repository](https://github.com/cepdnaclk/e20-3yp-Smart-Locker-System)
+- [Project Page](https://cepdnaclk.github.io/e20-3yp-Smart-Locker-System/)
 - [Department of Computer Engineering](http://www.ce.pdn.ac.lk/)
 - [University of Peradeniya](https://eng.pdn.ac.lk/)
 
