@@ -164,6 +164,26 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- AWS IoT Device SDK -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-iot-device-sdk-java</artifactId>
+			<version>1.3.9</version>
+		</dependency>
+
+		<!-- BouncyCastle for PEM parsing -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk15on</artifactId>
+			<version>1.70</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.70</version>
+		</dependency>
+
 		<!-- Spring Boot Test (includes Mockito & JUnit) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

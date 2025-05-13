@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/routes/route_helper.dart';
@@ -24,6 +24,26 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       initialRoute: RouteHelper.getSplashScreen(),
       getPages: RouteHelper.routes,
+    );
+  }
+}*/
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';  
+import 'package:secure_x/pages/map.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      home: Map(),
     );
   }
 }
