@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPendingUsresData, putLockeUsresData } from '../../Services/api.js';
+import { getPendingUsresData, putLockeUsresData,rejectPendingUser } from '../../Services/api.js';
 
 const Newusers = () => {
   const [users, setUsers] = useState([]);
@@ -32,6 +32,18 @@ const Newusers = () => {
     }
   };
   
+  // reject user function
+  const rejectPendingUsers = async (id) => {
+    try {
+      await rejectPendingUser(id);
+      alert(`User reject with ID: ${id}`);
+      // Refresh the list after accepting
+      handlePendingUsers(new Event('fetch'));
+    } catch (error) {
+      console.error(`Error reject user: ${id}`, error);
+      alert(`Error reject user: ${id}`);
+    }
+  };
 
   return (
     <div>
@@ -65,7 +77,7 @@ const Newusers = () => {
               <td>{user.status}</td>
               <td>
                 <button onClick={() => acceptPendingUser(user.id)}>Accept</button>
-                <button style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }}>
+                <button onClick={() => rejectPendingUsers(user.id)} style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }}>
                   Reject
                 </button>
               </td>
