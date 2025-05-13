@@ -1,43 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { getLockerUsresData, putLockeUsresData,deletLockeUsresData } from '../../Services/api.js';
+import { getLockerUsresData, deletLockeUsresData } from '../../Services/api.js';
 
-const Lockerusers = () => {
+const LockerUsers = () => {
   const [users, setUsers] = useState([]);
-   
-    // Fetch pending users
-    const handLeockerUsers = async (e) => {
-      console.log("get all user data");
-      e.preventDefault();
-      try {
-        const response = await getLockerUsresData();
-        
-        const lockerUsers = response.data;//filter((user) => user.role === "USER");
-        setUsers(lockerUsers);
-        console.log(response);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-        alert(`Invalid Request: Token ${localStorage.getItem("token")}`);
-      }
-    };
-    
-  
-    // Accept user function
-    const delettLockerUser = async (id) => {
-      try {
-        await deletLockeUsresData(id);
-        alert(`User delet with ID: ${id}`);
-        // Refresh the list after accepting
-        handLeockerUsers(new Event('fetch'));
-      } catch (error) {
-        console.error(`Error delet user: ${id}`, error);
-        alert(`Error delet user: ${id}`);
-      }
-    };
+
+  // Fetch locker users
+  const handleLockerUsers = async () => {
+    console.log("Fetching all user data");
+    try {
+      const response = await getLockerUsresData();
+      const lockerUsers = response.data; // Adjust this line if you need to filter users
+      setUsers(lockerUsers);
+      console.log(response);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      alert(`Invalid Request: Token ${localStorage.getItem("token")}`);
+    }
+  };
+
+  // Delete user function
+  const deleteLockerUser = async (id) => {
+    try {
+      await deletLockeUsresData(id);
+      alert(`User deleted with ID: ${id}`);
+      // Refresh the list after deleting
+      handleLockerUsers();
+    } catch (error) {
+      console.error(`Error deleting user: ${id}`, error);
+      alert(`Error deleting user: ${id}`);
+    }
+  };
+
+  // Load users when the component mounts
+  useEffect(() => {
+    handleLockerUsers();
+  }, []);
+
   
     return (
       <div>
         <h2>Locker Users</h2>
-        <button onClick={handLeockerUsers}>Get Data</button>
+        <button onClick={handleLockerUsers}>Get Data</button>
   
         <table border="1" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
           <thead>
@@ -62,7 +65,7 @@ const Lockerusers = () => {
                 <td>Locker {user.role}</td>
                 <td>
                   <button onClick>Edit</button>
-                  <button style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }} onClick={delettLockerUser}>
+                  <button style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }} onClick={() => deleteLockerUser(user.id)}>
                     Delet
                   </button>
                 </td>
@@ -73,4 +76,4 @@ const Lockerusers = () => {
       </div>);
 }
 
-export default Lockerusers
+export default LockerUsers
