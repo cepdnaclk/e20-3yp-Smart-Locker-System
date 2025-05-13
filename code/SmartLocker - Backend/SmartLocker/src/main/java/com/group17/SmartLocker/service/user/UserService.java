@@ -1,9 +1,12 @@
 package com.group17.SmartLocker.service.user;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.UserRepository;
+import com.group17.SmartLocker.service.mqtt.MqttPublisher;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import java.util.*;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final MqttPublisher mqttPublisher;
 
     @Override
     public List<UserDetailsDto> getAllUsers(){
@@ -111,6 +115,74 @@ public class UserService implements IUserService {
     public String getUserIdByUsername(String username){
         User user = userRepository.findByUsername(username);
         return user.getId();
+    }
+
+    // this method is to send the otp code via mqtt publish to the topic
+    @Override
+    public void sendOtpCode(String message){
+
+        //get the user Id from the message
+        String registrationId = "";
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(message);
+            registrationId = root.get("registrationID").asText();  // spelling preserved as is
+            registrationId = "E" + registrationId;
+//            System.out.println(registrationId);
+
+        } catch (Exception e) {
+            System.err.println("Failed to parse MQTT message: " + e.getMessage());
+        }
+
+        User user = userRepository.findById(registrationId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        String otp = user.getOtp();
+
+        try {
+            mqttPublisher.publish("esp32/password", "{\"password\":\"" + otp + "\"}" );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // save fingerprint id to the database
+    public void saveFingerPrint(String message){
+        //get the user Id from the message
+        String registrationId = "";
+        String fingerPrintId = "";
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(message);
+            registrationId = root.get("registrationID").asText();  // spelling preserved as is
+            registrationId = "E" + registrationId;
+//            System.out.println(registrationId);
+
+        } catch (Exception e) {
+            System.err.println("Failed to parse MQTT message: " + e.getMessage());
+        }
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(message);
+            registrationId = root.get("registrationID").asText();  // spelling preserved as is
+            registrationId = "E" + registrationId;
+
+            fingerPrintId = root.get("fingerprintID").asText();
+//            System.out.println(registrationId);
+
+        } catch (Exception e) {
+            System.err.println("Failed to parse MQTT message: " + e.getMessage());
+        }
+
+        User user = userRepository.findById(registrationId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        user.setFingerPrintId(fingerPrintId);
+        userRepository.save(user);
+        System.out.println("Fingerprint id saved successfully");
     }
 
 }
