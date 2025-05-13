@@ -72,6 +72,7 @@ public class LockerService implements ILockerService{
         return lockerRepository.findAll();
     }
 
+
     @Override
     public List<Locker> getAllLockersByCluster(Long clusterId) {
         return lockerRepository.findByLockerClusterId(clusterId);
