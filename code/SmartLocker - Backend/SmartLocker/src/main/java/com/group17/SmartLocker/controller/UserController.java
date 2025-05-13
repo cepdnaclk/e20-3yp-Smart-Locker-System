@@ -31,7 +31,7 @@ public class UserController {
     //todo: Implement the api end point to unlock the locker
     // send cluster id and the token to the service layer
     @GetMapping("/unlockLocker")
-    public ResponseEntity<ApiResponse> unlockLocker(HttpServletRequest request, @RequestBody Long clusterId){
+    public ResponseEntity<ApiResponse> unlockLocker(HttpServletRequest request, @RequestParam Long clusterId){
 
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.

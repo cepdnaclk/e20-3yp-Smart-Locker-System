@@ -1,5 +1,8 @@
 package com.group17.SmartLocker.service.locker;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.group17.SmartLocker.dto.LockerDto;
 import com.group17.SmartLocker.enums.LockerLogStatus;
 import com.group17.SmartLocker.enums.LockerStatus;
@@ -13,6 +16,7 @@ import com.group17.SmartLocker.repository.LockerLogRepository;
 import com.group17.SmartLocker.repository.LockerRepository;
 import com.group17.SmartLocker.repository.UserRepository;
 import com.group17.SmartLocker.service.lockerLog.LockerLogService;
+import com.group17.SmartLocker.service.mqtt.MqttPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +32,7 @@ public class LockerService implements ILockerService{
     private final LockerLogRepository lockerLogRepository;
     private final UserRepository userRepository;
     private final LockerClusterRepository lockerClusterRepository;
+    private final MqttPublisher mqttPublisher;
 
     @Override
     public String unlockLocker(String username, Long clusterId) {
@@ -38,11 +43,48 @@ public class LockerService implements ILockerService{
         List<Locker> availableLockers = lockerRepository.findByLockerClusterIdAndLockerStatus(clusterId, LockerStatus.AVAILABLE);
         LockerLog activeLog = lockerLogService.findActiveLog(userId);
 
-        if(activeLog != null){
-            activeLog.setStatus(LockerLogStatus.UNSAFE);
+        if(activeLog != null ){
+
+            // publish the unlock request
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode payload = mapper.createObjectNode();
+
+            String lockerId = activeLog.getLocker().getLockerId().toString();
+
+            payload.put("clusterId", clusterId.toString());
+            payload.put("lockerId", lockerId);
+
+            String message = null;
+            try {
+                message = mapper.writeValueAsString(payload);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                mqttPublisher.publish("esp32/unlock", message);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            activeLog.setStatus(LockerLogStatus.OLD);
             // todo : after this, a mqtt request should be sent to the locker to unlock the locker
             // until the locker signals back to the backend that locker is closed, the lockerLogStatus should be unsafe
-            activeLog.setReleasedTime(LocalDateTime.now());
+
+//            try {
+//                mqttPublisher.publish("esp32/lockerStatus", message);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+
+            try {
+                activeLog.setReleasedTime(LocalDateTime.now());
+                activeLog.getLocker().setLockerStatus(LockerStatus.AVAILABLE);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            lockerLogRepository.save(activeLog);
+            lockerRepository.save(activeLog.getLocker());
             return "Locker Unlocked! Locker Number: " + activeLog.getLocker().getDisplayNumber();
         }
         else{
@@ -54,13 +96,46 @@ public class LockerService implements ILockerService{
             Locker locker = availableLockers.get(0);
             LockerLog lockerLog = new LockerLog();
 
+            // publish the unlock request
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode payload = mapper.createObjectNode();
+
+            String lockerId = locker.getLockerId().toString();
+
+            payload.put("clusterId", clusterId.toString());
+            payload.put("lockerId", lockerId);
+
+            String message = null;
+            try {
+                message = mapper.writeValueAsString(payload);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                mqttPublisher.publish("esp32/unlock", message);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            // change lockerlog status
             lockerLog.setAccessTime(LocalDateTime.now());
-            lockerLog.setStatus(LockerLogStatus.UNSAFE);
+            lockerLog.setStatus(LockerLogStatus.ACTIVE);
+
             // todo : after this, a mqtt request should be sent to the locker to unlock the locker
             // until the locker signals back to the backend that locker is closed, the lockerLogStatus should be occupied
-            lockerLog.setLocker(locker);
-            lockerLog.setUser(userRepository.findByUsername(userId));
 
+//            try {
+//                mqttPublisher.publish("esp32/lockerStatus", message);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+
+
+            lockerLog.setLocker(locker);
+            locker.setLockerStatus(LockerStatus.OCCUPIED);
+            lockerRepository.save(locker);
+
+            lockerLog.setUser(userRepository.findByUsername(userId));
             lockerLogRepository.save(lockerLog);
 
             return "Please use the locker with locker number: " + locker.getDisplayNumber();
