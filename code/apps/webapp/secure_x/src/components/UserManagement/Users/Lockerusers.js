@@ -9,7 +9,8 @@ const LockerUsers = () => {
     console.log("Fetching all user data");
     try {
       const response = await getLockerUsresData();
-      const lockerUsers = response.data; // Adjust this line if you need to filter users
+      //const lockerUsers = response.data; // Adjust this line if you need to filter users
+      const lockerUsers = response.data.filter(user => user.role === "USER");
       setUsers(lockerUsers);
       console.log(response);
     } catch (error) {
