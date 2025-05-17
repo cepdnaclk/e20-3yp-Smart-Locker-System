@@ -7,18 +7,23 @@
 #include <esp_now.h>
 #include <WiFi.h>
 
-
-#define AWS_IOT_PUB_FINGER_TOPIC   "esp32/unlockFingerprint"
-#define AWS_IOT_ASSIGNED_LOCKER_TOPIC "esp32/unlock"
-#define AWS_IOT_GET_PASSWORD_TOPIC "esp32/getPassword"
-#define AWS_IOT_PASSWORD_TOPIC "esp32/password"
+#define AWS_IOT_PUBLISH_TOPIC "esp32/fingertemplate"
 #define AWS_IOT_REGID_TOPIC "esp32/regid"
 #define AWS_IOT_ABNORMAL_TOPIC "esp32/abnormal_lockers"
 #define AWS_IOT_SUBSCRIBE_CHECK_LOCKER_TOPIC "esp32/check_locker_status"
 #define AWS_IOT_PUBLISH_LOCKER_STATUS_TOPIC "esp32/locker_status"
 #define AWS_IOT_GET_REGISTRATION_ID_TOPIC "esp32/get_registrationID"
 #define AWS_IOT_ASSIGN_FINGERPRINT_TOPIC "esp32/assignFingerprint"
+//Topics
+//Registration Topics
+#define AWS_IOT_GET_PASSWORD_TOPIC "esp32/getPassword"
+#define AWS_IOT_PASSWORD_TOPIC "esp32/password"
 
+//unlock topics
+#define AWS_IOT_PUB_FINGER_TOPIC   "esp32/unlockFingerprint"
+#define AWS_IOT_ASSIGNED_LOCKER_TOPIC "esp32/unlock"
+
+//Mobile unlock topics
 
 WiFiClientSecure net;
 PubSubClient client(net); 
@@ -39,6 +44,11 @@ uint8_t checkLockerId;  // Locker ID
 uint8_t unlockLockerId ; // Locker ID to unlock
 bool unlockLocker = false; // Flag to unlock the locker
 uint8_t alreadyAssign;
+
+// mobile unlock
+uint8_t mUnlockLockerId ; // Locker ID to unlock
+bool mUnlockLocker = false; // Flag to unlock the locker
+
 
 // Slave MAC Address
 uint8_t broadcastAddress[] = {0x34, 0x94, 0x54, 0xAA, 0x79, 0xE0};
@@ -295,6 +305,56 @@ void publishMessage(int metricsValue) {
         Serial.println("Error code: " + String(client.state()));
     }
 }*/
+
+void publishFingerprintData(uint8_t fingerprintID, String templateBase64) {
+    if (!client.connected()) {
+        Serial.println("MQTT Client not connected! Attempting to reconnect...");
+        connectAWS();
+    }
+
+    const size_t chunkSize = 200;  // Choose size to keep entire JSON < AWS IoT's 128 KB limit
+    size_t totalLength = templateBase64.length();
+    size_t totalChunks = (totalLength + chunkSize - 1) / chunkSize;
+
+    Serial.print("Sending fingerprint data in ");
+    Serial.print(totalChunks);
+    Serial.println(" chunks...");
+
+    for (size_t i = 0; i < totalChunks; ++i) {
+        size_t start = i * chunkSize;
+        size_t end = start + chunkSize;
+        if (end > totalLength) end = totalLength;
+
+        String chunk = templateBase64.substring(start, end);
+
+        StaticJsonDocument<600> doc;
+        doc["fingerprint_id"] = fingerprintID;
+        doc["chunk_index"] = i;
+        doc["total_chunks"] = totalChunks;
+        doc["fingerprint_template"] = chunk;
+
+        char jsonBuffer[1024];
+        serializeJson(doc, jsonBuffer);
+
+        Serial.print("Publishing chunk ");
+        Serial.print(i + 1);
+        Serial.print(" of ");
+        Serial.println(totalChunks);
+        Serial.print("Payload size: ");
+        Serial.println(strlen(jsonBuffer));
+
+        if (!client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer)) {
+            Serial.println("Failed to publish fingerprint chunk.");
+            Serial.println("Error code: " + String(client.state()));
+            return;
+        }
+
+        delay(100);  // Slight delay to avoid flooding
+    }
+
+    Serial.println("All fingerprint chunks published.");
+}
+
 
 void publishGetPassword(String registrationID) {
     StaticJsonDocument<200> doc;
