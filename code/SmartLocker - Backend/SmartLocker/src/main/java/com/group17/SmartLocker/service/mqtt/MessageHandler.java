@@ -24,6 +24,12 @@ public class MessageHandler {
         if(topic.equals("esp32/assignFingerprint")){
             userService.saveFingerPrint(message);
         }
+
+        // unlock a locker using fingerprint
+        if(topic.equals("esp32/unlockFingerprint")){
+            System.out.println("Message handler");
+            userService.unlockLockerUsingFingerprint(message);
+        }
     }
 }
 

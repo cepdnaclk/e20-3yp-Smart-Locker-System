@@ -1,11 +1,14 @@
 package com.group17.SmartLocker.controller;
 
+import com.group17.SmartLocker.dto.LockerClusterDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
+import com.group17.SmartLocker.model.LockerCluster;
 import com.group17.SmartLocker.model.LockerLog;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repsponse.ApiResponse;
 import com.group17.SmartLocker.service.jwt.JwtService;
 import com.group17.SmartLocker.service.locker.LockerService;
+import com.group17.SmartLocker.service.lockerCluster.LockerClusterService;
 import com.group17.SmartLocker.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class UserController {
     private final UserService userService;
     private final JwtService jwtService;
     private final LockerService lockerService;
+    private final LockerClusterService lockerClusterService;
 
     //todo: Implement the api end point to unlock the locker
     // send cluster id and the token to the service layer
@@ -111,4 +115,21 @@ public class UserController {
         }
     }
 
+    @GetMapping("/lockerAvailability/{clusterId}")
+    public ResponseEntity<LockerClusterDto> getLockerClusterDetails(@PathVariable Long clusterId){
+        try {
+            LockerCluster lockerCluster = lockerClusterService.getLockerClusterById(clusterId);
+
+            LockerClusterDto lockerClusterDto = new LockerClusterDto();
+
+            lockerClusterDto.setClusterName(lockerCluster.getClusterName());
+            lockerClusterDto.setLockerClusterDescription(lockerCluster.getLockerClusterDescription());
+            lockerClusterDto.setTotalNumberOfLockers(lockerCluster.getTotalNumberOfLockers());
+            lockerClusterDto.setAvailableNumberOfLockers(lockerCluster.getAvailableNumberOfLockers());
+
+            return ResponseEntity.ok(lockerClusterDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

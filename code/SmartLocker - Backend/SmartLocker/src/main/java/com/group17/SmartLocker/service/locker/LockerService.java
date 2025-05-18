@@ -37,6 +37,10 @@ public class LockerService implements ILockerService{
     @Override
     public String unlockLocker(String username, Long clusterId) {
 
+        System.out.println("Locker service unlock locker");
+
+        System.out.println("Locker service unlock locker");
+
         // todo: Users should be allowed to use a preferred username
         String userId = username;
 
@@ -51,8 +55,9 @@ public class LockerService implements ILockerService{
 
             String lockerId = activeLog.getLocker().getLockerId().toString();
 
-            payload.put("clusterId", clusterId.toString());
-            payload.put("lockerId", lockerId);
+            payload.put("clusterID", clusterId.toString());
+            payload.put("lockerID", lockerId);
+            payload.put("alreadyAssign", "1");
 
             String message = null;
             try {
@@ -102,8 +107,9 @@ public class LockerService implements ILockerService{
 
             String lockerId = locker.getLockerId().toString();
 
-            payload.put("clusterId", clusterId.toString());
-            payload.put("lockerId", lockerId);
+            payload.put("clusterID", clusterId.toString());
+            payload.put("lockerID", lockerId);
+            payload.put("alreadyAssign", "0");
 
             String message = null;
             try {

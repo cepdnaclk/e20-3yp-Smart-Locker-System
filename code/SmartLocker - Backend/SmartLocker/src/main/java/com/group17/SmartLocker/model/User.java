@@ -39,7 +39,7 @@ public class User {
     @Column
     private String otp;
 
-    @Column
+    @Column(unique = true)
     private String fingerPrintId;
 
     @Column(nullable = false)

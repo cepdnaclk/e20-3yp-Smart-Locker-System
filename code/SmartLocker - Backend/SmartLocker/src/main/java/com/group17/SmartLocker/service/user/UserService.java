@@ -6,6 +6,7 @@ import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.UserRepository;
+import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.mqtt.MqttPublisher;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.*;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final LockerService lockerService;
     private final MqttPublisher mqttPublisher;
 
     @Override
@@ -164,18 +166,6 @@ public class UserService implements IUserService {
             System.err.println("Failed to parse MQTT message: " + e.getMessage());
         }
 
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(message);
-            registrationId = root.get("registrationID").asText();  // spelling preserved as is
-            registrationId = "E" + registrationId;
-
-            fingerPrintId = root.get("fingerprintID").asText();
-//            System.out.println(registrationId);
-
-        } catch (Exception e) {
-            System.err.println("Failed to parse MQTT message: " + e.getMessage());
-        }
 
         User user = userRepository.findById(registrationId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -185,6 +175,37 @@ public class UserService implements IUserService {
         System.out.println("Fingerprint id saved successfully");
     }
 
+    // unlock a locker using fingerprint
+    public void unlockLockerUsingFingerprint(String message){
 
+        System.out.println("user service");
+
+        // extract the fields from the mqtt message
+        String userFingerPrintId = "";
+        String clusterIdString = "";
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(message);
+            userFingerPrintId = root.get("fingerprintID").asText();  // spelling preserved as is
+            clusterIdString = root.get("clusterID").asText();
+//            System.out.println(registrationId);
+
+        } catch (Exception e) {
+            System.err.println("Failed to parse MQTT message: " + e.getMessage());
+        }
+//        System.out.println("userFingerprintId: " + userFingerPrintId);
+//        System.out.println("cluster id in string: " + clusterIdString);
+        // parse the input cluster id into a long
+        Long clusterId = Long.parseLong(clusterIdString);
+
+//        System.out.println("Long cluster id: " + clusterId);
+
+
+        // get the username
+        String username = userRepository.findByFingerPrintId(userFingerPrintId).getId();
+        System.out.println("username " + username);
+        System.out.println(lockerService.unlockLocker(username, clusterId));
+    }
 
 }
