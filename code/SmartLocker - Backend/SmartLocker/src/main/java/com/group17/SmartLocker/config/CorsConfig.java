@@ -1,4 +1,4 @@
-package com.example.project.config; // Replace with your actual package name
+package com.group17.SmartLocker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

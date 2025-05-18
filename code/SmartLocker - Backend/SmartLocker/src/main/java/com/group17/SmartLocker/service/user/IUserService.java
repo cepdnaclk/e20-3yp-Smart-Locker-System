@@ -20,4 +20,9 @@ public interface IUserService {
     void deleteUser(String id);
 
     String getUserIdByUsername(String username);
+
+    // this method is to send the otp code via mqtt publish to the topic
+    void sendOtpCode(String message);
+
+    String generateOtpCode(String username);
 }

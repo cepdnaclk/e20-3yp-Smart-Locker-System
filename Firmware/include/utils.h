@@ -7,13 +7,23 @@
 #include <esp_now.h>
 #include <WiFi.h>
 
-
-#define AWS_IOT_PUBLISH_TOPIC   "esp32/fingerprintdata"
-#define AWS_IOT_REGISTRAIONID_TOPIC "esp32/registrationID"
-#define AWS_IOT_PASSWORD_TOPIC "esp32/password"
+#define AWS_IOT_PUBLISH_TOPIC "esp32/fingertemplate"
+#define AWS_IOT_REGID_TOPIC "esp32/regid"
 #define AWS_IOT_ABNORMAL_TOPIC "esp32/abnormal_lockers"
 #define AWS_IOT_SUBSCRIBE_CHECK_LOCKER_TOPIC "esp32/check_locker_status"
 #define AWS_IOT_PUBLISH_LOCKER_STATUS_TOPIC "esp32/locker_status"
+#define AWS_IOT_GET_REGISTRATION_ID_TOPIC "esp32/get_registrationID"
+#define AWS_IOT_ASSIGN_FINGERPRINT_TOPIC "esp32/assignFingerprint"
+//Topics
+//Registration Topics
+#define AWS_IOT_GET_PASSWORD_TOPIC "esp32/getPassword"
+#define AWS_IOT_PASSWORD_TOPIC "esp32/password"
+
+//unlock topics
+#define AWS_IOT_PUB_FINGER_TOPIC   "esp32/unlockFingerprint"
+#define AWS_IOT_ASSIGNED_LOCKER_TOPIC "esp32/unlock"
+
+//Mobile unlock topics
 
 WiFiClientSecure net;
 PubSubClient client(net); 
@@ -22,8 +32,23 @@ PubSubClient client(net);
 bool passwordReceived = false; // Flag to indicate password reception
 String PassWord = "";
 
+//global variable to store the user ID
+bool RegIdRecv = false; // Flag to indicate registration ID reception
+String RegistrationId = "";
+
+
 bool statusCheck = false; // Flag to check if the locker is assigned
 uint8_t checkLockerId;  // Locker ID
+
+
+uint8_t unlockLockerId ; // Locker ID to unlock
+bool unlockLocker = false; // Flag to unlock the locker
+uint8_t alreadyAssign;
+
+// mobile unlock
+uint8_t mUnlockLockerId ; // Locker ID to unlock
+bool mUnlockLocker = false; // Flag to unlock the locker
+
 
 // Slave MAC Address
 uint8_t broadcastAddress[] = {0x34, 0x94, 0x54, 0xAA, 0x79, 0xE0};
@@ -151,7 +176,46 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
         } else {
             Serial.println("No locker ID found in the message.");
         }
-    } else {
+    }else if (strcmp(topic, AWS_IOT_REGID_TOPIC) == 0) {
+        // Parse the JSON payload
+        StaticJsonDocument<200> doc;
+        DeserializationError error = deserializeJson(doc, message);
+
+        if (error) {
+            Serial.print("Failed to parse JSON: ");
+            Serial.println(error.f_str());
+            return;
+        }
+
+        // Extract the registration ID
+        if (doc.containsKey("registrationID")) {
+            RegistrationId = doc["registrationID"].as<String>();
+            RegIdRecv = true; // Set the flag to true
+            Serial.println("Registration ID received: " + RegistrationId);
+        } else {
+            Serial.println("No registration ID found in the message.");
+        }
+    } else if(strcmp(topic, AWS_IOT_ASSIGNED_LOCKER_TOPIC) == 0) {
+        // Parse the JSON payload
+        StaticJsonDocument<200> doc;
+        DeserializationError error = deserializeJson(doc, message);
+
+        if (error) {
+            Serial.print("Failed to parse JSON: ");
+            Serial.println(error.f_str());
+            return;
+        }
+
+        // Extract the locker ID
+        if (doc.containsKey("lockerID") && doc["clusterID"] == "1" ) {
+            unlockLockerId = doc["lockerID"];
+            unlockLocker = true; // Set the flag to true
+            alreadyAssign = doc["alreadyAssign"];
+            Serial.println("Locker ID received: " + String(checkLockerId));
+        } else {
+            Serial.println("No locker ID found in the message.");
+        }
+    }else {
         Serial.println("Received message: " + message);
     }
 }
@@ -163,9 +227,13 @@ void connectAWS() {
     net.setCACert(AWS_CERT_CA);
     net.setCertificate(AWS_CERT_CRT);
     net.setPrivateKey(AWS_CERT_PRIVATE);
+    Serial.println(client.state());
 
     client.setServer(AWS_IOT_ENDPOINT, 8883);
     client.setCallback(messageHandler);
+    Serial.println(client.state());
+
+
 
     Serial.print("Connecting to AWS IoT...");
 
@@ -186,9 +254,15 @@ void connectAWS() {
     //client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
     client.subscribe(AWS_IOT_PASSWORD_TOPIC);
     Serial.println("Subscribed to password topic");
+    client.subscribe(AWS_IOT_SUBSCRIBE_CHECK_LOCKER_TOPIC);
+    Serial.println("Subscribed to locker status topic");
+    client.subscribe(AWS_IOT_REGID_TOPIC);
+    Serial.println("Subscribed to registration ID topic");
+    client.subscribe(AWS_IOT_ASSIGNED_LOCKER_TOPIC);
+    Serial.println("Subscribed to unlock topic");
 }
 
-// Publish MQTT Message
+/*// Publish MQTT Message
 void publishMessage(int metricsValue) {
     if (!client.connected()) {
         Serial.println("MQTT Client not connected!");
@@ -202,9 +276,9 @@ void publishMessage(int metricsValue) {
     serializeJson(doc, jsonBuffer);
 
     client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
-}
+}*/
 
-void publishFingerprintData(uint8_t fingerprintID, String templateBase64) {
+/*void publishFingerprintData(uint8_t fingerprintID, String templateBase64) {
     // Check if MQTT client is connected
     if (!client.connected()) {
         Serial.println("MQTT Client not connected! Attempting to reconnect...");
@@ -230,16 +304,66 @@ void publishFingerprintData(uint8_t fingerprintID, String templateBase64) {
         Serial.println("Failed to publish fingerprint data.");
         Serial.println("Error code: " + String(client.state()));
     }
+}*/
+
+void publishFingerprintData(uint8_t fingerprintID, String templateBase64) {
+    if (!client.connected()) {
+        Serial.println("MQTT Client not connected! Attempting to reconnect...");
+        connectAWS();
+    }
+
+    const size_t chunkSize = 200;  // Choose size to keep entire JSON < AWS IoT's 128 KB limit
+    size_t totalLength = templateBase64.length();
+    size_t totalChunks = (totalLength + chunkSize - 1) / chunkSize;
+
+    Serial.print("Sending fingerprint data in ");
+    Serial.print(totalChunks);
+    Serial.println(" chunks...");
+
+    for (size_t i = 0; i < totalChunks; ++i) {
+        size_t start = i * chunkSize;
+        size_t end = start + chunkSize;
+        if (end > totalLength) end = totalLength;
+
+        String chunk = templateBase64.substring(start, end);
+
+        StaticJsonDocument<600> doc;
+        doc["fingerprint_id"] = fingerprintID;
+        doc["chunk_index"] = i;
+        doc["total_chunks"] = totalChunks;
+        doc["fingerprint_template"] = chunk;
+
+        char jsonBuffer[1024];
+        serializeJson(doc, jsonBuffer);
+
+        Serial.print("Publishing chunk ");
+        Serial.print(i + 1);
+        Serial.print(" of ");
+        Serial.println(totalChunks);
+        Serial.print("Payload size: ");
+        Serial.println(strlen(jsonBuffer));
+
+        if (!client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer)) {
+            Serial.println("Failed to publish fingerprint chunk.");
+            Serial.println("Error code: " + String(client.state()));
+            return;
+        }
+
+        delay(100);  // Slight delay to avoid flooding
+    }
+
+    Serial.println("All fingerprint chunks published.");
 }
 
-void publishIDMessage(String registrationID) {
+
+void publishGetPassword(String registrationID) {
     StaticJsonDocument<200> doc;
     doc["registrationID"] = registrationID;
 
     char jsonBuffer[512];
     serializeJson(doc, jsonBuffer);
 
-    if (client.publish(AWS_IOT_REGISTRAIONID_TOPIC, jsonBuffer)) {
+    if (client.publish(AWS_IOT_GET_PASSWORD_TOPIC, jsonBuffer)) {
         Serial.println("Registration ID is published to MQTT topic.");
     } else {
         Serial.println("Failed to publish test message.");
@@ -295,6 +419,82 @@ void publishLockerStatus(int lockerId, int status) {
         Serial.println(jsonBuffer);
     } else {
         Serial.println("Failed to publish locker status.");
+        Serial.println("Error code: " + String(client.state()));
+    }
+}
+
+void publishRegID_FinID(String registrationID, uint8_t fingerprintID) {
+    // Check if MQTT client is connected
+    if (!client.connected()) {
+        Serial.println("MQTT Client not connected! Attempting to reconnect...");
+        connectAWS(); // Reconnect to AWS IoT
+    }
+
+    // Create JSON payload
+    StaticJsonDocument<512> doc;
+    doc["registrationID"] = registrationID;
+    doc["fingerprintID"] = fingerprintID;
+
+    char jsonBuffer[1024];
+    serializeJson(doc, jsonBuffer);
+
+    // Debug: Print payload size
+    Serial.print("Payload size: ");
+    Serial.println(strlen(jsonBuffer));
+
+    // Publish to MQTT topic
+    if (client.publish(AWS_IOT_ASSIGN_FINGERPRINT_TOPIC, jsonBuffer)) {
+        Serial.println("Registration ID and fingerprint ID published to MQTT topic.");
+    } else {
+        Serial.println("Failed to publish registration ID and fingerprint ID.");
+        Serial.println("Error code: " + String(client.state()));
+    }
+}
+
+void publishFingerprintID(uint8_t fingerprintID,uint8_t clusterId) {
+    // Check if MQTT client is connected
+    if (!client.connected()) {
+        Serial.println("MQTT Client not connected! Attempting to reconnect...");
+        connectAWS(); // Reconnect to AWS IoT
+    }
+
+    // Create JSON payload
+    StaticJsonDocument<200> doc;
+    doc["fingerprintID"] = fingerprintID;
+    doc["clusterID"] = clusterId;
+
+    char jsonBuffer[1024];
+    serializeJson(doc, jsonBuffer);
+
+    // Publish to MQTT topic
+    if (client.publish(AWS_IOT_PUB_FINGER_TOPIC, jsonBuffer)) {
+        Serial.println("Fingerprint ID published to MQTT topic.");
+    } else {
+        Serial.println("Failed to publish fingerprint ID.");
+        Serial.println("Error code: " + String(client.state()));
+    }
+}
+
+void publishRegID_LockerID(String registrationID, uint8_t lockerID) {
+    // Check if MQTT client is connected
+    if (!client.connected()) {
+        Serial.println("MQTT Client not connected! Attempting to reconnect...");
+        connectAWS(); // Reconnect to AWS IoT
+    }
+
+    // Create JSON payload
+    StaticJsonDocument<200> doc;
+    doc["registrationID"] = registrationID;
+    doc["lockerID"] = lockerID;
+
+    char jsonBuffer[512];
+    serializeJson(doc, jsonBuffer);
+
+    // Publish to MQTT topic
+    if (client.publish(AWS_IOT_GET_REGISTRATION_ID_TOPIC, jsonBuffer)) {
+        Serial.println("Registration ID and locker ID published to MQTT topic.");
+    } else {
+        Serial.println("Failed to publish registration ID and locker ID.");
         Serial.println("Error code: " + String(client.state()));
     }
 }
