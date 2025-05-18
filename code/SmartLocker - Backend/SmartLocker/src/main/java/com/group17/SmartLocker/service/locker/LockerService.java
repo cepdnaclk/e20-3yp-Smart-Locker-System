@@ -37,10 +37,6 @@ public class LockerService implements ILockerService{
     @Override
     public String unlockLocker(String username, Long clusterId) {
 
-        System.out.println("Locker service unlock locker");
-
-        System.out.println("Locker service unlock locker");
-
         // todo: Users should be allowed to use a preferred username
         String userId = username;
 
@@ -50,6 +46,8 @@ public class LockerService implements ILockerService{
         if(activeLog != null ){
 
             // publish the unlock request
+
+            //create the message payload
             ObjectMapper mapper = new ObjectMapper();
             ObjectNode payload = mapper.createObjectNode();
 
@@ -65,25 +63,28 @@ public class LockerService implements ILockerService{
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
+            // send the Mqtt message
             try {
                 mqttPublisher.publish("esp32/unlock", message);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            
+            /*
+            * Should check the locker status and update the locker log details
+            * If the locker is not closed locker log status should be in UNSAFE status
+            * UNSAFE : should send a notification to the user to close the locker properly
+            */
 
+            /*
+            * If the user finishes the service from the locker
+            * This should be inside an if else statement
+            * Because the locker status should be checked
+            */
             activeLog.setStatus(LockerLogStatus.OLD);
-            // todo : after this, a mqtt request should be sent to the locker to unlock the locker
-            // until the locker signals back to the backend that locker is closed, the lockerLogStatus should be unsafe
-
-//            try {
-//                mqttPublisher.publish("esp32/lockerStatus", message);
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-
             try {
                 activeLog.setReleasedTime(LocalDateTime.now());
-                activeLog.getLocker().setLockerStatus(LockerStatus.AVAILABLE);
+                activeLog.getLocker().setLockerStatus(LockerStatus.AVAILABLE); // change locker status
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -111,6 +112,7 @@ public class LockerService implements ILockerService{
             payload.put("lockerID", lockerId);
             payload.put("alreadyAssign", "0");
 
+            // Create the message payload
             String message = null;
             try {
                 message = mapper.writeValueAsString(payload);
@@ -126,15 +128,6 @@ public class LockerService implements ILockerService{
             // change lockerlog status
             lockerLog.setAccessTime(LocalDateTime.now());
             lockerLog.setStatus(LockerLogStatus.ACTIVE);
-
-            // todo : after this, a mqtt request should be sent to the locker to unlock the locker
-            // until the locker signals back to the backend that locker is closed, the lockerLogStatus should be occupied
-
-//            try {
-//                mqttPublisher.publish("esp32/lockerStatus", message);
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
 
 
             lockerLog.setLocker(locker);
