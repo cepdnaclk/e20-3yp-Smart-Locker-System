@@ -36,6 +36,12 @@ public class User {
     @Column(nullable = false, unique = true)
     private String contactNumber;
 
+    @Column
+    private String otp;
+
+    @Column(unique = true)
+    private String fingerPrintId;
+
     @Column(nullable = false)
     private String email;
 

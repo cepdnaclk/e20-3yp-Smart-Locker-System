@@ -7,4 +7,5 @@ public class LockerClusterDto {
     private String clusterName;
     private String lockerClusterDescription;
     private int totalNumberOfLockers;
+    private int availableNumberOfLockers;
 }

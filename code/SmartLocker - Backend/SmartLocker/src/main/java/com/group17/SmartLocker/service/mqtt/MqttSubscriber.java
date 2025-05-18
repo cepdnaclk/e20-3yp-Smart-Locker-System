@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MqttSubscriber {
 
     private final AWSIotMqttClient awsIotMqttClient;
+    private final MessageHandler messageHandler;
 
     // Store latest message per topic
     private final Map<String, String> latestMessages = new ConcurrentHashMap<>();
@@ -26,6 +27,10 @@ public class MqttSubscriber {
             public void onMessage(AWSIotMessage message) {
                 String payload = message.getStringPayload();
                 latestMessages.put(topicName, payload);
+
+                // trigger a service method to handle the messages
+                messageHandler.handleIncomingMessage(topicName, payload);
+
                 System.out.println("Received message on topic [" + getTopic() + "]: " + payload);
             }
         };

@@ -15,28 +15,30 @@ void scrollText(int row, String message) {
   int delayTime = 300;
   int lcdColumns = 20;
 
-  // If the message fits, print it without scrolling
+  // If message fits the screen, just print it
   if (message.length() <= lcdColumns) {
     I2C_LCD.setCursor(0, row);
     I2C_LCD.print(message);
     return;
   }
 
-  // Append the message to itself with a space to create loop effect
-  String scrollMessage = message + "     " + message;  // 3 spaces = small pause before repeating
+  // Scroll the message one full pass
+  int scrollLength = message.length() - lcdColumns;
 
-  // Scroll through only the first (message.length + lcdColumns) characters
-  int scrollLength = message.length() + 5; // scroll till just before repeat starts
-
-  for (int pos = 0; pos < scrollLength; pos++) {
+  for (int pos = 0; pos <= scrollLength; pos++) {
     I2C_LCD.setCursor(0, row);
-    I2C_LCD.print(scrollMessage.substring(pos, pos + lcdColumns));
-    /*if (pos == 0) {
-      delay(delayTime);  // Extra pause at the start
-    }*/
+    I2C_LCD.print(message.substring(pos, pos + lcdColumns));
     delay(delayTime);
   }
+
+  // Pause slightly before returning to start
+  delay(500);
+
+  // Reset to beginning of message
+  I2C_LCD.setCursor(0, row);
+  I2C_LCD.print(message.substring(0, lcdColumns));
 }
+
 
 void startScreen() {
   I2C_LCD.clear();
