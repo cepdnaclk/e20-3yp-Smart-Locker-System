@@ -217,7 +217,7 @@ public class UserService implements IUserService {
     * In case : Someone has stolen the otp code
     */
     @Override
-    public String generateOtpCode(String username){
+    public String generateOtpCode(String id){
 
         String otpCode =  "";
 
@@ -232,7 +232,9 @@ public class UserService implements IUserService {
             otpCode = generateOtpCode();
         }
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         user.setFingerPrintId(otpCode);
         userRepository.save(user);
 
