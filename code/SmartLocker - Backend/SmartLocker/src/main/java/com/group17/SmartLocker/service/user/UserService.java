@@ -210,6 +210,12 @@ public class UserService implements IUserService {
     }
 
 
+    /*
+    * This method generates the otp code.
+    * Otp code should not have duplicates.
+    * user should be able to generate otp codes from the mobile app
+    * In case : Someone has stolen the otp code
+    */
     @Override
     public String generateOtpCode(String username){
 
@@ -219,8 +225,24 @@ public class UserService implements IUserService {
         int randomNumber = ThreadLocalRandom.current().nextInt(1000, 10000);
         otpCode = Integer.toString(randomNumber);
 
+        // get the current otp codes exists in the repository
+        List<String> otpList = userRepository.findAllOtps();
+
+        while(otpList.contains(otpCode)){
+            otpCode = generateOtpCode();
+        }
+
         User user = userRepository.findByUsername(username);
         user.setFingerPrintId(otpCode);
+        userRepository.save(user);
+
         return Integer.toString(randomNumber);
     }
+
+    // Method overloading to avoid the duplicate otp codes
+    public String generateOtpCode() {
+        int randomNumber = ThreadLocalRandom.current().nextInt(1000, 10000);
+        return Integer.toString(randomNumber);
+    }
+
 }
