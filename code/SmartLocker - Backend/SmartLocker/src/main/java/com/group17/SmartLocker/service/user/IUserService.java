@@ -23,4 +23,6 @@ public interface IUserService {
 
     // this method is to send the otp code via mqtt publish to the topic
     void sendOtpCode(String message);
+
+    String generateOtpCode(String username);
 }

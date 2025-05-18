@@ -45,42 +45,20 @@ public class LockerService implements ILockerService{
 
         if(activeLog != null ){
 
-            // publish the unlock request
-
-            //create the message payload
-            ObjectMapper mapper = new ObjectMapper();
-            ObjectNode payload = mapper.createObjectNode();
-
-            String lockerId = activeLog.getLocker().getLockerId().toString();
-
-            payload.put("clusterID", clusterId.toString());
-            payload.put("lockerID", lockerId);
-            payload.put("alreadyAssign", "1");
-
-            String message = null;
-            try {
-                message = mapper.writeValueAsString(payload);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-            // send the Mqtt message
-            try {
-                mqttPublisher.publish("esp32/unlock", message);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            
-            /*
-            * Should check the locker status and update the locker log details
-            * If the locker is not closed locker log status should be in UNSAFE status
-            * UNSAFE : should send a notification to the user to close the locker properly
-            */
+            // send Mqtt message to unlock (Unlocking the occupied locker)
+            sendMqttMessageToLockerUnlock(clusterId, Math.toIntExact(activeLog.getLocker().getLockerId()), "1");
 
             /*
-            * If the user finishes the service from the locker
-            * This should be inside an if else statement
-            * Because the locker status should be checked
-            */
+             * Should check the locker status and update the locker log details
+             * If the locker is not closed locker log status should be in UNSAFE status
+             * UNSAFE : should send a notification to the user to close the locker properly
+             */
+
+            /*
+             * If the user finishes the service from the locker
+             * This should be inside an if else statement
+             * Because the locker status should be checked
+             */
             activeLog.setStatus(LockerLogStatus.OLD);
             try {
                 activeLog.setReleasedTime(LocalDateTime.now());
@@ -102,28 +80,8 @@ public class LockerService implements ILockerService{
             Locker locker = availableLockers.get(0);
             LockerLog lockerLog = new LockerLog();
 
-            // publish the unlock request
-            ObjectMapper mapper = new ObjectMapper();
-            ObjectNode payload = mapper.createObjectNode();
-
-            String lockerId = locker.getLockerId().toString();
-
-            payload.put("clusterID", clusterId.toString());
-            payload.put("lockerID", lockerId);
-            payload.put("alreadyAssign", "0");
-
-            // Create the message payload
-            String message = null;
-            try {
-                message = mapper.writeValueAsString(payload);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                mqttPublisher.publish("esp32/unlock", message);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            // send Mqtt message to unlock (Unlocking a new existing locker)
+            sendMqttMessageToLockerUnlock(clusterId, Math.toIntExact(locker.getLockerId()), "0");
 
             // change lockerlog status
             lockerLog.setAccessTime(LocalDateTime.now());
@@ -138,6 +96,35 @@ public class LockerService implements ILockerService{
             lockerLogRepository.save(lockerLog);
 
             return "Please use the locker with locker number: " + locker.getDisplayNumber();
+        }
+    }
+
+    /*
+     * A helper method to the unlock locker function
+     * Publish mqtt messages for given clusterId, lockerId and already assign state
+     */
+    public void sendMqttMessageToLockerUnlock(Long clusterId, Integer lockerId, String alreadyAssign){
+        // publish the unlock Mqtt request message
+
+        //create the message payload
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode payload = mapper.createObjectNode();
+
+        payload.put("clusterID", clusterId.toString());
+        payload.put("lockerID", lockerId.toString());
+        payload.put("alreadyAssign", alreadyAssign);
+
+        String message = null;
+        try {
+            message = mapper.writeValueAsString(payload);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        // send the Mqtt message
+        try {
+            mqttPublisher.publish("esp32/unlock", message);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

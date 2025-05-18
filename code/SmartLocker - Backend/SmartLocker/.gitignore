@@ -32,3 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 /src/main/resources/serviceAccountKey.json
+
+# Application config (local secrets)
+SmartLocker/src/main/resources/application.properties
