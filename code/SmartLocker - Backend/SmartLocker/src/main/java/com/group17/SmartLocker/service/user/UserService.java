@@ -15,6 +15,7 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
 @Service
@@ -208,4 +209,18 @@ public class UserService implements IUserService {
         System.out.println(lockerService.unlockLocker(username, clusterId));
     }
 
+
+    @Override
+    public String generateOtpCode(String username){
+
+        String otpCode =  "";
+
+        //generate a random number
+        int randomNumber = ThreadLocalRandom.current().nextInt(1000, 10000);
+        otpCode = Integer.toString(randomNumber);
+
+        User user = userRepository.findByUsername(username);
+        user.setFingerPrintId(otpCode);
+        return Integer.toString(randomNumber);
+    }
 }
