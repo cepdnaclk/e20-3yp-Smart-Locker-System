@@ -10,6 +10,8 @@
 #include "ultraSonic.h"
 #include "PCF8574.h"
 
+PCF8574 pcf8574(0x20);
+
 #define ROWS  4
 #define COLS  4
 #define RELAY_PIN 5
@@ -18,6 +20,7 @@
 #define LOCKER_DISTANCE_THRESHOLD 10 // Distance threshold in cm for abnormal detection
 #define clusterId 1
 
+Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial2);
 
 const int LOCKERPINS[NUMLOCKERS] = {4,23,13}; // GPIO pins for lockers
 
@@ -73,17 +76,11 @@ String InputStr = "";
 uint8_t idS = 1;
 String user = "";
 uint8_t id;
-unsigned long previousTime = 0;
-const unsigned long interval = 5000;
+long currentTime = 0;
 char key;
 
 
-Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial2);
-PCF8574 pcf8574(0x20);
 Keypad keypad = Keypad(makeKeymap(keyMap), rowPins, colPins, ROWS, COLS);
-TaskHandle_t Task1;
-TaskHandle_t Task2;
-
 
 void init_finger() {
   Serial2.begin(57600, SERIAL_8N1, RXD2, TXD2);
@@ -268,8 +265,9 @@ uint8_t getFingerprintEnroll(uint8_t id) {
   
   return 1;
   }
-
-void sendFingerprint(uint8_t id) {
+  
+  
+/* void sendFingerprint(uint8_t id) {
     uint8_t bytesReceived[534]; // Buffer for fingerprint template (includes headers)
     uint8_t fingerTemplate[512]; // Actual fingerprint template
     String templateString = "";  // Base64-encoded fingerprint template
@@ -326,9 +324,9 @@ void sendFingerprint(uint8_t id) {
   
     // Publish fingerprint data via MQTT
     publishFingerprintData(id, templateString);
-    }
-   
-uint8_t getFingerprintIDez() {
+  }*/
+  
+  uint8_t getFingerprintIDez() {
     uint8_t p = -1;
   
     // Wait until a finger is detected
@@ -372,7 +370,7 @@ uint8_t getFingerprintIDez() {
     return finger.fingerID; // Return the matched fingerprint ID
   }
   
-uint8_t getFingerprintID()
+  uint8_t getFingerprintID()
   {
   uint8_t p = finger.getImage();
   switch (p)
@@ -448,8 +446,8 @@ uint8_t getFingerprintID()
   Serial.println(finger.confidence);
   
   return finger.fingerID;
-}
-
+  }
+  
 void unlock(uint8_t lockerid){
   for(uint8_t i = 0; i < NUMLOCKERS; i++){
         if(lockers[i].lockerId == lockerid){
@@ -460,231 +458,15 @@ void unlock(uint8_t lockerid){
 }
 }
 
-void codeForTask1( void * parameter )
-{
-  for (;;) {
-    if(WiFi.status() != WL_CONNECTED){
-        Serial.println("WiFi not connected! Attempting to reconnect...");
-        initWiFi();
-    }
-
-    if (!client.connected()) {
-            Serial.println("MQTT Client not connected! Attempting to reconnect...");
-            connectAWS(); // Reconnect to AWS IoT
-    }
-    
-    bool cancelled = false;
-    key = keypad.getKey();
-    if (key == 'A') {
-        user = "";
-        I2C_LCD.clear();
-        I2C_LCD.setCursor(0, 0);
-        I2C_LCD.print("Enter Registration ID: ");
-        I2C_LCD.setCursor(0, 3);
-        I2C_LCD.print("# - Clear");
-        I2C_LCD.setCursor(10,3);
-        I2C_LCD.print("D - Submit");
-        LCD_CursorPosition = 0;
-        while (true) {
-            char passKey = keypad.getKey();
-            if (passKey) {
-                if (passKey == 'D') {  // Press 'D' to submit ID
-                    break;
-                }
-                if (passKey == '#') {  // Press '#' to clear ID
-                    user = ""; // Clear the ID
-                    LCD_CursorPosition = 0; // Reset cursor position
-                    I2C_LCD.setCursor(0, 1);
-                    I2C_LCD.print("                "); // Clear the second line
-                    I2C_LCD.setCursor(0, 1);
-                    continue;
-                }
-                user += passKey;
-                I2C_LCD.setCursor(LCD_CursorPosition++, 1);
-                I2C_LCD.print(passKey);
-            }
-        }
-        publishGetPassword(user); // Publish the registration ID
-        client.loop();
-        delay(1000);
-
-        // Wait for the password to be received
-        I2C_LCD.clear();
-        scrollText(0,"Waiting for the Code.....");
-        I2C_LCD.setCursor(0, 3);
-        I2C_LCD.print("Press 'B' to Cancel");
-        passwordReceived = false; // Reset the flag
-        while (!passwordReceived) {
-            client.loop(); // Keep the MQTT client running
-            delay(100);    // Small delay to avoid busy-waiting
-            key = keypad.getKey();
-            if(key == 'B'){
-              I2C_LCD.clear();
-              I2C_LCD.setCursor(0, 0);
-              I2C_LCD.print("Cancelled!");
-              delay(2000);
-              startScreen(); // Go back to the main menu
-              cancelled = true;
-              break; // Break the password waiting loop
-            }
-        }
-        if (cancelled) {
-            continue; // Continue the for(;;) loop, restarting from the top
-        }
-        I2C_LCD.clear();
-        I2C_LCD.setCursor(0, 0);
-        //I2C_LCD.print(PassWord);
-        delay(1000);
-
-
-        I2C_LCD.clear();
-        I2C_LCD.print("Enter Code: ");
-         I2C_LCD.setCursor(0, 3);
-        I2C_LCD.print("# - Clear");
-        I2C_LCD.setCursor(10,3);
-        I2C_LCD.print("D - Submit");
-        LCD_CursorPosition = 0;
-        InputStr = ""; // Clear the input string
-        while (true) {
-            char passKey = keypad.getKey();
-            if (passKey) {
-                if (passKey == 'D') {  // Press 'D' to submit code
-                    break;
-                }
-                if (passKey == '#') {  // Press '#' to clear ID
-                    InputStr = ""; // Clear the ID
-                    LCD_CursorPosition = 0; // Reset cursor position
-                    I2C_LCD.setCursor(0, 1);
-                    I2C_LCD.print("                "); // Clear the second line
-                    I2C_LCD.setCursor(0, 1);
-                    continue;
-                }
-                InputStr += passKey;
-                I2C_LCD.setCursor(LCD_CursorPosition++, 1);
-                I2C_LCD.print(passKey);
-            }
-        }
-
-        // Check the entered code against the received password
-        if (InputStr == PassWord) {
-            I2C_LCD.clear();
-            scrollText(0,"Registering fingerprint...");
-            delay(2000);
-
-            // Proceed with fingerprint registration
-            I2C_LCD.clear();
-            while (!getFingerprintEnroll(idS));
-            publishRegID_FinID(user,idS);
-            delay(2000);
-            sendFingerprint(idS);
-            idS++;
-        } else {
-            I2C_LCD.clear();
-            I2C_LCD.setCursor(0, 0);
-            I2C_LCD.print("Wrong Password!");
-            delay(2000);
-        }
-
-        startScreen(); // Go back to the main menu
-    }
-
-    else if (key == 'B') {
-        I2C_LCD.clear();
-        scrollText(0,"Place Finger on Sensor...");
-        Serial.println("Place Finger on Sensor...");
-
-        uint8_t match = getFingerprintIDez();  // Try reading a fingerprint
-
-        if (match > 0) { // Check if a valid fingerprint ID is returned
-          Serial.println("Fingerprint Matched!");
-          publishFingerprintID(match,clusterId); // Publish the fingerprint ID
-          I2C_LCD.clear();
-          scrollText(0,"Assigning a locker...");
-          I2C_LCD.setCursor(0, 3);
-          I2C_LCD.print("Press 'B' to Cancel");
-          unlockLocker = false; // Reset the flag
-          while (!unlockLocker) {
-              client.loop(); // Keep the MQTT client running
-              delay(100);
-              key = keypad.getKey();
-              if(key == 'B'){
-                I2C_LCD.clear();
-                I2C_LCD.setCursor(0, 0);
-                I2C_LCD.print("Cancelled!");
-                delay(2000);
-                startScreen(); // Go back to the main menu
-                cancelled = true;
-                break; // Break the password waiting loop
-              }    // Small delay to avoid busy-waiting
-          }
-          
-          if (cancelled) {
-              continue; // Continue the for(;;) loop, restarting from the top
-          }
-
-          delay(2000);
-          if(alreadyAssign == 1){
-              I2C_LCD.clear();
-              I2C_LCD.setCursor(0, 0);
-              I2C_LCD.print("Locker Unlocked!");
-              I2C_LCD.setCursor(0, 1);
-              I2C_LCD.print("Please Remove your");
-              I2C_LCD.setCursor(0, 2);
-              I2C_LCD.print("belongings");
-              unlock(unlockLockerId);
-              delay(2000);
-              lockers[unlockLockerId-1].assignedId = -1; // Assign the locker ID
-              lockers[unlockLockerId-1].status = 0; // Set status to unsafe
-
-          }else{
-              I2C_LCD.clear();
-              I2C_LCD.setCursor(0, 0);
-              I2C_LCD.print("Access Granted!");
-              I2C_LCD.setCursor(0, 1);
-              I2C_LCD.print("Locker No: ");
-              I2C_LCD.print(unlockLockerId);
-              unlock(unlockLockerId);
-              delay(2000);
-              lockers[unlockLockerId-1].assignedId = match; // Assign the locker ID
-              lockers[unlockLockerId-1].status = 1; // Set status to unsafe
-
-          }
-        } else {
-            Serial.println("No Match Found.");
-            I2C_LCD.clear();
-            I2C_LCD.setCursor(0, 0);
-            I2C_LCD.print("Access Denied!");
-            delay(2000);
-        }
-
-        startScreen(); // Go back to the main menu
-    } else {
-        // Handle other cases if necessary
-        // For now, this block is intentionally left empty
-    }
-
-  }
-}
-
-void codeForTask2( void * parameter )
-{
-  for (;;) {
-    
-
-
-    if(statusCheck == true){
-        publishLockerStatus(checkLockerId, lockers[checkLockerId-1].status); // Publish locker status
-        statusCheck = false; // Reset the flag
-    }
-    
-    unsigned long currentTime = millis();
-    if (currentTime - previousTime >= interval) {
-        previousTime = currentTime;
-
-        updateStatus(); // Check for abnormal lockers
-        publishAbnormalLockers(abnormalLockerId, NUMLOCKERS);
-    }
-    previousTime = millis();
+void ReturnMenu(){
+  key = keypad.getKey();
+  if(key == 'B'){
+    I2C_LCD.clear();
+    I2C_LCD.setCursor(0, 0);
+    I2C_LCD.print("Cancelled!");
+    delay(2000);
+    startScreen(); // Go back to the main menu
+    return;
   }
 }
 
@@ -708,27 +490,166 @@ void setup(){
   initLCD();
   init_finger();
   startScreen();
-  xTaskCreatePinnedToCore(
-    codeForTask1,
-    "led1Task",
-    8192,
-    NULL,
-    1,
-    &Task1,
-    1);
-
-  delay(500);  // needed to start-up task1
-    /*
-  xTaskCreatePinnedToCore(
-    codeForTask2,
-    "led2Task",
-    1000,
-    NULL,
-    1,
-    &Task2,
-    0);*/
 }
 
-void loop() {
-  // Empty loop, all tasks are handled in the task functions
+
+void loop(){
+  if(WiFi.status() != WL_CONNECTED){
+    Serial.println("WiFi not connected! Attempting to reconnect...");
+    initWiFi();
+  }
+
+  if (!client.connected()) {
+        Serial.println("MQTT Client not connected! Attempting to reconnect...");
+        connectAWS(); // Reconnect to AWS IoT
+  }
+
+  if(statusCheck == true){
+    publishLockerStatus(checkLockerId, lockers[checkLockerId-1].status); // Publish locker status
+    statusCheck = false; // Reset the flag
+  }
+  /*currentTime = millis();
+  if(currentTime%5000 == 0){
+    updateStatus(); // Check for abnormal lockers every 5 seconds
+    publishAbnormalLockers(abnormalLockerId, NUMLOCKERS);
+  }*/
+  
+  key = keypad.getKey();
+  if (key == 'A') {
+    user = "";
+    I2C_LCD.clear();
+    I2C_LCD.setCursor(0, 0);
+    I2C_LCD.print("Enter ID: ");
+    LCD_CursorPosition = 0;
+    while (true) {
+        char passKey = keypad.getKey();
+        if (passKey) {
+            if (passKey == 'D') {  // Press 'D' to submit ID
+                break;
+            }
+            user += passKey;
+            I2C_LCD.setCursor(LCD_CursorPosition++, 1);
+            I2C_LCD.print(passKey);
+        }
+    }
+    publishGetPassword(user); // Publish the registration ID
+    client.loop();
+    delay(1000);
+
+    // Wait for the password to be received
+    I2C_LCD.clear();
+    scrollText(0,"Waiting for the Code.....");
+    I2C_LCD.setCursor(0, 3);
+    I2C_LCD.print("Press 'B' to Cancel");
+    passwordReceived = false; // Reset the flag
+    while (!passwordReceived) {
+        client.loop(); // Keep the MQTT client running
+        delay(100);    // Small delay to avoid busy-waiting
+        ReturnMenu();
+    }
+    I2C_LCD.clear();
+    I2C_LCD.setCursor(0, 0);
+    //I2C_LCD.print(PassWord);
+    delay(1000);
+
+    I2C_LCD.clear();
+    I2C_LCD.print("Enter Code: ");
+    LCD_CursorPosition = 0;
+    InputStr = ""; // Clear the input string
+    while (true) {
+        char passKey = keypad.getKey();
+        if (passKey) {
+            if (passKey == 'D') {  // Press 'D' to submit code
+                break;
+            }
+            InputStr += passKey;
+            I2C_LCD.setCursor(LCD_CursorPosition++, 1);
+            I2C_LCD.print(passKey);
+        }
+    }
+
+    // Check the entered code against the received password
+    if (InputStr == PassWord) {
+        I2C_LCD.clear();
+        scrollText(0,"Registering fingerprint...");
+        delay(2000);
+
+        // Proceed with fingerprint registration
+        I2C_LCD.clear();
+        while (!getFingerprintEnroll(idS));
+        publishRegID_FinID(user,idS);
+        delay(2000);
+        //sendFingerprint(idS);
+        idS++;
+    } else {
+        I2C_LCD.clear();
+        I2C_LCD.setCursor(0, 0);
+        I2C_LCD.print("Wrong Password!");
+        delay(2000);
+    }
+
+    startScreen(); // Go back to the main menu
+  }
+
+  else if (key == 'B') {
+    I2C_LCD.clear();
+    scrollText(0,"Place Finger on Sensor...");
+    Serial.println("Place Finger on Sensor...");
+
+    uint8_t match = getFingerprintIDez();  // Try reading a fingerprint
+
+    if (match > 0) { // Check if a valid fingerprint ID is returned
+      Serial.println("Fingerprint Matched!");
+      publishFingerprintID(match,clusterId); // Publish the fingerprint ID
+      I2C_LCD.clear();
+      //scrollText(0,"Assigning a locker...");
+      unlockLocker = false; // Reset the flag
+      while (!unlockLocker) {
+          client.loop(); // Keep the MQTT client running
+          delay(100);    // Small delay to avoid busy-waiting
+      }
+
+      delay(2000);
+      if(alreadyAssign == 1){
+        I2C_LCD.clear();
+        I2C_LCD.setCursor(0, 0);
+        I2C_LCD.print("Locker Unlocked!");
+        I2C_LCD.setCursor(0, 1);
+        I2C_LCD.print("Please Remove your");
+        I2C_LCD.setCursor(0, 2);
+        I2C_LCD.print("belongings");
+        unlock(unlockLockerId);
+        delay(2000);
+        lockers[unlockLockerId-1].assignedId = -1; // Assign the locker ID
+        lockers[unlockLockerId-1].status = 0; // Set status to unsafe
+
+      }else{
+          I2C_LCD.clear();
+          I2C_LCD.setCursor(0, 0);
+          I2C_LCD.print("Access Granted!");
+          I2C_LCD.setCursor(0, 1);
+          I2C_LCD.print("Locker No: ");
+          I2C_LCD.print(unlockLockerId);
+          unlock(unlockLockerId);
+          delay(2000);
+          lockers[unlockLockerId-1].assignedId = match; // Assign the locker ID
+          lockers[unlockLockerId-1].status = 1; // Set status to unsafe
+
+      }
+    } else {
+        Serial.println("No Match Found.");
+        I2C_LCD.clear();
+        I2C_LCD.setCursor(0, 0);
+        I2C_LCD.print("Access Denied!");
+        delay(2000);
+    }
+
+    startScreen(); // Go back to the main menu
+  } else {
+    // Handle other cases if necessary
+    // For now, this block is intentionally left empty
+  }
+
 }
+
+
