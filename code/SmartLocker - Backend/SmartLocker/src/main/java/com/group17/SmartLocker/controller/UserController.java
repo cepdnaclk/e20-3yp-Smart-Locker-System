@@ -1,9 +1,9 @@
 package com.group17.SmartLocker.controller;
 
 import com.group17.SmartLocker.dto.LockerClusterDto;
+import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.model.LockerCluster;
-import com.group17.SmartLocker.model.LockerLog;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repsponse.ApiResponse;
 import com.group17.SmartLocker.service.jwt.JwtService;
@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 import java.util.Map;
@@ -97,7 +96,7 @@ public class UserController {
     }
 
     @GetMapping("/logs")
-    public ResponseEntity<List<LockerLog>> getUserLogs(HttpServletRequest request){
+    public ResponseEntity<List<LockerLogDto>> getUserLogs(HttpServletRequest request){
 
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
@@ -108,8 +107,7 @@ public class UserController {
         }
 
         try {
-            UserDetailsDto user = userService.getUserById(jwtService.extractUsername(jwtToken));
-            return ResponseEntity.ok(user.getLockerLogs());
+            return ResponseEntity.ok(userService.getLockerLogs(jwtService.extractUsername(jwtToken)));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
@@ -132,4 +130,41 @@ public class UserController {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping("/getOtpCode")
+    public ResponseEntity<String> getOtpCode(HttpServletRequest request){
+        // find the username to get the otp code
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        }
+
+        try {
+            return ResponseEntity.ok(userService.getOtpCode(jwtService.extractUsername(jwtToken)));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/generateNewOtpCode")
+    public ResponseEntity<String> generateNewOtpCode(HttpServletRequest request){
+        // find the username to get the otp code
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        }
+
+        try {
+            return ResponseEntity.ok(userService.generateOtpCodeManually(jwtService.extractUsername(jwtToken)));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }
