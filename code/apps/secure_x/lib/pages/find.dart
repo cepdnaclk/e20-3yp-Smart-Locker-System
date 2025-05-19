@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:secure_x/pages/map.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
 class Find extends StatefulWidget {
@@ -35,14 +36,7 @@ class _FindState extends State<Find> {
               width: 400,
               height:600,
               alignment: Alignment.center,
-              child:ClipRect(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Image.asset('assets/img/map.png',
-                  fit: BoxFit.contain,             
-                ),
-                ),
-              )             
+              child:LockerMap(),         
             ),
           ),
           const SizedBox(height: 10,),
