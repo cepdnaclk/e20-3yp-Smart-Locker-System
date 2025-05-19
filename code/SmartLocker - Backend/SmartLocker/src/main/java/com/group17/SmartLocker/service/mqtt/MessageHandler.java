@@ -31,5 +31,6 @@ public class MessageHandler {
             userService.unlockLockerUsingFingerprint(message);
         }
     }
+
 }
 
