@@ -22,6 +22,8 @@ public class LockerLogService implements ILockerLogService{
         // activeLogs has only one element -> LockerUser is currently using a locker
         // no active logs -> User is not using a locker now
         // more than one active lockers -> Some error has occurred, fix it in here
+
+
         List<LockerLog> activeLogs = lockerLogRepository.findByUserIdAndStatus(userId, ACTIVE);
         Optional<List<LockerLog>> optionalActiveLogs = Optional.ofNullable(activeLogs.isEmpty() ? null : activeLogs);
 

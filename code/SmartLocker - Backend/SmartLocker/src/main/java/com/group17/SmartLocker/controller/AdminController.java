@@ -8,6 +8,8 @@ import com.group17.SmartLocker.model.Locker;
 import com.group17.SmartLocker.model.LockerCluster;
 import com.group17.SmartLocker.model.NewUser;
 import com.group17.SmartLocker.model.User;
+import com.group17.SmartLocker.repsponse.ApiResponse;
+import com.group17.SmartLocker.service.email.EmailService;
 import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.lockerCluster.LockerClusterService;
 import com.group17.SmartLocker.service.newUser.NewUserService;
@@ -34,6 +36,7 @@ public class AdminController {
     private final UserService userService;
     private final LockerService lockerService;
     private final LockerClusterService lockerClusterService;
+    private final EmailService emailService;
 
     // api endpoints to manage new users
 
@@ -261,5 +264,17 @@ public class AdminController {
         }
     }
 
-
+//    // send and email for a test
+//    @PostMapping("/sendEmail")
+//    public ResponseEntity<HttpStatus> sendEmail(@RequestBody String email){
+//        try {
+//            System.out.println(email);
+//            emailService.sendSimpleEmail(email, "Welcome to SmartLocker", "Your locker access has been registered successfully.");
+//            System.out.println("Email sent successfully");
+//            return ResponseEntity.status(OK).build();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
 }

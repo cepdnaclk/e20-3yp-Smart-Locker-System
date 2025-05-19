@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 const API_URL = "http://localhost:8080/api/v1";
 
 const api = axios.create({
@@ -51,6 +51,25 @@ export const putLockeUsresData = async (id) => {
         }
     );
 };
+export const rejectPendingUser = async (id) => {
+    if (!localStorage.getItem("token")) {
+        console.error("JWT Token is missing! Check localStorage.");
+        return;
+    }
+    return await api.delete(
+        `/admin/reject/${id}`, 
+        {},  // Empty request body
+        {
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`, 
+                "Content-Type": "application/json"
+            }
+        }
+    );
+};
+
+
+
 
 export const getLockerUsresData = async () => {
     return await api.get("/admin/getAllUsers", {
@@ -66,13 +85,26 @@ export const deletLockeUsresData = async (id) => {
         console.error("JWT Token is missing! Check localStorage.");
         return;
     }
-    return await api.delete(
-        `/admin/deleteUserByID/${id}`, 
+    return await api.delete(`/admin/deleteUser/${id}`, 
         {
-            headers: { 
-                Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`, 
-                "Content-Type": "application/json"
-            }
+             headers: { 
+             Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
+            //"Content-Type": "application/json"
+        }
         }
     );
 };
+
+export const findUserByID = async (id) => {
+    if (!localStorage.getItem("token")) {
+        console.error("JWT Token is missing! Check localStorage.sesion expire ");
+        <Link to="/home"></Link>
+        return;
+    }
+    return await api.get( `/admin/findUserById/${id}`, {
+        headers: { 
+             Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
+            //"Content-Type": "application/json"
+        }
+    });
+}
