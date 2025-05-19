@@ -1,4 +1,4 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/routes/route_helper.dart';
@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget {
       getPages: RouteHelper.routes,
     );
   }
-}*/
-import 'package:flutter/material.dart';
+}
+/*import 'package:flutter/material.dart';
 import 'package:get/get.dart';  
 import 'package:secure_x/pages/map.dart';
 
@@ -46,4 +46,4 @@ class MyApp extends StatelessWidget {
       home: Map(),
     );
   }
-}
+}*/

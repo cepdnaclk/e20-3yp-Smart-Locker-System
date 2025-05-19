@@ -13,7 +13,6 @@ import 'package:secure_x/utils/custom_snackbar.dart';
 
 class AuthController extends GetxController {
   final AuthRepo authRepo;
-
   final DioClient dioClient = DioClient(); // Add this line
 
   AuthController({required this.authRepo});
@@ -41,7 +40,8 @@ class AuthController extends GetxController {
         print('Login successful: ${response.message}'); // Debug print
         print('Token: $token'); // Debug print
         //Get.snackbar('Success', response.message); // Show a success message
-        CustomSnackBar(response.message,iserror: false, title:'Login successful',duration: Duration(seconds: 4));
+        CustomSnackBar(response.message, iserror: false, title: 'Login successful', duration: Duration(seconds: 4));
+        
         // Fetch the signed-in user's details
         await getSignedInUser();
         // Navigate to the LoginSuccess page
@@ -60,10 +60,9 @@ class AuthController extends GetxController {
 
   // Method to handle user registration
   Future<ResponseModel<Map<String, dynamic>>> registration(CreateUserModel createUserModel) async {
-  try {
-    final Map<String, dynamic> registrationData = createUserModel.toJson();
-
     try {
+      final Map<String, dynamic> registrationData = createUserModel.toJson();
+
       final response = await dioClient.postData(
         AppConstants.CREATE_USER_URI,
         registrationData,
@@ -106,20 +105,23 @@ class AuthController extends GetxController {
         message: 'Network Error: ${dioError.message}',
       );
     }
-  } catch (e) {
-    print('Unexpected registration error: $e');
-    return ResponseModel<Map<String, dynamic>>(
-      isSuccess: false,
-      message: 'Unexpected error: $e',
-    );
   }
-}
+
   // Method to get the signed-in user's details
   Future<void> getSignedInUser() async {
     isLoading.value = true; // Start loading
     print('Fetching signed-in user details...'); // Debug print
 
     try {
+      // Fetch the token first
+      final token = await authRepo.getUserToken();
+
+      if (token == null) {
+        print('No valid token found or token expired. Please log in again.');
+        Get.snackbar('Error', 'Session expired. Please log in again.');
+        return; // Token is null, do not continue with fetching user details.
+      }
+
       final ResponseModel response = await authRepo.getSignedInUser();
 
       if (response.isSuccess) {
@@ -155,38 +157,36 @@ class AuthController extends GetxController {
   }
 
   // Method to unlock the locker
-  Future<ResponseModel> unlockLocker(String token) async {
-    isLoading.value = true; // Start loading
-    try {
-      // Debug: Print sending unlock request
-      print('Sending unlock request to backend...');
+  // Method to unlock the locker
+Future<ResponseModel> unlockLocker(String token, int clusterId) async {
+  isLoading.value = true; // Start loading
+  try {
+    print('Sending unlock request to backend for cluster $clusterId...');
 
-      // Send the unlock request to the backend
-      final response = await authRepo.unlockLocker(token);
+    final response = await authRepo.unlockLocker(token, clusterId);
 
-      // Debug: Print API response
-      print('API Response: ${response.message}');
+    print('API Response: ${response.message}');
 
-      if (response.isSuccess) {
-        return ResponseModel(
-          isSuccess: true,
-          message: 'Locker unlocked successfully',
-        );
-      } else {
-        return ResponseModel(
-          isSuccess: false,
-          message: 'Failed to unlock locker: ${response.message}',
-        );
-      }
-    } catch (e) {
-      // Debug: Print unexpected error
-      print('Unexpected error during unlock: $e');
+    if (response.isSuccess) {
+      return ResponseModel(
+        isSuccess: true,
+        message: 'Locker unlocked successfully',
+      );
+    } else {
       return ResponseModel(
         isSuccess: false,
-        message: 'An unexpected error occurred: $e',
+        message: 'Failed to unlock locker: ${response.message}',
       );
-    } finally {
-      isLoading.value = false; // Stop loading
     }
+  } catch (e) {
+    print('Unexpected error during unlock: $e');
+    return ResponseModel(
+      isSuccess: false,
+      message: 'An unexpected error occurred: $e',
+    );
+  } finally {
+    isLoading.value = false; // Stop loading
   }
+}
+
 }

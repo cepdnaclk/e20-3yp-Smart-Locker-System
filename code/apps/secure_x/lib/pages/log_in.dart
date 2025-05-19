@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/pages/create_user.dart';
+import 'package:secure_x/pages/unlock.dart';
 import 'package:secure_x/utils/colors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
@@ -103,6 +104,7 @@ class LogIn extends StatelessWidget {
                       ElevatedButton(
                         onPressed:(){
                           _login();
+                          //Get.to(() => Unlock());
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.buttonBackgroundColor1,

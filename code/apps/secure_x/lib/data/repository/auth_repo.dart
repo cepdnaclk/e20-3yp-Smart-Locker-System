@@ -14,6 +14,52 @@ class AuthRepo {
 
   AuthRepo({required this.dioClient, required this.sharedPreferences});
 
+  // Method to check if the token has expired
+  bool _isTokenExpired(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) return true;
+
+      final payload = json.decode(
+        utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))),
+      );
+
+      final exp = payload['exp'];
+      if (exp == null) return true;
+
+      final expiryDate = DateTime.fromMillisecondsSinceEpoch(exp * 1000);
+      return DateTime.now().isAfter(expiryDate);
+    } catch (e) {
+      print('Token decode error: $e');
+      return true;
+    }
+  }
+
+  // Method to get the user token from SharedPreferences
+  Future<String?> getUserToken() async {
+    try {
+      final token = sharedPreferences.getString(AppConstants.TOKEN);
+      print('Fetched user token: $token');
+
+      if (token == null || _isTokenExpired(token)) {
+        print('Token is null or expired');
+        await clearUserToken(); // Clear if invalid
+        return null;
+      }
+
+      return token;
+    } catch (e) {
+      print('Error fetching user token: $e');
+      return null;
+    }
+  }
+
+  // Method to clear the user token from SharedPreferences
+  Future<void> clearUserToken() async {
+    await sharedPreferences.remove(AppConstants.TOKEN);
+    print('Token cleared from SharedPreferences');
+  }
+
   // Method to handle user login
   Future<ResponseModel<String>> login(String username, String password) async {
     try {
@@ -119,19 +165,6 @@ class AuthRepo {
     }
   }
 
-  // Method to get the user token from SharedPreferences
-  Future<String?> getUserToken() async {
-    try {
-      // Retrieve the token from SharedPreferences
-      final String? token = sharedPreferences.getString(AppConstants.TOKEN);
-      print('Fetched user token: $token'); // Debug print
-      return token;
-    } catch (e) {
-      print('Error fetching user token: $e'); // Debug print
-      return null;
-    }
-  }
-
   // Method to fetch the signed-in user's details
   Future<ResponseModel<UserModel>> getSignedInUser() async {
     try {
@@ -178,44 +211,49 @@ class AuthRepo {
   }
 
   // Method to unlock the locker
-  Future<ResponseModel> unlockLocker(String token) async {
-    try {
-      // Debug: Print updating headers with token
-      print('Updating headers with token: $token');
+  // Method to unlock the locker
+Future<ResponseModel> unlockLocker(String token, int clusterId) async {
+  try {
+    // Debug: Print updating headers with token
+    print('Updating headers with token: $token');
 
-      // Update headers with the token
-      dioClient.updateHeader(token);
+    // Update headers with the token
+    dioClient.updateHeader(token);
 
-      // Debug: Print sending POST request
-      print('Sending POST request to: ${AppConstants.UNLOCK_LOCKER_URI}');
+    // Prepare request body
+    final requestBody = {
+      'clusterId': clusterId, // ✅ Pass the required clusterId
+    };
 
-      // Send the POST request to the backend
-      final response = await dioClient.postData(
-        AppConstants.UNLOCK_LOCKER_URI, // Define this constant in AppConstants
-        {}, // Add any required request body here
+    // Debug: Print sending POST request
+    print('Sending POST request to: ${AppConstants.UNLOCK_LOCKER_URI} with body: $requestBody');
+
+    // Send the POST request to the backend
+    final response = await dioClient.postData(
+      AppConstants.UNLOCK_LOCKER_URI,
+      requestBody,
+    );
+
+    // Debug: Print API response
+    print('Received API response: ${response.statusCode} - ${response.data}');
+
+    if (response.statusCode == 200) {
+      return ResponseModel(
+        isSuccess: true,
+        message: 'Locker unlocked successfully',
       );
-
-      // Debug: Print API response
-      print('Received API response: ${response.statusCode} - ${response.data}');
-
-      if (response.statusCode == 200) {
-        return ResponseModel(
-          isSuccess: true,
-          message: 'Locker unlocked successfully',
-        );
-      } else {
-        return ResponseModel(
-          isSuccess: false,
-          message: 'Failed to unlock locker: ${response.data}',
-        );
-      }
-    } catch (e) {
-      // Debug: Print network error
-      print('Network error during unlock: $e');
+    } else {
       return ResponseModel(
         isSuccess: false,
-        message: 'Network error: $e',
+        message: 'Failed to unlock locker: ${response.data}',
       );
     }
+  } catch (e) {
+    print('Network error during unlock: $e');
+    return ResponseModel(
+      isSuccess: false,
+      message: 'Network error: $e',
+    );
   }
+}
 }
