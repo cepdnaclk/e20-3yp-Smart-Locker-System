@@ -34,99 +34,103 @@ public class LockerService implements ILockerService{
     private final LockerClusterRepository lockerClusterRepository;
     private final MqttPublisher mqttPublisher;
 
-    @Override
-    public String unlockLocker(String username, Long clusterId) {
+//    @Override
+//    public String unlockLocker(String username, Long clusterId) {
+//
+//        // todo: Users should be allowed to use a preferred username
+//        String userId = username;
+//
+//        List<Locker> availableLockers = lockerRepository.findByLockerClusterIdAndLockerStatus(clusterId, LockerStatus.AVAILABLE);
+//        LockerLog activeLog = lockerLogService.findActiveLog(userId);
+//
+//        if(activeLog != null ){
+//
+//            // send Mqtt message to unlock (Unlocking the occupied locker)
+//            sendMqttMessageToLockerUnlock(clusterId, Math.toIntExact(activeLog.getLocker().getLockerId()), "1");
+//
+//            /*
+//             * Should check the locker status and update the locker log details
+//             * If the locker is not closed locker log status should be in UNSAFE status
+//             * UNSAFE : should send a notification to the user to close the locker properly
+//             */
+//
+//            /*
+//             * If the user finishes the service from the locker
+//             * This should be inside an if else statement
+//             * Because the locker status should be checked
+//             */
+//            activeLog.setStatus(LockerLogStatus.OLD);
+//            try {
+//                activeLog.setReleasedTime(LocalDateTime.now());
+//                activeLog.getLocker().setLockerStatus(LockerStatus.AVAILABLE); // change locker status
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            lockerLogRepository.save(activeLog);
+//            lockerRepository.save(activeLog.getLocker());
+//            return "Locker Unlocked! Locker Number: " + activeLog.getLocker().getDisplayNumber();
+//        }
+//        else{
+//
+//            if(availableLockers.isEmpty()){
+//                return "Sorry, No available lockers!";
+//            }
+//
+//            Locker locker = availableLockers.get(0);
+//            LockerLog lockerLog = new LockerLog();
+//
+//            // send Mqtt message to unlock (Unlocking a new existing locker
+//            sendMqttMessageToLockerUnlock(clusterId, Math.toIntExact(locker.getLockerId()), "0");
+//
+//            // change lockerlog status
+//            lockerLog.setAccessTime(LocalDateTime.now());
+//            lockerLog.setStatus(LockerLogStatus.ACTIVE);
+//
+//
+//            lockerLog.setLocker(locker);
+//            locker.setLockerStatus(LockerStatus.OCCUPIED);
+//            lockerRepository.save(locker);
+//
+//            lockerLog.setUser(userRepository.findByUsername(userId));
+//            lockerLogRepository.save(lockerLog);
+//
+//            return "Please use the locker with locker number: " + locker.getDisplayNumber();
+//        }
+//    }
+//
+//    /*
+//     * A helper method to the unlock locker function
+//     * Publish mqtt messages for given clusterId, lockerId and already assign state
+//     */
+//    public void sendMqttMessageToLockerUnlock(Long clusterId, Integer lockerId, String alreadyAssign){
+//        // publish the unlock Mqtt request message
+//
+//        //create the message payload
+//        ObjectMapper mapper = new ObjectMapper();
+//        ObjectNode payload = mapper.createObjectNode();
+//
+//        payload.put("clusterID", clusterId.toString());
+//        payload.put("lockerID", lockerId.toString());
+//        payload.put("alreadyAssign", alreadyAssign);
+//
+//        String message = null;
+//        try {
+//            message = mapper.writeValueAsString(payload);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//        // send the Mqtt message
+//        try {
+//            mqttPublisher.publish("esp32/unlock", message);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
-        // todo: Users should be allowed to use a preferred username
-        String userId = username;
-
-        List<Locker> availableLockers = lockerRepository.findByLockerClusterIdAndLockerStatus(clusterId, LockerStatus.AVAILABLE);
-        LockerLog activeLog = lockerLogService.findActiveLog(userId);
-
-        if(activeLog != null ){
-
-            // send Mqtt message to unlock (Unlocking the occupied locker)
-            sendMqttMessageToLockerUnlock(clusterId, Math.toIntExact(activeLog.getLocker().getLockerId()), "1");
-
-            /*
-             * Should check the locker status and update the locker log details
-             * If the locker is not closed locker log status should be in UNSAFE status
-             * UNSAFE : should send a notification to the user to close the locker properly
-             */
-
-            /*
-             * If the user finishes the service from the locker
-             * This should be inside an if else statement
-             * Because the locker status should be checked
-             */
-            activeLog.setStatus(LockerLogStatus.OLD);
-            try {
-                activeLog.setReleasedTime(LocalDateTime.now());
-                activeLog.getLocker().setLockerStatus(LockerStatus.AVAILABLE); // change locker status
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            lockerLogRepository.save(activeLog);
-            lockerRepository.save(activeLog.getLocker());
-            return "Locker Unlocked! Locker Number: " + activeLog.getLocker().getDisplayNumber();
-        }
-        else{
-
-            if(availableLockers.isEmpty()){
-                return "Sorry, No available lockers!";
-            }
-
-            Locker locker = availableLockers.get(0);
-            LockerLog lockerLog = new LockerLog();
-
-            // send Mqtt message to unlock (Unlocking a new existing locker)
-            sendMqttMessageToLockerUnlock(clusterId, Math.toIntExact(locker.getLockerId()), "0");
-
-            // change lockerlog status
-            lockerLog.setAccessTime(LocalDateTime.now());
-            lockerLog.setStatus(LockerLogStatus.ACTIVE);
 
 
-            lockerLog.setLocker(locker);
-            locker.setLockerStatus(LockerStatus.OCCUPIED);
-            lockerRepository.save(locker);
 
-            lockerLog.setUser(userRepository.findByUsername(userId));
-            lockerLogRepository.save(lockerLog);
-
-            return "Please use the locker with locker number: " + locker.getDisplayNumber();
-        }
-    }
-
-    /*
-     * A helper method to the unlock locker function
-     * Publish mqtt messages for given clusterId, lockerId and already assign state
-     */
-    public void sendMqttMessageToLockerUnlock(Long clusterId, Integer lockerId, String alreadyAssign){
-        // publish the unlock Mqtt request message
-
-        //create the message payload
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode payload = mapper.createObjectNode();
-
-        payload.put("clusterID", clusterId.toString());
-        payload.put("lockerID", lockerId.toString());
-        payload.put("alreadyAssign", alreadyAssign);
-
-        String message = null;
-        try {
-            message = mapper.writeValueAsString(payload);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        // send the Mqtt message
-        try {
-            mqttPublisher.publish("esp32/unlock", message);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public List<Locker> getAllLockers() {
