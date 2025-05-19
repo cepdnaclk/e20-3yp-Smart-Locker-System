@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:get/get.dart';
 import 'package:secure_x/data/api/dio_client.dart'; // Use DioClient
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/response_model.dart';
