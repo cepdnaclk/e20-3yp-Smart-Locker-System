@@ -171,9 +171,9 @@ public class LockerService implements ILockerService{
         String userId = username;
 
         List<Locker> availableLockers = lockerRepository.findByLockerClusterIdAndLockerStatus(clusterId, LockerStatus.AVAILABLE);
-        LockerLog activeLog = lockerLogService.findActiveOrUnsafeLog(userId);
+        LockerLog activeOrUnsafeLog = lockerLogService.findActiveOrUnsafeLog(userId);
 
-        if(activeLog == null){
+        if(activeOrUnsafeLog == null){
             /*
             * There should not have any active logs when user come to assign a locker
             */
