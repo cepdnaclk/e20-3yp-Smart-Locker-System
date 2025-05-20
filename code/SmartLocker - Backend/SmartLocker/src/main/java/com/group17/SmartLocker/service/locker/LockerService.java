@@ -1,6 +1,7 @@
 package com.group17.SmartLocker.service.locker;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.group17.SmartLocker.dto.LockerDto;
@@ -35,8 +36,7 @@ public class LockerService implements ILockerService{
     private final UserRepository userRepository;
     private final LockerClusterRepository lockerClusterRepository;
     private final MqttPublisher mqttPublisher;
-    private final MqttSubscriber mqttSubscriber;
-    private final MessageHandler messageHandler;
+
 
 //    @Override
 //    public String unlockLocker(String username, Long clusterId) {
@@ -108,7 +108,7 @@ public class LockerService implements ILockerService{
      * A helper method to the unlock locker function
      * Publish mqtt messages for given clusterId, lockerId and already assign state
      */
-    public void sendMqttMessageToLockerUnlock(Long clusterId, Integer lockerId, String alreadyAssign){
+    public void sendMqttMessageToLockerUnlock(Long clusterId, Long lockerId, String alreadyAssign){
         // publish the unlock Mqtt request message
 
         //create the message payload
@@ -137,14 +137,17 @@ public class LockerService implements ILockerService{
      * A helper method to the check the locker status, (properly closed or not)
      * Publish mqtt messages for a specific topic
      */
-    public void sendMqttMessageToCheckLockerStatus(String topic){
+    public void sendMqttMessageToCheckLockerStatus(Long clusterId, Long lockerId ){
         // publish the unlock Mqtt request message
+
+        System.out.println("📡 Publishing locker status check for: Cluster " + clusterId + ", Locker " + lockerId);
 
         //create the message payload
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode payload = mapper.createObjectNode();
 
-        payload.put("Status", "Check");
+        payload.put("clusterId", clusterId.toString());
+        payload.put("lockerId", lockerId.toString());
 
         String message = null;
         try {
@@ -155,16 +158,12 @@ public class LockerService implements ILockerService{
 
         // send the Mqtt message
         try {
-            mqttPublisher.publish(topic, message);
+            System.out.println("message sent to esp32/CheckLockerStatus");
+            mqttPublisher.publish("esp32/CheckLockerStatus", message);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
-    /*
-    * A helper function to get the locker status of a locker
-    */
-    public String getLockerStatus()
 
     @Override
     public String assignLocker(String username, Long clusterId){
@@ -172,12 +171,14 @@ public class LockerService implements ILockerService{
         String userId = username;
 
         List<Locker> availableLockers = lockerRepository.findByLockerClusterIdAndLockerStatus(clusterId, LockerStatus.AVAILABLE);
-        LockerLog activeLog = lockerLogService.findActiveLog(userId);
+        LockerLog activeLog = lockerLogService.findActiveOrUnsafeLog(userId);
 
         if(activeLog == null){
             /*
             * There should not have any active logs when user come to assign a locker
             */
+
+            System.out.println("⚡ assignLocker() invoked");
 
             if(availableLockers.isEmpty()){
                 return "Sorry, No available lockers!";
@@ -187,18 +188,8 @@ public class LockerService implements ILockerService{
             Long lockerId = locker.getLockerId();
             LockerLog lockerLog = new LockerLog(); // create a locker log
 
-            // send Mqtt message to unlock (Unlocking a new existing locker
-            sendMqttMessageToLockerUnlock(clusterId, Math.toIntExact(locker.getLockerId()), "0");
-
-            String topic = "esp32/lockerStatus/" + clusterId + "/" + lockerId ; // create the topic
-
-            // subscribe to the topic to get the locker status
-            try {
-                mqttSubscriber.subscribeToTopic(topic);
-                System.out.println("Subscribed to the topic: " + topic);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            // send Mqtt message to unlock (Unlocking a new existing locker)
+            sendMqttMessageToLockerUnlock(clusterId, locker.getLockerId(), "0");
 
             // change locker log status
             lockerLog.setAccessTime(LocalDateTime.now());
@@ -211,25 +202,25 @@ public class LockerService implements ILockerService{
             lockerLogRepository.save(lockerLog);
 
 
-            // Delay execution for 2 seconds
+            // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(90000); // 90000 milliseconds = 1.5 mins
+                Thread.sleep(1000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // good practice
                 System.err.println("Thread was interrupted");
             }
 
+            System.out.println("✅ After sleep, sending locker status request...");
+
             // asking for the locker status
-            sendMqttMessageToCheckLockerStatus(topic);
+            sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
 
-            // get the locker status
-
-
-
-
+            // Todo: make this to send as notifications
             return "Please use the locker with locker number: " + locker.getDisplayNumber(); // change this accordingly
         }
         else{
+            // Todo: make this to send notification
+            System.out.println("You have already used a locker.");
             return "You have already used a locker.";
         }
 
@@ -237,17 +228,83 @@ public class LockerService implements ILockerService{
     }
 
     @Override
-    public String accessLocker(String username, Long clusterId){
+    public String accessLocker(String username){
 
-        return "";
+        String userId = username;
+        LockerLog activeLog = lockerLogService.findActiveLog(userId); // find the active log
+        Long clusterId = activeLog.getLocker().getLockerCluster().getId();
+
+        if(activeLog != null){
+            Locker locker = activeLog.getLocker();
+            Long lockerId = locker.getLockerId();
+
+            // change locker log details
+            activeLog.setStatus(LockerLogStatus.UNSAFE);
+            lockerLogRepository.save(activeLog);
+
+            // send Mqtt message to unlock (Unlocking the assigned locker)
+            sendMqttMessageToLockerUnlock(clusterId, lockerId, "1");
+
+            // Delay execution for 1.5 minutes
+            try {
+                Thread.sleep(1000); // 90000 milliseconds = 1.5 minutes
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("Thread was interrupted");
+            }
+
+            // asking for the locker status
+            System.out.println("sendMqttMessageToCheckLockerStatus method invoking");
+            sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
+
+            // Todo: make this to send as notifications
+            return "Locker unlocked, Use the your locker with locker number: " + locker.getDisplayNumber();
+        }
+        else{
+            // Todo: make this to send as notifications
+            return "You have not assigned to a locker!";
+        }
+
     }
 
-     @Override
-    public String unassignLocker(String username, Long clusterId){
+    @Override
+    public String unassignLocker(String username){
 
-        return "";
+         String userId = username;
+
+         LockerLog activeLog = lockerLogService.findActiveLog(userId); // find the active log
+         Long clusterId = activeLog.getLocker().getLockerCluster().getId();
+
+         if(activeLog != null){
+
+             Locker locker = activeLog.getLocker();
+             Long lockerId = locker.getLockerId();
+
+             // change locker log details
+             activeLog.setStatus(LockerLogStatus.UNSAFE);
+             activeLog.setReleasedTime(LocalDateTime.now());
+             lockerLogRepository.save(activeLog);
+
+             // send Mqtt message to unlock (Unlocking the assigned locker)
+             sendMqttMessageToLockerUnlock(clusterId, lockerId, "1");
+
+             // Delay execution for 1.5 minutes
+             try {
+                 Thread.sleep(1000); // 90000 milliseconds = 1.5 minutes
+             } catch (InterruptedException e) {
+                 Thread.currentThread().interrupt();
+                 System.err.println("Thread was interrupted");
+             }
+
+             // asking for the locker status
+             sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
+
+             return "Locker unlocked, Use the your locker with locker number: " + locker.getDisplayNumber();
+         }
+         else{
+             return "You have not any lockers assigned!";
+         }
     }
-
 
 
     @Override
@@ -312,5 +369,109 @@ public class LockerService implements ILockerService{
         Locker locker = lockerRepository.findById(lockerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid locker id"));
         lockerRepository.delete(locker);
+    }
+
+
+    // handling locker status messages coming from the esp32
+    public void lockerStatusHandle(String message){
+
+        Long clusterId = null;
+        Long lockerId = null;
+        Integer status = null;
+
+        // extract fields from the incoming Mqtt message
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(message);
+            clusterId = Long.parseLong(root.get("clusterId").asText());  // spelling preserved as is
+            lockerId = Long.parseLong(root.get("lockerId").asText());
+            status = Integer.parseInt(root.get("lockerId").asText());
+
+        } catch (Exception e) {
+            System.err.println("Failed to parse MQTT message: " + e.getMessage());
+        }
+
+        // Find the locker log of the locker which is unsafe
+        LockerLog lockerLog = lockerLogRepository.findByLocker_LockerIdAndStatus(lockerId, LockerLogStatus.UNSAFE);
+
+        /*
+        * Event : User selected the unassign option
+        */
+        if(lockerLog.getReleasedTime() != null){
+
+            if(status == null){
+                System.out.println("Error : Status is null.");
+            }
+            else if(status == 0){
+                /*
+                * Event :  User properly remove his belongings from the locker
+                */
+                lockerLog.setStatus(LockerLogStatus.OLD);
+                Locker locker = lockerLog.getLocker();
+                locker.setLockerStatus(LockerStatus.AVAILABLE);
+
+                lockerLogRepository.save(lockerLog);
+                lockerRepository.save(locker);
+            }
+            else if (status == 3) {
+                /*
+                * Event : User did not remove all the belongings from the locker or
+                * locker is not properly closed after using
+                */
+                lockerLog.setStatus(LockerLogStatus.OLD);
+                Locker locker = lockerLog.getLocker();
+                locker.setLockerStatus(LockerStatus.BLOCKED);
+
+                lockerLogRepository.save(lockerLog);
+                lockerRepository.save(locker);
+
+                // Todo : notification should be sent informing this
+            }
+            else{
+                System.out.println("Unidentified locker status");
+            }
+        }
+
+        /*
+        * Event : User selected the assign option or access option
+        */
+        else{
+            if(status == null){
+                System.out.println("Error : Status is null.");
+            }
+            else if(status == 1){
+                /*
+                * Event : User has not properly closed the locker
+                */
+                // Todo: send another request to check the locker status
+                // Again check the locker status
+                // Delay execution for 0.5 minutes
+                try {
+                    Thread.sleep(30000); // 90000 milliseconds = 0.5 minutes
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    System.err.println("Thread was interrupted");
+                }
+
+                // asking for the locker status
+                sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
+
+                // Todo: Notify the user
+            }
+            else if(status == 2){
+                /*
+                * Event : User has properly closed the locker
+                */
+
+                lockerLog.setStatus(LockerLogStatus.ACTIVE);
+                lockerLogRepository.save(lockerLog);
+
+                // Todo: Notify the user
+            }
+            else{
+                System.out.println("Unidentified locker status");
+            }
+        }
+
     }
 }
