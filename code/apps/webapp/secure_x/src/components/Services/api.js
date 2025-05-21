@@ -80,7 +80,7 @@ export const getLockerUsresData = async () => {
     });
 };
 
-export const deletLockeUsresData = async (id) => {
+export const deletLockeUsresData = async (id,) => {
     if (!localStorage.getItem("token")) {
         console.error("JWT Token is missing! Check localStorage.");
         return;
@@ -102,6 +102,20 @@ export const findUserByID = async (id) => {
         return;
     }
     return await api.get( `/admin/findUserById/${id}`, {
+        headers: { 
+             Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
+            //"Content-Type": "application/json"
+        }
+    });
+}
+
+export const updateLockerUser = async (id,data) => {
+    if (!localStorage.getItem("token")) {
+        console.error("JWT Token is missing! Check localStorage.sesion expire ");
+        <Link to="/home"></Link>
+        return;
+    }
+    return await api.patch( `/admin/editUser/${id}`, data,{
         headers: { 
              Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
             //"Content-Type": "application/json"
