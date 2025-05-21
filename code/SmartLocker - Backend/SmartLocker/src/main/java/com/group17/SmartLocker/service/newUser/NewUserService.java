@@ -53,6 +53,7 @@ public class NewUserService implements INewUserService{
     // Admin approves user and move the user in to the locker user table
     @Override
     public Optional<User> approveUser(Long id) {
+
         Optional<NewUser> newUserOpt = newUserRepository.findById(id);
         if (newUserOpt.isPresent()) {
             User user = getUser(newUserOpt);

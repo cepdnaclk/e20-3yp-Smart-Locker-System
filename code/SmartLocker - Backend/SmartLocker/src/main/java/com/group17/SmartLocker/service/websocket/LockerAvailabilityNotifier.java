@@ -8,11 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class LockerAvailabilityNotifier {
-
     private final SimpMessagingTemplate messagingTemplate;
 
     public void notifyAvailability(Long clusterId, LockerClusterDto lockerClusterDto){
         messagingTemplate.convertAndSend("/topic/lockerAvailability/" + clusterId, lockerClusterDto);
     }
-
 }

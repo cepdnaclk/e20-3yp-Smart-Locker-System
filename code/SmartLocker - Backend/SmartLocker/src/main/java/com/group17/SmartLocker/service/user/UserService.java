@@ -2,10 +2,13 @@ package com.group17.SmartLocker.service.user;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
+import com.group17.SmartLocker.model.LockerLog;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.UserRepository;
+import com.group17.SmartLocker.service.email.EmailService;
 import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.mqtt.MqttPublisher;
 import io.micrometer.common.util.StringUtils;
@@ -24,6 +27,7 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final LockerService lockerService;
     private final MqttPublisher mqttPublisher;
+    private final EmailService emailService;
 
     @Override
     public List<UserDetailsDto> getAllUsers(){
@@ -172,6 +176,7 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         user.setFingerPrintId(fingerPrintId);
+        user.setOtp(null); // to ensure the otp is used only once
         userRepository.save(user);
         System.out.println("Fingerprint id saved successfully");
     }
@@ -235,7 +240,7 @@ public class UserService implements IUserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        user.setFingerPrintId(otpCode);
+        user.setOtp(otpCode);
         userRepository.save(user);
 
         return Integer.toString(randomNumber);
@@ -247,4 +252,59 @@ public class UserService implements IUserService {
         return Integer.toString(randomNumber);
     }
 
+    @Override
+    public String generateOtpCodeManually(String username){
+
+        User user = userRepository.findByUsername(username);
+        String otpCode = generateOtpCode(user.getId());
+
+//        System.out.println(otpCode);
+
+        // Send an email to inform the user
+        String subject = "SmartLocker – Your New OTP Code for Fingerprint Registration";
+        String body = String.format("""
+Dear %s,
+                
+A new OTP code has been generated for your SmartLocker account.
+                
+🔐 New OTP Code for Fingerprint Registration: %s
+                
+👉 Please use this OTP when prompted by the system to save your fingerprint.
+This code is valid for one-time use and helps us securely link your identity to the locker system.
+                
+If you didn’t request this, please contact our support team immediately.
+                
+Thank you,
+SmartLocker Admin Team
+""", user.getFirstName(), otpCode);
+
+        emailService.sendSimpleEmail(user.getEmail(), subject, body);
+        return otpCode;
+    }
+
+    @Override
+    public String getOtpCode(String username){
+        return userRepository.findById(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"))
+                .getOtp();
+
+    }
+
+
+    @Override
+    public List<LockerLogDto> getLockerLogs(String username) {
+        List<LockerLog> logs = userRepository.findByUsername(username).getLockerLogs();
+        List<LockerLogDto> lockerLogs = new ArrayList<>();
+
+        for(LockerLog log : logs){
+            LockerLogDto logDto = new LockerLogDto();
+            logDto.setLogId(log.getLogId());
+            logDto.setAccessTime(log.getAccessTime());
+            logDto.setReleasedTime(log.getReleasedTime());
+            logDto.setLockerId(log.getLocker().getLockerId());
+
+            lockerLogs.add(logDto);
+        }
+        return lockerLogs;
+    }
 }
