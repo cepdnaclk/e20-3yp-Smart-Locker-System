@@ -234,9 +234,9 @@ public class AdminController {
 
     // find all locker clusters
     @GetMapping("/getAllLockerClusters")
-    public ResponseEntity<List<LockerCluster>> getAllLockerClusters(){
+    public ResponseEntity<List<LockerClusterDto>> getAllLockerClusters(){
         try {
-            List<LockerCluster> lockerClusters = lockerClusterService.getAllLockerClusters();
+            List<LockerClusterDto> lockerClusters = lockerClusterService.getAllLockerClusters();
             return ResponseEntity.ok(lockerClusters);
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
