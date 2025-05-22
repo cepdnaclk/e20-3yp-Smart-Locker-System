@@ -1,6 +1,7 @@
 package com.group17.SmartLocker.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.group17.SmartLocker.enums.Role;
 import com.group17.SmartLocker.model.LockerLog;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class UserDetailsDto {
     private String contactNumber;
     private String email;
     private String otp;
+    private Role role;
     private boolean fingerPrintExists; // This is to check the user is using the fingerprint or not
 
     @JsonIgnore
