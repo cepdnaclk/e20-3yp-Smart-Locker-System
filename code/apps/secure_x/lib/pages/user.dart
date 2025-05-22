@@ -98,13 +98,13 @@ class _UserState extends State<User> {
                       const SizedBox(height: 20,),
                       TextButton.icon(
                         onPressed: (){
-                          //Get.to(() => UserDetails());
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => UserDetails(),
-                            ),
-                          );
+                          Get.to(() => UserDetails());
+                          //Navigator.push(
+                          //  context,
+                          //  MaterialPageRoute(
+                          //    builder: (context) => UserDetails(),
+                          //  ),
+                         // );
                       }, 
                       icon: const Icon(
                         Icons.person_4_outlined,

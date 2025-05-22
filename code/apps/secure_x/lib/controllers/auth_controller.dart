@@ -5,6 +5,7 @@ import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/response_model.dart';
 import 'package:secure_x/models/user_model.dart';
 import 'package:secure_x/pages/login_success.dart';
+import 'package:secure_x/pages/navigation.dart';
 import 'package:secure_x/utils/app_constants.dart';
 import 'package:secure_x/data/api/dio_client.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
@@ -43,7 +44,8 @@ class AuthController extends GetxController {
         // Fetch the signed-in user's details
         await getSignedInUser();
         // Navigate to the LoginSuccess page
-        Get.offAll(() => LoginSuccess());
+        //Get.offAll(() => LoginSuccess());
+        Get.offAll(() => Navigation());
       } else {
         print('Login failed: ${response.message}'); // Debug print
         Get.snackbar('Error', response.message); // Show an error message

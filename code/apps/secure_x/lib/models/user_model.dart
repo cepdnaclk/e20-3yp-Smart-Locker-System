@@ -1,14 +1,16 @@
 class UserModel{
-  int? id;
-  String? username;
+  String? id;
+  String? firstName;
+  String? lastName; 
   String? email;
-  int? phoneNo;
+  String? phoneNo;
   String? regNo;
   late bool isUserSignedIn;
 
   UserModel({
     this.id,
-    this.username,
+    this.firstName,
+    this.lastName,
     this.email,
     this.phoneNo,
     this.regNo,
@@ -16,11 +18,15 @@ class UserModel{
   });
 
   UserModel.fromJson(Map<String,dynamic>json){
+
+      print("User JSON: $json");
+
       id=json['id'];
-      username=json['first_name'];
+      firstName=json['firstName'];
+      lastName=json['lastName'];
       email= json['email']; 
-      phoneNo= json['contact_number'];
-      regNo = json['reg_no'];
+      phoneNo= json['contactNumber'];
+      regNo = json['username'];
       isUserSignedIn=false;
   }
 
@@ -28,9 +34,10 @@ class UserModel{
     final Map<String,dynamic> data=Map<String,dynamic>();
     data['id']=id;
     data['email']=email;
-    data['first_name']=username;
-    data['contact_number']=phoneNo;
-    data['reg_no'] = regNo;
+    data['firstName']=firstName;
+    data['lastName']=lastName;
+    data['contactNumber']=phoneNo;
+    data['username'] = regNo;
     return data; 
   } 
 
