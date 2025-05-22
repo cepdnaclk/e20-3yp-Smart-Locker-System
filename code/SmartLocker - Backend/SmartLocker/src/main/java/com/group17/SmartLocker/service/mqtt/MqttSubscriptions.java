@@ -15,8 +15,8 @@ public class MqttSubscriptions {
         try {
             mqttSubscriber.subscribeToTopic("esp32/getPassword");
             mqttSubscriber.subscribeToTopic("esp32/assignFingerprint");
-//            mqttSubscriber.subscribeToTopic("esp32/unlock");
             mqttSubscriber.subscribeToTopic("esp32/unlockFingerprint");
+            mqttSubscriber.subscribeToTopic("esp32/lockerStatus");
 
         } catch (Exception e) {
             throw new RuntimeException(e);

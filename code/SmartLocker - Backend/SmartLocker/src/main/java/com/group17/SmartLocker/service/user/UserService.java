@@ -181,37 +181,73 @@ public class UserService implements IUserService {
         System.out.println("Fingerprint id saved successfully");
     }
 
-    // unlock a locker using fingerprint
+//    // unlock a locker using fingerprint
+//    public void unlockLockerUsingFingerprint(String message){
+//
+//        System.out.println("user service");
+//
+//        // extract the fields from the mqtt message
+//        String userFingerPrintId = "";
+//        String clusterIdString = "";
+//
+//        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            JsonNode root = mapper.readTree(message);
+//            userFingerPrintId = root.get("fingerprintID").asText();  // spelling preserved as is
+//            clusterIdString = root.get("clusterID").asText();
+////            System.out.println(registrationId);
+//
+//        } catch (Exception e) {
+//            System.err.println("Failed to parse MQTT message: " + e.getMessage());
+//        }
+////        System.out.println("userFingerprintId: " + userFingerPrintId);
+////        System.out.println("cluster id in string: " + clusterIdString);
+//        // parse the input cluster id into a long
+//        Long clusterId = Long.parseLong(clusterIdString);
+//
+////        System.out.println("Long cluster id: " + clusterId);
+//
+//
+//        // get the username
+//        String username = userRepository.findByFingerPrintId(userFingerPrintId).getId();
+//        System.out.println("username " + username);
+////        System.out.println(lockerService.unlockLocker(username, clusterId));
+//    }
+
+
+    //Unlock locker using fingerprint
     public void unlockLockerUsingFingerprint(String message){
 
         System.out.println("user service");
 
         // extract the fields from the mqtt message
         String userFingerPrintId = "";
-        String clusterIdString = "";
+        Long clusterId = null;
+        String action = "";
 
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(message);
-            userFingerPrintId = root.get("fingerprintID").asText();  // spelling preserved as is
-            clusterIdString = root.get("clusterID").asText();
-//            System.out.println(registrationId);
+            userFingerPrintId = root.get("fingerprintId").asText();  // spelling preserved as is
+            clusterId = Long.parseLong(root.get("clusterId").asText());
+            action = root.get("action").asText();
 
         } catch (Exception e) {
             System.err.println("Failed to parse MQTT message: " + e.getMessage());
         }
-//        System.out.println("userFingerprintId: " + userFingerPrintId);
-//        System.out.println("cluster id in string: " + clusterIdString);
-        // parse the input cluster id into a long
-        Long clusterId = Long.parseLong(clusterIdString);
 
-//        System.out.println("Long cluster id: " + clusterId);
+        User user = userRepository.findByFingerPrintId(userFingerPrintId);
 
+        String username = user.getUsername();
 
-        // get the username
-        String username = userRepository.findByFingerPrintId(userFingerPrintId).getId();
-        System.out.println("username " + username);
-        System.out.println(lockerService.unlockLocker(username, clusterId));
+        if(action.equals("assign")){
+            lockerService.assignLocker(username, clusterId);
+        } else if (action.equals("access")) {
+            lockerService.accessLocker(username);
+        } else if (action.equals("unassign")) {
+            lockerService.unassignLocker(username);
+        }
+
     }
 
 
@@ -307,4 +343,6 @@ SmartLocker Admin Team
         }
         return lockerLogs;
     }
+
+
 }

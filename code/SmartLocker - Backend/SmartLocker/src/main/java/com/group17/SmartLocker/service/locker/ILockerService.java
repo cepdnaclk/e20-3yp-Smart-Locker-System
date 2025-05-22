@@ -6,7 +6,13 @@ import com.group17.SmartLocker.model.Locker;
 import java.util.List;
 
 public interface ILockerService {
-    String unlockLocker(String username, Long clusterId);
+//    String unlockLocker(String username, Long clusterId);
+
+    String assignLocker(String username, Long clusterId);
+
+    String accessLocker(String username);
+
+    String unassignLocker(String username);
 
     List<Locker> getAllLockers();
 
