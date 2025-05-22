@@ -1,0 +1,25 @@
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 400px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px;
+}
+
+.no-border input {
+  
+  outline: none;
+  background-color: transparent;
+  padding: 8px 0;
+}
+
+.no-border .MuiOutlinedInput-notchedOutline {
+  border: none;
+}

@@ -31,11 +31,32 @@ public class UserController {
     private final LockerService lockerService;
     private final LockerClusterService lockerClusterService;
 
-    //todo: Implement the api end point to unlock the locker
-    // send cluster id and the token to the service layer
-    @GetMapping("/unlockLocker")
-    public ResponseEntity<ApiResponse> unlockLocker(HttpServletRequest request, @RequestParam Long clusterId){
+//    //todo: Implement the api end point to unlock the locker
+//    // send cluster id and the token to the service layer
+//    @GetMapping("/unlockLocker")
+//    public ResponseEntity<ApiResponse> unlockLocker(HttpServletRequest request, @RequestParam Long clusterId){
+//
+//        String jwtToken = "";
+//        // Extract token from the http request. No need to check the token in null.
+//        // There should be a token to access this endpoint ?
+//        String authHeader = request.getHeader("Authorization");
+//        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+//            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+//        }
+//
+//        try {
+//            String message = lockerService.unlockLocker(jwtService.extractUsername(jwtToken), clusterId);
+//            return ResponseEntity.ok(new ApiResponse("Success", message));
+//        } catch (Exception e) {
+//            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+//        }
+//
+//    }
 
+
+    // access the assigned locker
+    @GetMapping("/accessLocker")
+    public ResponseEntity<String> accessLocker(HttpServletRequest request){
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
         // There should be a token to access this endpoint ?
@@ -45,12 +66,31 @@ public class UserController {
         }
 
         try {
-            String message = lockerService.unlockLocker(jwtService.extractUsername(jwtToken), clusterId);
-            return ResponseEntity.ok(new ApiResponse("Success", message));
+            String username = jwtService.extractUsername(jwtToken);
+            return ResponseEntity.ok(lockerService.accessLocker(username));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    // unassign the assigned locker
+    @GetMapping("/unassign")
+    public ResponseEntity<String> unassignLocker(HttpServletRequest request){
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
         }
 
+        try {
+            String username = jwtService.extractUsername(jwtToken);
+            return ResponseEntity.ok(lockerService.unassignLocker(username));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // to view users their user details

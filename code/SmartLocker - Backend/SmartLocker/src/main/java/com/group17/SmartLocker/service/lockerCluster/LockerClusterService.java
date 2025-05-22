@@ -8,6 +8,7 @@ import com.group17.SmartLocker.service.locker.LockerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -42,8 +43,23 @@ public class LockerClusterService implements ILockerClusterService{
     }
 
     @Override
-    public List<LockerCluster> getAllLockerClusters() {
-        return lockerClusterRepository.findAll();
+    public List<LockerClusterDto> getAllLockerClusters() {
+        List<LockerCluster> lockerClusters =  lockerClusterRepository.findAll();
+        List<LockerClusterDto> lockerClustersList = new ArrayList<>();
+
+        for(int i = 0; i < lockerClusters.size(); i++){
+            LockerClusterDto lockerCluster = new LockerClusterDto();
+
+            lockerCluster.setId(lockerClusters.get(i).getId());
+            lockerCluster.setClusterName(lockerClusters.get(i).getClusterName());
+            lockerCluster.setLockerClusterDescription(lockerClusters.get(i).getLockerClusterDescription());
+            lockerCluster.setTotalNumberOfLockers(lockerClusters.get(i).getTotalNumberOfLockers());
+            lockerCluster.setAvailableNumberOfLockers(lockerClusters.get(i).getAvailableNumberOfLockers());
+
+            lockerClustersList.add(lockerCluster);
+        }
+
+        return lockerClustersList;
     }
 
     @Override
