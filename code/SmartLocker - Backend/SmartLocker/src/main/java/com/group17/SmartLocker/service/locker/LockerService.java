@@ -158,8 +158,8 @@ public class LockerService implements ILockerService{
 
         // send the Mqtt message
         try {
-            System.out.println("message sent to esp32/CheckLockerStatus");
-            mqttPublisher.publish("esp32/CheckLockerStatus", message);
+            System.out.println("message sent to esp32/checkLockerStatus");
+            mqttPublisher.publish("esp32/checkLockerStatus", message);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -269,6 +269,8 @@ public class LockerService implements ILockerService{
 
     @Override
     public String unassignLocker(String username){
+
+         System.out.println("unassign locker");
 
          String userId = username;
 
@@ -385,7 +387,7 @@ public class LockerService implements ILockerService{
             JsonNode root = mapper.readTree(message);
             clusterId = Long.parseLong(root.get("clusterId").asText());  // spelling preserved as is
             lockerId = Long.parseLong(root.get("lockerId").asText());
-            status = Integer.parseInt(root.get("lockerId").asText());
+            status = Integer.parseInt(root.get("status").asText());
 
         } catch (Exception e) {
             System.err.println("Failed to parse MQTT message: " + e.getMessage());

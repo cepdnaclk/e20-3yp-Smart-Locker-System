@@ -11,7 +11,7 @@ public interface ILockerClusterService {
 
     LockerCluster getLockerClusterById(Long clusterId);
 
-    List<LockerCluster> getAllLockerClusters();
+    List<LockerClusterDto> getAllLockerClusters();
 
     LockerCluster updateLockerCluster(Long lockerClusterId, LockerClusterDto lockerCluster);
 
