@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secure_x/pages/find.dart';
+import 'package:secure_x/pages/navigation.dart';
 import 'package:secure_x/pages/unlock.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
@@ -44,7 +45,10 @@ class LoginSuccess extends StatelessWidget {
             child: TextButton(onPressed: (){
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Unlock(),));
+                MaterialPageRoute(
+                  builder: (context) => const Unlock(),));
+                  //builder: (context) => const Navigation(selectedIndex: 3),
+                //));
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.blue,

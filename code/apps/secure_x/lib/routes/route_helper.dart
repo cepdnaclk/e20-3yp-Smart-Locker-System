@@ -7,9 +7,10 @@ import 'package:secure_x/pages/sign_in.dart';
 import 'package:secure_x/pages/splash_screen.dart';
 import 'package:secure_x/pages/unlock.dart';
 import 'package:secure_x/pages/user.dart';
+import 'package:secure_x/pages/user_details.dart';
 
 class RouteHelper {
-  static const String initial='/';
+  //static const String initial='/';
   static const String splashScreen='/splash-screen';
   static const String login='/log-in';
   static const String createUser='/create-user';
@@ -17,8 +18,11 @@ class RouteHelper {
   static const String unlock='/unlock';
   static const String signin='/sign-in';
   static const String user='/user';
+  static const String navigation='/navigation';
+  static const String userDetails='/user-details';
+  
 
-  static String getInitial()=>'$initial';
+  //static String getInitial()=>'$initial';
   static String getSplashScreen()=>'$splashScreen';
   static String getlogin()=>'$login';
   static String getCreateuser()=>'$createUser';
@@ -26,15 +30,19 @@ class RouteHelper {
   static String getUnlock()=>'$unlock';
   static String getSignin()=>'$signin';
   static String getUser()=>'$user';
+  static String getNavigation()=>'$navigation';
+  static String getUserDetails()=>'$userDetails';
 
   static List<GetPage> routes=[
-    GetPage(name:initial,page:()=>Navigation()),
+    //GetPage(name:initial,page:()=>Navigation()),
     GetPage(name: splashScreen,page: () => SplashScreen(),),
     GetPage(name: login,page: ()=>LogIn()),
     GetPage(name: createUser,page: () => CreateUser(),),
     GetPage(name: loginSuccess,page: () => LoginSuccess(),),
     GetPage(name: unlock, page:() => Unlock(),),
     GetPage(name: signin, page:()=>SignIn()),
-    GetPage(name: user, page: ()=>User())
+    GetPage(name: user, page: ()=>User()),
+    GetPage(name: navigation, page: ()=>Navigation()),    
+    GetPage(name:userDetails,page:()=> UserDetails(),),
   ];
 }

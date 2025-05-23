@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
+import 'package:secure_x/pages/user_details.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
 class User extends StatefulWidget {
@@ -97,6 +98,13 @@ class _UserState extends State<User> {
                       const SizedBox(height: 20,),
                       TextButton.icon(
                         onPressed: (){
+                          Get.to(() => UserDetails());
+                          //Navigator.push(
+                          //  context,
+                          //  MaterialPageRoute(
+                          //    builder: (context) => UserDetails(),
+                          //  ),
+                         // );
                       }, 
                       icon: const Icon(
                         Icons.person_4_outlined,
