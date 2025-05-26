@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:secure_x/pages/locker_logs.dart';
 import 'package:secure_x/pages/user.dart';
-import 'package:secure_x/utils/colors.dart';
+import 'package:secure_x/utils/appcolors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -9,15 +10,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.appBarColor,
+      backgroundColor: AppColors.buttonBackgroundColor2,
         leading: PopupMenuButton<String>(
-          icon: const Icon(Icons.menu, color: AppColors.iconColor,),
+          icon: const Icon(Icons.menu, color: AppColors.boxColor,),
           color: AppColors.boxColor,
           onSelected: (value) {
             if(value== 'View Profile'){
               Get.to(() => const User());
             }else if(value=='Settings'){
             }else if(value=='History'){
+              Get.to(() => LockerLogs());
             }else if(value=='Log Out'){            
             }
           },
@@ -79,11 +81,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: Center(
           child: ColorFiltered(
             colorFilter:ColorFilter.mode(
-              Colors.grey[400]!,
-              BlendMode.modulate ,
+              AppColors.boxColor,
+              BlendMode.modulate,
             ),
             child: Image.asset(
-            'assets/img/logo.png',
+            'assets/img/logo2.png',
             height: 100,
             width: 800,
           ),
@@ -91,7 +93,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.message_outlined, color: AppColors.iconColor,),
+            icon: const Icon(Icons.message_outlined, color: AppColors.boxColor,),
             onPressed: () {
             },
           ),
