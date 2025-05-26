@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
+import 'package:secure_x/pages/locker_logs.dart';
 import 'package:secure_x/pages/user_details.dart';
+import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
 class User extends StatefulWidget {
@@ -53,10 +55,10 @@ class _UserState extends State<User> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppColors.mainColor,
       appBar:const CustomAppBar(),
       body:Container(
-        color: Colors.blue[100],
+        color: AppColors.mainColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -119,6 +121,7 @@ class _UserState extends State<User> {
                       const SizedBox(height: 20,),
                       TextButton.icon(
                         onPressed: (){
+                          Get.to(() => LockerLogs());
                       }, 
                       icon: const Icon(
                         Icons.history,

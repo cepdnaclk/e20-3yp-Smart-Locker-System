@@ -3,7 +3,7 @@ import 'package:secure_x/pages/find.dart';
 import 'package:secure_x/pages/login_success.dart';
 import 'package:secure_x/pages/sign_in.dart';
 import 'package:secure_x/pages/user.dart';
-import 'package:secure_x/utils/colors.dart';
+import 'package:secure_x/utils/appcolors.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});

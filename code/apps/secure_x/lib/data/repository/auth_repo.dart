@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:secure_x/data/api/dio_client.dart'; // Use DioClient
 import 'package:secure_x/models/create_user_model.dart';
+import 'package:secure_x/models/locker_logs_model.dart';
 import 'package:secure_x/models/response_model.dart';
 import 'package:secure_x/models/user_model.dart';
 import 'package:secure_x/utils/app_constants.dart';
@@ -254,4 +255,30 @@ Future<ResponseModel> unlockLocker(String token, int clusterId) async {
     );
   }
 }
+
+  //method to get the user logs
+  Future<List<LockerLogsModel>> getUserLogs() async{
+    // Retrieve the token from SharedPreferences
+    final String? token = sharedPreferences.getString(AppConstants.TOKEN);
+
+    if (token == null) {
+      throw Exception('User not authenticated');         
+    }
+
+    // Update the headers in DioClient with the current token
+    dioClient.updateHeader(token);
+
+    try{
+      final response=await dioClient.getData(AppConstants.LOCKER_LOGS_URI,);
+      if(response.statusCode==200){
+        List<dynamic> data= response.data;
+        return data.map((e)=> LockerLogsModel.fromJson(e)).toList();
+      }else{
+        throw Exception('Failed to fetch locker logs: ${response.statusCode}');
+      }
+    }catch(e){
+      print('Error fetching logs: $e');
+      throw e;
+    }
+  }
 }

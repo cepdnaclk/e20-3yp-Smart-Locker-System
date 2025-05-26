@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/pages/create_user.dart';
 import 'package:secure_x/pages/navigation.dart';
-import 'package:secure_x/utils/colors.dart';
+import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
 
@@ -35,7 +35,7 @@ class LogIn extends StatelessWidget {
     double screenHeight=MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      appBar: CustomAppBar(),
+      //appBar: CustomAppBar(),
       body: GetBuilder<AuthController>(
         builder: (authController) {
           return authController.isLoading.value
@@ -108,8 +108,8 @@ class LogIn extends StatelessWidget {
                           //Get.to(()=>Navigation());
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.buttonBackgroundColor1,
-                          foregroundColor: AppColors.buttonForegroundColor2,
+                          backgroundColor: AppColors.buttonBackgroundColor2,
+                          foregroundColor: AppColors.textInverse,
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                         ), 
                         child: //_isLoading? const CircularProgressIndicator():
@@ -125,7 +125,7 @@ class LogIn extends StatelessWidget {
                         Get.to(() => CreateUser());        
                         },
                         style: TextButton.styleFrom(
-                          foregroundColor: AppColors.textColor2,
+                          foregroundColor: AppColors.textPrimary,
                         ),
                         child: const Text('CREATE ACCOUNT')
                       ),

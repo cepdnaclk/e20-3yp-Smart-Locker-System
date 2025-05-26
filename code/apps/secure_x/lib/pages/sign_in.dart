@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secure_x/pages/create_user.dart';
+import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/pages/log_in.dart';
 
@@ -11,10 +12,10 @@ class SignIn extends StatelessWidget {
     double screenWidth=MediaQuery.of(context).size.width;
     double screenHeight=MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.blue[100],
-      appBar:const CustomAppBar(),
+      backgroundColor: AppColors.mainColor,
+      //appBar:const CustomAppBar(),
       body:Container(
-        color: Colors.blue[100],
+        color: AppColors.mainColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -54,8 +55,8 @@ class SignIn extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => LogIn(),));
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
+                          backgroundColor: AppColors.buttonBackgroundColor2,
+                          foregroundColor: AppColors.buttonBackgroundColor1,
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                         ), 
                         child: const Text('SIGN IN',style: TextStyle(
@@ -72,7 +73,7 @@ class SignIn extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => const CreateUser(),));
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.blue,
+                        foregroundColor: AppColors.textSecondary,
                       ),
                       child: const Text('CREATE ACCOUNT')
                       ),
