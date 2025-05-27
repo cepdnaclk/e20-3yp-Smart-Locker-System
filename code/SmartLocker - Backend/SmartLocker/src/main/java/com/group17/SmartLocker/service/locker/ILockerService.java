@@ -8,7 +8,7 @@ import java.util.List;
 public interface ILockerService {
 //    String unlockLocker(String username, Long clusterId);
 
-    String assignLocker(String username, Long clusterId);
+    void assignLocker(String username, Long clusterId);
 
     String accessLocker(String username);
 

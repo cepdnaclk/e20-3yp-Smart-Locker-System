@@ -12,14 +12,14 @@ import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.model.Locker;
 import com.group17.SmartLocker.model.LockerCluster;
 import com.group17.SmartLocker.model.LockerLog;
+import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.LockerClusterRepository;
 import com.group17.SmartLocker.repository.LockerLogRepository;
 import com.group17.SmartLocker.repository.LockerRepository;
 import com.group17.SmartLocker.repository.UserRepository;
 import com.group17.SmartLocker.service.lockerLog.LockerLogService;
-import com.group17.SmartLocker.service.mqtt.MessageHandler;
 import com.group17.SmartLocker.service.mqtt.MqttPublisher;
-import com.group17.SmartLocker.service.mqtt.MqttSubscriber;
+import com.group17.SmartLocker.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +36,7 @@ public class LockerService implements ILockerService{
     private final UserRepository userRepository;
     private final LockerClusterRepository lockerClusterRepository;
     private final MqttPublisher mqttPublisher;
+    private final NotificationService notificationService;
 
 
 //    @Override
@@ -166,11 +167,19 @@ public class LockerService implements ILockerService{
     }
 
     @Override
-    public String assignLocker(String username, Long clusterId){
-
+    public void assignLocker(String username, Long clusterId){
+        /*
+        * This is the initial state that user is taking a locker
+        * User should unlock and assign a locker using the fingerprint
+        * User cannot assign a locker using the mobile app
+        */
         String userId = username;
+        User user = userRepository.findByUsername(username);
 
+        // Find the available locker in the given cluster
         List<Locker> availableLockers = lockerRepository.findByLockerClusterIdAndLockerStatus(clusterId, LockerStatus.AVAILABLE);
+
+        // Check the user is already has assigned to a locker. That locker can be an active locker or and unsafe locker
         LockerLog activeOrUnsafeLog = lockerLogService.findActiveOrUnsafeLog(userId);
 
         if(activeOrUnsafeLog == null){
@@ -178,10 +187,11 @@ public class LockerService implements ILockerService{
             * There should not have any active logs when user come to assign a locker
             */
 
-            System.out.println("⚡ assignLocker() invoked");
+            System.out.println("⚡ assignLocker() invoked"); // This is a debugging line
 
             if(availableLockers.isEmpty()){
-                return "Sorry, No available lockers!";
+                System.out.println("Sorry, No lockers are available");
+//                return "Sorry, No available lockers!";
             }
 
             Locker locker = availableLockers.get(0); // find an available locker
@@ -190,6 +200,17 @@ public class LockerService implements ILockerService{
 
             // send Mqtt message to unlock (Unlocking a new existing locker)
             sendMqttMessageToLockerUnlock(clusterId, locker.getLockerId(), "0");
+
+            // Todo: make this to send as notifications
+            System.out.println(user.getFirstName() + ", Please use the locker with locker number: " + locker.getDisplayNumber());
+
+            // Send the notification to the user about the locker unlocking
+            notificationService.sendAndSave(
+                    userId,
+                    "Locker Unlocked",
+                    "Use the Locker with Locker Number: " + locker.getDisplayNumber(),
+                    "INFO"
+            );
 
             // change locker log status
             lockerLog.setAccessTime(LocalDateTime.now());
@@ -204,24 +225,29 @@ public class LockerService implements ILockerService{
 
             // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(1000); // 90000 milliseconds = 1.5 minutes
+                Thread.sleep(5000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // good practice
                 System.err.println("Thread was interrupted");
             }
 
-            System.out.println("✅ After sleep, sending locker status request...");
+            System.out.println("✅ After sleep, sending locker status request..."); // This is a debugging line
 
             // asking for the locker status
             sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
 
-            // Todo: make this to send as notifications
-            return "Please use the locker with locker number: " + locker.getDisplayNumber(); // change this accordingly
+//            return "Please use the locker with locker number: " + locker.getDisplayNumber(); // change this accordingly
         }
         else{
             // Todo: make this to send notification
-            System.out.println("You have already used a locker.");
-            return "You have already used a locker.";
+            System.out.println(user.getFirstName() + ", You have already used a locker.");
+            notificationService.sendAndSave(
+                    userId,
+                    "Unable to use a locker",
+                    "You have already used a locker!",
+                    "ERROR"
+            );
+//            return "You have already used a locker.";
         }
 
 
@@ -230,8 +256,19 @@ public class LockerService implements ILockerService{
     @Override
     public String accessLocker(String username){
 
+        // Todo : Locker cluster should be checked before this, cluster must be same where the user puts his fingerprint
+
+        /*
+        * When a user need to add or remove thing to an assigned locker.
+        * He/she should have assigned to a locker before this.
+        * This can be done from both fingerprint and the mobile app
+        */
+
         String userId = username;
-        LockerLog activeLog = lockerLogService.findActiveLog(userId); // find the active log
+        User user = userRepository.findByUsername(username);
+
+        // Find the active log of the user
+        LockerLog activeLog = lockerLogService.findActiveLog(userId);
         Long clusterId = activeLog.getLocker().getLockerCluster().getId();
 
         if(activeLog != null){
@@ -247,21 +284,38 @@ public class LockerService implements ILockerService{
 
             // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(1000); // 90000 milliseconds = 1.5 minutes
+                Thread.sleep(5000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 System.err.println("Thread was interrupted");
             }
 
-            // asking for the locker status
-            System.out.println("sendMqttMessageToCheckLockerStatus method invoking");
+            // Asking for locker status
+            System.out.println("✅ After sleep, sending locker status request..."); // This is a debugging line
             sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
 
             // Todo: make this to send as notifications
+            notificationService.sendAndSave(
+                    userId,
+                    "Locker Unlocked!",
+                    "Your locker is unlocked. Please user the Locker with locker number: " + locker.getDisplayNumber(),
+                    "INFO"
+            );
+
+            System.out.println(user.getFirstName() + ", Please use the locker with locker number: " + locker.getDisplayNumber());
+
             return "Locker unlocked, Use the your locker with locker number: " + locker.getDisplayNumber();
         }
         else{
             // Todo: make this to send as notifications
+            System.out.println(user.getFirstName() + ", You have not assigned to a locker!");
+            notificationService.sendAndSave(
+                    userId,
+                    "Unable to unlock the locker",
+                    "You have not used any locker!, Please allocate a locker using assign option",
+                    "ERROR"
+            );
+
             return "You have not assigned to a locker!";
         }
 
@@ -269,10 +323,16 @@ public class LockerService implements ILockerService{
 
     @Override
     public String unassignLocker(String username){
+        /*
+        * This is for withdraw the things from the locker.
+        * This can be done also using the mobile app and fingerprint
+        * User should have an assigned locker with an active log
+        */
 
          System.out.println("unassign locker");
 
          String userId = username;
+         User user = userRepository.findByUsername(username);
 
          LockerLog activeLog = lockerLogService.findActiveLog(userId); // find the active log
          Long clusterId = activeLog.getLocker().getLockerCluster().getId();
@@ -292,18 +352,43 @@ public class LockerService implements ILockerService{
 
              // Delay execution for 1.5 minutes
              try {
-                 Thread.sleep(1000); // 90000 milliseconds = 1.5 minutes
+                 Thread.sleep(5000); // 90000 milliseconds = 1.5 minutes
              } catch (InterruptedException e) {
                  Thread.currentThread().interrupt();
                  System.err.println("Thread was interrupted");
              }
 
              // asking for the locker status
+             System.out.println("✅ After sleep, sending locker status request..."); // This is a debugging line
              sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
+
+             // Todo: make this to send as notifications
+
+             // Send the notification to the user about the locker unlocking
+             notificationService.sendAndSave(
+                     userId,
+                     "Locker Unlocked",
+                     "Withdraw your goods from Locker with Locker Number: " + locker.getDisplayNumber(),
+                     "INFO"
+             );
+
+             System.out.println(user.getFirstName() + ", Please use the locker with locker number: " + locker.getDisplayNumber());
 
              return "Locker unlocked, Use the your locker with locker number: " + locker.getDisplayNumber();
          }
          else{
+
+             // Todo: make this to send as notifications
+             System.out.println(user.getFirstName() + ", You have not assigned to a locker!");
+
+             notificationService.sendAndSave(
+                     userId,
+                     "Unable to unlock the locker",
+                     "You have not used any locker!, Please allocate a locker using assign option",
+                     "ERROR"
+             );
+
+
              return "You have not any lockers assigned!";
          }
     }
@@ -395,6 +480,7 @@ public class LockerService implements ILockerService{
 
         // Find the locker log of the locker which is unsafe
         LockerLog lockerLog = lockerLogRepository.findByLocker_LockerIdAndStatus(lockerId, LockerLogStatus.UNSAFE);
+        User user = userRepository.findByUsername(lockerLog.getUser().getUsername());
 
         /*
         * Event : User selected the unassign option
@@ -406,7 +492,7 @@ public class LockerService implements ILockerService{
             }
             else if(status == 0){
                 /*
-                * Event :  User properly remove his belongings from the locker
+                * Event :  User properly removed his belongings from the locker and properly closed
                 */
                 lockerLog.setStatus(LockerLogStatus.OLD);
                 Locker locker = lockerLog.getLocker();
@@ -414,6 +500,18 @@ public class LockerService implements ILockerService{
 
                 lockerLogRepository.save(lockerLog);
                 lockerRepository.save(locker);
+
+                // This is a debugging line
+                System.out.println(user.getFirstName() + ", successfully withdrawn belongings from locker and properly closed");
+
+                // Todo: send a notification
+                notificationService.sendAndSave(
+                        user.getId(),
+                        "Good Bye!",
+                        "Thank you for using the SmartLocker service, Have a nice day!",
+                        "INFO"
+                );
+                System.out.println(user.getFirstName() + ", Thank you for using smart locker service! \ncome again!");
             }
             else if (status == 3) {
                 /*
@@ -422,12 +520,21 @@ public class LockerService implements ILockerService{
                 */
                 lockerLog.setStatus(LockerLogStatus.OLD);
                 Locker locker = lockerLog.getLocker();
-                locker.setLockerStatus(LockerStatus.BLOCKED);
+                locker.setLockerStatus(LockerStatus.BLOCKED); // set the locker status as blocked
 
                 lockerLogRepository.save(lockerLog);
                 lockerRepository.save(locker);
 
                 // Todo : notification should be sent informing this
+                System.out.println(user.getFirstName() + ", You have not properly closed the locker or you have left something inside");
+                notificationService.sendAndSave(
+                        user.getId(),
+                        "Something went wrong!",
+                        "You have not properly closed the locker or something left in the locker. Please check again",
+                        "WARNING"
+                );
+                // This should be notified to the admin in a notification and the corresponding user by an email.
+
             }
             else{
                 System.out.println("Unidentified locker status");
@@ -445,11 +552,23 @@ public class LockerService implements ILockerService{
                 /*
                 * Event : User has not properly closed the locker
                 */
-                // Todo: send another request to check the locker status
                 // Again check the locker status
                 // Delay execution for 0.5 minutes
+
+                // Todo: Notify the user
+                // This notification should be displayed in the very first page of the mobile app
+                System.out.println(user.getFirstName() + ", You have not properly closed your locker! please close the locker");
+
+                notificationService.sendAndSave(
+                        user.getId(),
+                        "Locker not closed!",
+                        "You have not properly closed the locker. Please lock the locker properly.",
+                        "WARNING"
+                );
+
+
                 try {
-                    Thread.sleep(30000); // 90000 milliseconds = 0.5 minutes
+                    Thread.sleep(5000); // 90000 milliseconds = 0.5 minutes
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     System.err.println("Thread was interrupted");
@@ -458,7 +577,6 @@ public class LockerService implements ILockerService{
                 // asking for the locker status
                 sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
 
-                // Todo: Notify the user
             }
             else if(status == 2){
                 /*
@@ -469,6 +587,15 @@ public class LockerService implements ILockerService{
                 lockerLogRepository.save(lockerLog);
 
                 // Todo: Notify the user
+                // This notification should be displayed  in the very first page of the mobile app
+                System.out.println(user.getFirstName() +", you have an active locker");
+
+                notificationService.sendAndSave(
+                        user.getId(),
+                        "Locker allocated for you!",
+                        "You have allocated a locker in " + lockerLog.getLocker().getLockerCluster().getClusterName(),
+                        "INFO"
+                );
             }
             else{
                 System.out.println("Unidentified locker status");
