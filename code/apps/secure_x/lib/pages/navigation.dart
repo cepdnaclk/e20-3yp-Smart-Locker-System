@@ -33,8 +33,8 @@ class _NavigationState extends State<Navigation> {
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: AppColors.mainColor,
-        unselectedItemColor: AppColors.iconColor,
+        selectedItemColor: AppColors.textTertiary,
+        unselectedItemColor: AppColors.textPrimary,
       currentIndex: _selectedIndex,
       onTap: _onTabSelected,
       items: const [

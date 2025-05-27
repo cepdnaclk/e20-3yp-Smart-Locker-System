@@ -9,6 +9,7 @@ import 'package:secure_x/pages/splash_screen.dart';
 import 'package:secure_x/pages/unlock.dart';
 import 'package:secure_x/pages/user.dart';
 import 'package:secure_x/pages/user_details.dart';
+import 'package:secure_x/pages/edit_profile.dart';
 
 class RouteHelper {
   //static const String initial='/';
@@ -22,6 +23,7 @@ class RouteHelper {
   static const String navigation='/navigation';
   static const String userDetails='/user-details';
   static const String lockerLogs='/locker-logs';
+  static const String editProfile='/edit-profile';
   
 
   //static String getInitial()=>'$initial';
@@ -35,6 +37,7 @@ class RouteHelper {
   static String getNavigation()=>'$navigation';
   static String getUserDetails()=>'$userDetails';
   static String getLockerLogs()=>'$lockerLogs';
+  static String getEditProfile()=>'$EditProfile';
 
   static List<GetPage> routes=[
     //GetPage(name:initial,page:()=>Navigation()),
@@ -48,5 +51,6 @@ class RouteHelper {
     GetPage(name: navigation, page: ()=>Navigation()),    
     GetPage(name: userDetails,page:()=> UserDetails(),),
     GetPage(name: lockerLogs,page: ()=> LockerLogs(),),
+    GetPage(name: editProfile,page: ()=>EditProfile(),)
   ];
 }

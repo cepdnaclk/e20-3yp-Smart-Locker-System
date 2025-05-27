@@ -217,5 +217,23 @@ Future<ResponseModel> unlockLocker(String token, int clusterId) async {
     }
   }
 
+  //Method to update user profile
+  Future<void> updateProfile(UserModel updatedUser) async{
+    isLoading.value=true;
 
+    try{
+      final response = await authRepo.UpdateUserProfile(updatedUser);
+      if (response.isSuccess){
+        userModel.value=updatedUser;
+        Get.snackbar("Success", response.message);
+      }else{
+        Get.snackbar("Error", response.message);
+      }
+    }catch(e){
+      print('Error updating profile: $e');
+      Get.snackbar("Error", 'Failed to update profile: $e');
+    }finally{
+      isLoading.value=false;
+    }
+  }
 }

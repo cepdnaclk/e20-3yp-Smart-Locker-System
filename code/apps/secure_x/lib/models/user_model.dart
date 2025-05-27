@@ -30,7 +30,6 @@ class UserModel{
       phoneNo= json['contactNumber'];
       regNo = json['username'];
       role=json['role'];
-      isUserSignedIn=false;
   }
 
 

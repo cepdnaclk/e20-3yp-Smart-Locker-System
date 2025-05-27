@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/models/user_model.dart';
+import 'package:secure_x/pages/edit_profile.dart';
 import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
@@ -55,7 +56,9 @@ class UserDetails extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         )
                       ),
-                      onPressed: (){}, 
+                      onPressed: (){
+                        Get.to(() => EditProfile()); 
+                      }, 
                       child: const Text('Edit Profile')),
                   )
                 ],

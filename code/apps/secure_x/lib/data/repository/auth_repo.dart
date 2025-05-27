@@ -281,4 +281,49 @@ Future<ResponseModel> unlockLocker(String token, int clusterId) async {
       throw e;
     }
   }
+
+  //Method to update user profile
+  Future<ResponseModel> UpdateUserProfile(UserModel updatedUser) async{
+    try{
+      // Retrieve the token from SharedPreferences
+      final String? token = sharedPreferences.getString(AppConstants.TOKEN);
+
+      if (token == null) {
+        return ResponseModel(
+          isSuccess: false,
+          message: 'User not authenticated',
+        );
+      }
+
+      // Update the headers in DioClient with the current token
+      dioClient.updateHeader(token);
+
+      // Debug: Print the updated user data
+      print('Updating user profile with data: ${updatedUser.toJson()}');
+
+      // Send the PUT request to update user profile
+      final response = await dioClient.putData(
+        AppConstants.EDIT_PROFILE_URI,
+        updatedUser.toJson(),
+      );
+
+      if (response.statusCode == 200) {
+        return ResponseModel(
+          isSuccess: true,
+          message: 'Profile updated successfully',
+        );
+      } else {
+        return ResponseModel(
+          isSuccess: false,
+          message: 'Failed to update profile: ${response.data}',
+        );
+      }
+    } catch (e) {
+      print('Error during profile update: $e');
+      return ResponseModel(
+        isSuccess: false,
+        message: 'Error: $e',
+      );
+    }
+  }
 }

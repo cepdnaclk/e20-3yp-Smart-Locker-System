@@ -23,7 +23,7 @@ class _LockerMapState extends State<LockerMap> {
     LockerLocation(
       latitude: 7.254865694625847,
       longitude: 80.5913351662026,
-      availableLockers: 0,
+      availableLockers: 6,
       locationName: "Department of Computer Engineering",
     ),
     LockerLocation(
