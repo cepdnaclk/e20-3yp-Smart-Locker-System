@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getLockerClusterData } from '../../Services/lockerAPI';
-
+import '../../Button/Button.css'
+import '../../TableStyle/Table.css'
+import { SquarePen,Trash2,Grid2x2Plus } from 'lucide-react';
+import Tooltip from '@mui/material/Tooltip';
 const Lcluster = () =>  {
 
   
@@ -29,7 +32,17 @@ const Lcluster = () =>  {
   return (
     <div>
       <h2>Locker Clusters</h2>
-      <table border="1" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
+      <div className='ActionB'>
+        <Tooltip title="Add Cluster" arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+          <button className='ADDB'>
+          <Grid2x2Plus size={20}/>
+         </button>
+        </Tooltip>
+         
+         
+      </div>
+      
+      <table className='Ctable'>
         <thead>
           <tr> 
             <th>ID</th>
@@ -48,11 +61,15 @@ const Lcluster = () =>  {
               <td>{user.availableNumberOfLockers}</td>
               <td>{user.clusterName}</td>
               <td>{user.lockerClusterDescription}</td>
-              <td>
-                <button onClick>Edit</button>
-                <button onClick style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }}>
-                  Delet
-                </button>
+              <td  className='ActionF'arrow >
+                <Tooltip title = 'Edit'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+                  <button className='EDITB' onClick> <SquarePen size={16}/></button>
+                </Tooltip>
+                <Tooltip title = 'Delet'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+                  <button onClick className='DELETB'><Trash2 size={16}/></button>
+                </Tooltip>
+                
+                
               </td>
             </tr>
           ))}

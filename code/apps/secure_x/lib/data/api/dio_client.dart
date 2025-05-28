@@ -51,4 +51,22 @@ class DioClient {
       rethrow;
     }
   }
+
+  //Method to handle PUT requests
+  Future<Response> putData(String uri,dynamic body) async{
+    try{
+      print('Sending PUT request to: $uri'); // Debug print
+      print('Request headers: ${_dio.options.headers}'); // Debug print
+      print('Request body: $body'); // Debug print
+
+      final response = await _dio.put(uri, data: body);
+
+      print('Received response: ${response.statusCode} - ${response.data}'); // Debug print
+
+      return response;
+    } catch (e) {
+      print('Error during PUT request: $e'); // Debug print
+      rethrow;
+    }
+  }
 }

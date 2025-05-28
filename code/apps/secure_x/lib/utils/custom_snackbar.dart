@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:secure_x/utils/colors.dart';
+import 'package:secure_x/utils/appcolors.dart';
 
-void CustomSnackBar(String message,{bool iserror=true,String title='Error',Duration duration = const Duration(seconds: 3)}){
-  Get.snackbar(title, message,
+void CustomSnackBar(String? message,{bool iserror=true,String title='Error',Duration duration = const Duration(seconds: 3)}){
+  Get.snackbar(title, message?? 'Something went wrong',
   titleText: Text(title,style: TextStyle(
-    color: AppColors.textColor1
+    color: AppColors.textSecondary,
   ),
   ),
-  messageText: Text(message, style: TextStyle(
-    color: AppColors.textColor1,
+  messageText: Text(message?? 'Something went wrong', style: TextStyle(
+    color: AppColors.textSecondary,
     fontWeight: FontWeight.bold
   ),
   ),

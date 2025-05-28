@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getLockerData } from '../../Services/lockerAPI';
+import { SquarePen,Trash2,SquarePlus,KeyRound } from 'lucide-react';
+import Tooltip from '@mui/material/Tooltip';
+import '../../Button/Button.css'
+import '../../TableStyle/Table.css'
 const Locker = () =>  {
 
     const [locker, setLocker] = useState([]);
@@ -25,9 +29,14 @@ const Locker = () =>  {
       }, []);
 
   return (
-    <div>
+    <div >
       <h2>Lockers</h2>
-      <table border="1" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
+      <div className='ActionB'>
+          <Tooltip title = 'Add locker'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+            <button className='ADDB'><SquarePlus size={20}/></button>
+          </Tooltip>
+      </div>
+      <table className='Ctable'>
         <thead>
           <tr> 
             <th>LockerID</th>
@@ -47,12 +56,19 @@ const Locker = () =>  {
               <td>{user.lockerStatus}</td>
               <td>{user.lockerLogs}</td>
               <td>{user.lockerCluster.id}</td>
-              <td>
-                <button onClick>Edit</button>
-                <button onClick style={{ marginLeft: '10px', backgroundColor: 'blue', color: 'white' }}>Unlock</button>
-                <button onClick style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }}>
-                  Delet
-                </button>
+              <td className='ActionF'>
+                <Tooltip title = 'Edit'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+                  <button className='EDITB'><SquarePen size={16} /></button>
+                </Tooltip>
+                
+                <Tooltip title = 'Unlock'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+                  <button className='UNLOCKB'><KeyRound size={16} /></button>
+                </Tooltip>
+                
+                <Tooltip title = 'Delet'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+                  <button className='DELETB'><Trash2 size={16}/></button>
+                </Tooltip>
+                
               </td>
             </tr>
           ))}
