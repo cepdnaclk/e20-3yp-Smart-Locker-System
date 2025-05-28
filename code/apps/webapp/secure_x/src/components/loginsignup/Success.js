@@ -7,7 +7,7 @@ const Success = () =>{
   const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/login"); // Redirect to home after 5 seconds
+      navigate("/admin/login"); // Redirect to home after 5 seconds
     }, 5000);
 
     return () => clearTimeout(timer); // Cleanup timeout on unmount
