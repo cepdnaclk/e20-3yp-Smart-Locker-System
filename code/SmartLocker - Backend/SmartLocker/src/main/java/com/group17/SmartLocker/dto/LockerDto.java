@@ -15,6 +15,5 @@ public class LockerDto {
     private Long lockerId;
     private int displayNumber;
     private LockerStatus lockerStatus;
-    private List<LockerLog> lockerLogs;
-    private LockerCluster lockerCluster;
+    private Long lockerClusterId;
 }

@@ -14,7 +14,7 @@ public interface ILockerService {
 
     String unassignLocker(String username);
 
-    List<Locker> getAllLockers();
+    List<LockerDto> getAllLockers();
 
     List<LockerDto> getAllLockersByCluster(Long clusterId);
 
@@ -24,7 +24,7 @@ public interface ILockerService {
 
     Locker addLockerToCluster(Long clusterId);
 
-    Locker updateLockerDetails(Long lockerId, LockerDto locker);
+    Locker updateLockerDetails(Long lockerId, Locker locker);
 
     void deleterLocker(Long lockerId);
 

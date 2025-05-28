@@ -396,8 +396,21 @@ public class LockerService implements ILockerService{
 
 
     @Override
-    public List<Locker> getAllLockers() {
-        return lockerRepository.findAll();
+    public List<LockerDto> getAllLockers() {
+        List<Locker> lockers = lockerRepository.findAll();
+        List<LockerDto> lockerList = new ArrayList<>();
+
+        for(int i = 0; i <lockers.size(); i++){
+            LockerDto locker = new LockerDto();
+
+            locker.setLockerId(lockers.get(i).getLockerId());
+            locker.setDisplayNumber(lockers.get(i).getDisplayNumber());
+            locker.setLockerStatus(lockers.get(i).getLockerStatus());
+            locker.setLockerClusterId(lockers.get(i).getLockerCluster().getId());
+
+            lockerList.add(locker);
+        }
+        return lockerList;
     }
 
 
@@ -412,8 +425,7 @@ public class LockerService implements ILockerService{
             locker.setLockerId(lockers.get(i).getLockerId());
             locker.setDisplayNumber(lockers.get(i).getDisplayNumber());
             locker.setLockerStatus(lockers.get(i).getLockerStatus());
-            locker.setLockerLogs(lockers.get(i).getLockerLogs());
-            locker.setLockerCluster(lockers.get(i).getLockerCluster());
+            locker.setLockerClusterId(lockers.get(i).getLockerCluster().getId());
 
             lockerList.add(locker);
         }
@@ -450,7 +462,7 @@ public class LockerService implements ILockerService{
     }
 
     @Override
-    public Locker updateLockerDetails(Long lockerId, LockerDto locker) {
+    public Locker updateLockerDetails(Long lockerId, Locker locker) {
 
         Locker updateLocker = lockerRepository.findById(lockerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid locker id!"));

@@ -132,9 +132,9 @@ public class AdminController {
 
     // get all lockers in the system
     @GetMapping("/getAllLockers")
-    public ResponseEntity<List<Locker>> getAllLockers(){
+    public ResponseEntity<List<LockerDto>> getAllLockers(){
         try {
-            List<Locker> lockers = lockerService.getAllLockers();
+            List<LockerDto> lockers = lockerService.getAllLockers();
             return ResponseEntity.ok(lockers);
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
@@ -187,7 +187,7 @@ public class AdminController {
 
     // update locker
     @PutMapping("/updateLockerDetails/{lockerId}")
-    public ResponseEntity<Locker> updateLockerDetails(@PathVariable Long lockerId, @RequestBody LockerDto locker){
+    public ResponseEntity<Locker> updateLockerDetails(@PathVariable Long lockerId, @RequestBody Locker locker){
         try {
             Locker newLocker = lockerService.updateLockerDetails(lockerId, locker);
             return ResponseEntity.ok(newLocker);
