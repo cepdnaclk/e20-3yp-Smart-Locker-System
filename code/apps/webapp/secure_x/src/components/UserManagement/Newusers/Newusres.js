@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getPendingUsresData, putLockeUsresData,rejectPendingUser } from '../../Services/api.js';
-
+import { Check,Ban,RefreshCw } from 'lucide-react';
+import Tooltip  from '@mui/material/Tooltip';
+import'../../Button/Button.css'
+import '../../TableStyle/Table.css'
 const Newusers = () => {
   const [users, setUsers] = useState([]);
 
@@ -46,11 +49,16 @@ const Newusers = () => {
   };
 
   return (
-    <div>
+    <div className='WindowPU'> 
+     <div className='WindowPU_t'>
       <h2>Pending Users</h2>
-      <button onClick={handlePendingUsers}>Get Data</button>
+      <div className='ActionB'>
+        <Tooltip title = 'Refresh'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+          <button className='ADDB' onClick={handlePendingUsers}><RefreshCw size={16}/></button>
+        </Tooltip>
+      </div>
 
-      <table border="1" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
+      <table className='Ctable'>
         <thead>
           <tr> 
             <th>ID</th>
@@ -75,16 +83,19 @@ const Newusers = () => {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td>{user.status}</td>
-              <td>
-                <button onClick={() => acceptPendingUser(user.id)}>Accept</button>
-                <button onClick={() => rejectPendingUsers(user.id)} style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }}>
-                  Reject
-                </button>
+              <td className='ActionF'>
+                <Tooltip title = 'Accept'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+                  <button className='UNLOCKB' onClick={() => acceptPendingUser(user.id)}><Check size={16}/></button>
+                </Tooltip>
+                <Tooltip title = 'Reject' arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+                  <button className='DELETB' onClick={() => rejectPendingUsers(user.id)} ><Ban size={16}/></button>
+                </Tooltip>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };
