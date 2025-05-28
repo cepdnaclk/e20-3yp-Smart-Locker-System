@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secure_x/pages/map.dart';
+import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
 class Find extends StatefulWidget {
@@ -19,7 +20,7 @@ class _FindState extends State<Find> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppColors.mainColor,
       appBar:const CustomAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

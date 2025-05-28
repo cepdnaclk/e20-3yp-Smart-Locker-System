@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:secure_x/pages/find.dart';
 import 'package:secure_x/pages/navigation.dart';
 import 'package:secure_x/pages/unlock.dart';
+import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
 class LoginSuccess extends StatelessWidget {
@@ -10,7 +11,7 @@ class LoginSuccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppColors.mainColor,
       appBar:const CustomAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -51,7 +52,7 @@ class LoginSuccess extends StatelessWidget {
                 //));
             },
             style: TextButton.styleFrom(
-              foregroundColor: Colors.blue,
+              foregroundColor: AppColors.textHighlight,
             ),
             child: const Text('Unlock my Locker' ,style: TextStyle(
               fontSize: 22,
@@ -67,7 +68,7 @@ class LoginSuccess extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const Find(),));
             },
             style: TextButton.styleFrom(
-              foregroundColor: Colors.blue,
+              foregroundColor: AppColors.textHighlight,
             ),
             child: const Text('Search a Locker' ,style: TextStyle(
               fontSize: 22,

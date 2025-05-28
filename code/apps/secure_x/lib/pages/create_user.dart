@@ -4,7 +4,7 @@ import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/response_model.dart';
 import 'package:secure_x/pages/log_in.dart';
-import 'package:secure_x/utils/colors.dart';
+import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
 
@@ -250,6 +250,11 @@ class _CreateUserState extends State<CreateUser> {
                           context,
                           MaterialPageRoute(builder: (context) => LogIn(),));
                           },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.buttonBackgroundColor2,
+                            foregroundColor: AppColors.textInverse,
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                          ), 
                           child: const Text('Create Account'),
                         ),
                       ],

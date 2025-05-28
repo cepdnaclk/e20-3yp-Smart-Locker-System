@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/data/repository/auth_repo.dart';
 import 'package:secure_x/models/create_user_model.dart';
+import 'package:secure_x/models/locker_logs_model.dart';
 import 'package:secure_x/models/response_model.dart';
 import 'package:secure_x/models/user_model.dart';
 import 'package:secure_x/pages/login_success.dart';
@@ -189,4 +190,50 @@ Future<ResponseModel> unlockLocker(String token, int clusterId) async {
   }
 }
 
+  //method to get the user logs
+  Future<List<LockerLogsModel>> getUserLogs() async{
+    isLoading.value=true;
+    try{
+      final String? token=await authRepo.getUserToken();
+      if(token==null){
+        throw Exception('User not authenticated');
+      }
+      dioClient.updateHeader(token);
+
+      final response=await dioClient.getData(AppConstants.LOCKER_LOGS_URI);
+
+      if(response.statusCode==200){
+        List<dynamic> data=response.data;
+        return data.map((e) => LockerLogsModel.fromJson(e)).toList();
+      }else{
+        throw Exception('Failed to fetch locker logs: ${response.statusCode}');
+      }
+    }catch(e){
+      print('Error fetching logs: $e');
+      Get.snackbar('Error', 'Failed to load user logs: $e');
+      return [];
+    }finally{
+      isLoading.value=false;
+    }
+  }
+
+  //Method to update user profile
+  Future<void> updateProfile(UserModel updatedUser) async{
+    isLoading.value=true;
+
+    try{
+      final response = await authRepo.UpdateUserProfile(updatedUser);
+      if (response.isSuccess){
+        userModel.value=updatedUser;
+        Get.snackbar("Success", response.message);
+      }else{
+        Get.snackbar("Error", response.message);
+      }
+    }catch(e){
+      print('Error updating profile: $e');
+      Get.snackbar("Error", 'Failed to update profile: $e');
+    }finally{
+      isLoading.value=false;
+    }
+  }
 }

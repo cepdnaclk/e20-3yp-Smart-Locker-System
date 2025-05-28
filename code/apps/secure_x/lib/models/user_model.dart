@@ -5,6 +5,7 @@ class UserModel{
   String? email;
   String? phoneNo;
   String? regNo;
+  String? role;
   late bool isUserSignedIn;
 
   UserModel({
@@ -14,6 +15,7 @@ class UserModel{
     this.email,
     this.phoneNo,
     this.regNo,
+    this.role,
     this.isUserSignedIn=false,
   });
 
@@ -27,8 +29,9 @@ class UserModel{
       email= json['email']; 
       phoneNo= json['contactNumber'];
       regNo = json['username'];
-      isUserSignedIn=false;
+      role=json['role'];
   }
+
 
   Map<String,dynamic> toJson(){
     final Map<String,dynamic> data=Map<String,dynamic>();
@@ -38,6 +41,7 @@ class UserModel{
     data['lastName']=lastName;
     data['contactNumber']=phoneNo;
     data['username'] = regNo;
+    data['role']=role;
     return data; 
   } 
 
