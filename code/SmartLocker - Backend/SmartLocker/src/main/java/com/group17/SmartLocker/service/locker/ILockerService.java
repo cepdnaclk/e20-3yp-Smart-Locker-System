@@ -16,7 +16,7 @@ public interface ILockerService {
 
     List<Locker> getAllLockers();
 
-    List<Locker> getAllLockersByCluster(Long clusterId);
+    List<LockerDto> getAllLockersByCluster(Long clusterId);
 
     List<Locker> getAvailableLockersByCluster(Long clusterId);
 

@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -401,8 +402,22 @@ public class LockerService implements ILockerService{
 
 
     @Override
-    public List<Locker> getAllLockersByCluster(Long clusterId) {
-        return lockerRepository.findByLockerClusterId(clusterId);
+    public List<LockerDto> getAllLockersByCluster(Long clusterId) {
+        List<Locker> lockers = lockerRepository.findByLockerClusterId(clusterId);
+        List<LockerDto> lockerList = new ArrayList<>();
+
+        for(int i = 0; i <lockers.size(); i++){
+            LockerDto locker = new LockerDto();
+
+            locker.setLockerId(lockers.get(i).getLockerId());
+            locker.setDisplayNumber(lockers.get(i).getDisplayNumber());
+            locker.setLockerStatus(lockers.get(i).getLockerStatus());
+            locker.setLockerLogs(lockers.get(i).getLockerLogs());
+            locker.setLockerCluster(lockers.get(i).getLockerCluster());
+
+            lockerList.add(locker);
+        }
+        return lockerList;
     }
 
     @Override
