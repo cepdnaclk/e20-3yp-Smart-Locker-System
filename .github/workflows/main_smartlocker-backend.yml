@@ -17,7 +17,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: code/SmartLocker - Backend/SmartLocker
+        working-directory: code/SmartLocker - Backend
 
     steps:
       - uses: actions/checkout@v4
