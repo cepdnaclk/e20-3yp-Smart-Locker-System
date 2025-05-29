@@ -55,7 +55,7 @@ const Locker = () =>  {
               <td>{user.displayNumber}</td>
               <td>{user.lockerStatus}</td>
               <td>{user.lockerLogs}</td>
-              <td>{user.lockerCluster.id}</td>
+              <td>{user.lockerClusterId}</td>
               <td className='ActionF'>
                 <Tooltip title = 'Edit'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
                   <button className='EDITB'><SquarePen size={16} /></button>
