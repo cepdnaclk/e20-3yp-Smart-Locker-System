@@ -14,13 +14,15 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
 
                 registry.addMapping("/**") // Apply to all API endpoints
-                        //.allowedOriginPatterns("*")
-                        //.allowedOrigins("http://localhost:3000")
-                        .allowedOrigins("http://localhost:3000") // Allow frontend (put frontend address here instead of *)
-                        .allowedMethods("*");
-                        //.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        //.allowedHeaders("*")
-                        //.allowCredentials(false);
+                        .allowedOriginPatterns("*")
+                        .allowedOrigins("http://localhost:3000") // Allow frontend (put frontend address here instead of
+                                                                 // *)
+                        // .allowedOrigins("*") // Allow frontend (put frontend address here instead of
+                        // *)
+
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(false);
             }
         };
     }
