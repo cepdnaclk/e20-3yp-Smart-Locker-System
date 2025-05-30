@@ -43,10 +43,13 @@ void scrollText(int row, String message) {
 void startScreen() {
   I2C_LCD.clear();
   I2C_LCD.setCursor(0, 0);
-  I2C_LCD.print("Choose an option");
-  I2C_LCD.setCursor(0, 1);
   I2C_LCD.print("A .Register");
-  scrollText(2,"B. Unlock");
+  I2C_LCD.setCursor(0, 1);
+  I2C_LCD.print("B .Assign Locker");
+  I2C_LCD.setCursor(0, 2);
+  I2C_LCD.print("C .Access Locker");
+  I2C_LCD.setCursor(0, 3);
+  I2C_LCD.print("D .Release Locker");
 }
 
 
