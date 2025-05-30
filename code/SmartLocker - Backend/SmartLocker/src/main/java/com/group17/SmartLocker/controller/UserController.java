@@ -5,7 +5,6 @@ import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.model.LockerCluster;
 import com.group17.SmartLocker.model.User;
-import com.group17.SmartLocker.repsponse.ApiResponse;
 import com.group17.SmartLocker.service.jwt.JwtService;
 import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.lockerCluster.LockerClusterService;
@@ -67,7 +66,7 @@ public class UserController {
 
         try {
             String username = jwtService.extractUsername(jwtToken);
-            return ResponseEntity.ok(lockerService.accessLocker(username));
+            return ResponseEntity.ok(lockerService.accessLocker(username, "1"));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
@@ -87,7 +86,7 @@ public class UserController {
 
         try {
             String username = jwtService.extractUsername(jwtToken);
-            return ResponseEntity.ok(lockerService.unassignLocker(username));
+            return ResponseEntity.ok(lockerService.unassignLocker(username, "1"));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
