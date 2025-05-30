@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SquarePen, Trash2, RefreshCw, Search } from "lucide-react";
+import { SquarePen, Trash2, RefreshCw, Search, X, Save } from "lucide-react";
 import {
   getLockerUsresData,
   deletLockeUsresData,
@@ -26,6 +26,7 @@ const LockerUsers = () => {
   const [users, setUsers] = useState([]);
   const [username, setUsername] = useState("");
   const [openEdit, setOpenEdit] = useState(false);
+  const [openDelet, setOpenDelet] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   // Fetch locker users
   const handleLockerUsers = async () => {
@@ -47,6 +48,7 @@ const LockerUsers = () => {
     try {
       await deletLockeUsresData(id);
       alert(`User deleted with ID: ${id}`);
+      setOpenDelet(false);
       // Refresh the list after deleting
       handleLockerUsers();
     } catch (error) {
@@ -64,7 +66,7 @@ const LockerUsers = () => {
         : [response.data];
       setUsers(lockerUsers);
       console.log(response);
-      alert(`User Finding with ID: ${id}`);
+      // alert(`User Finding with ID: ${id}`);
     } catch (error) {
       console.error(`Error Finding user: ${id}`, error);
       alert(`Error Finding user: ${id}`);
@@ -74,6 +76,11 @@ const LockerUsers = () => {
   const handleEditClick = (user) => {
     setSelectedUser(user);
     setOpenEdit(true);
+  };
+
+  const handleDeleteClick = (user) => {
+    setSelectedUser(user);
+    setOpenDelet(true);
   };
 
   const handleEditChange = (e) => {
@@ -199,7 +206,7 @@ const LockerUsers = () => {
                 >
                   <button
                     className="DELETB"
-                    onClick={() => deleteLockerUser(user.id)}
+                    onClick={() => handleDeleteClick(user)}
                   >
                     <Trash2 size={16} />
                   </button>
@@ -209,10 +216,58 @@ const LockerUsers = () => {
           ))}
         </tbody>
       </table>
-      <div className="dialogbox">
-        <Dialog open={openEdit} onClose={() => setOpenEdit(false)}>
-          <DialogTitle>Edit User</DialogTitle>
+      <div>
+        {/* DELET DIALOG */}
+        <Dialog
+          className="DileteDialog"
+          open={openDelet}
+          onClose={() => setOpenDelet(false)}
+        >
+          <DialogTitle className="DTital">Delet User! </DialogTitle>
+          <DialogContent>
+            <p> Are you sure delet this user?</p>
+            <p>
+              ID - <i> {selectedUser?.id}</i>
+            </p>
+            <p>
+              First Name - <i> {selectedUser?.firstName}</i>
+            </p>
+          </DialogContent>
+          <DialogActions className="dialog-actions">
+            <button className="CANCELB" onClick={() => setOpenDelet(false)}>
+              Cancel
+            </button>
+            <button
+              className="DELETEB"
+              onClick={() => deleteLockerUser(selectedUser?.id)}
+              variant="contained"
+            >
+              Delete User
+            </button>
+          </DialogActions>
+        </Dialog>
+      </div>
+      <div>
+        {/* EDIT DIALOG */}
+        <Dialog
+          className="dialogbox"
+          open={openEdit}
+          onClose={() => setOpenEdit(false)}
+        >
+          <DialogTitle className="DTital">Edit User </DialogTitle>
+          <div className="trance"></div>
           <DialogContent className="dialog-content">
+            <TextField
+              label="User id"
+              name="UserId"
+              variant="outlined"
+              className="no-border"
+              value={selectedUser?.id + "     can't change"}
+              disabled
+              InputProps={{
+                style: { fontStyle: "italic" },
+              }}
+            />
             <TextField
               label="First Name"
               name="firstName"
@@ -261,10 +316,16 @@ const LockerUsers = () => {
           </DialogContent>
 
           <DialogActions className="dialog-actions">
-            <Button onClick={() => setOpenEdit(false)}>Cancel</Button>
-            <Button onClick={handleEditSave} variant="contained">
-              Save
-            </Button>
+            <button className="DELETB" onClick={() => setOpenEdit(false)}>
+              <X size={20} />
+            </button>
+            <button
+              className="UNLOCKB"
+              onClick={handleEditSave}
+              variant="contained"
+            >
+              <Save size={20} />
+            </button>
           </DialogActions>
         </Dialog>
       </div>
