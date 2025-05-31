@@ -158,37 +158,36 @@ class AuthController extends GetxController {
   }
 
   // Method to unlock the locker
-  // Method to unlock the locker
-Future<ResponseModel> unlockLocker(String token, int clusterId) async {
-  isLoading.value = true; // Start loading
-  try {
-    print('Sending unlock request to backend for cluster $clusterId...');
+  /*Future<ResponseModel> unlockLocker(String token, int clusterId) async {
+    isLoading.value = true; // Start loading
+    try {
+      print('Sending unlock request to backend for cluster $clusterId...');
 
-    final response = await authRepo.unlockLocker(token, clusterId);
+      final response = await authRepo.unlockLocker(token, clusterId);
 
-    print('API Response: ${response.message}');
+      print('API Response: ${response.message}');
 
-    if (response.isSuccess) {
-      return ResponseModel(
-        isSuccess: true,
-        message: 'Locker unlocked successfully',
-      );
-    } else {
+      if (response.isSuccess) {
+        return ResponseModel(
+          isSuccess: true,
+          message: 'Locker unlocked successfully',
+        );
+      } else {
+        return ResponseModel(
+          isSuccess: false,
+          message: 'Failed to unlock locker: ${response.message}',
+        );
+      }
+    } catch (e) {
+      print('Unexpected error during unlock: $e');
       return ResponseModel(
         isSuccess: false,
-        message: 'Failed to unlock locker: ${response.message}',
+        message: 'An unexpected error occurred: $e',
       );
+    } finally {
+      isLoading.value = false; // Stop loading
     }
-  } catch (e) {
-    print('Unexpected error during unlock: $e');
-    return ResponseModel(
-      isSuccess: false,
-      message: 'An unexpected error occurred: $e',
-    );
-  } finally {
-    isLoading.value = false; // Stop loading
-  }
-}
+  }*/
 
   //method to get the user logs
   Future<List<LockerLogsModel>> getUserLogs() async{
@@ -236,4 +235,55 @@ Future<ResponseModel> unlockLocker(String token, int clusterId) async {
       isLoading.value=false;
     }
   }
+
+  //Method to access the assigned locker
+  Future<void> accessLocker() async{
+    isLoading.value=true;
+    try{
+      final String? token=await authRepo.getUserToken();
+      if(token==null){
+        throw Exception('User not authenticated');
+      }
+      dioClient.updateHeader(token);
+      final response= await dioClient.getData(AppConstants.ACCESS_LOCKER_URI);
+      if(response.statusCode==200){
+        print('Locker access successful : ${response.data}');
+        Get.snackbar('Success','Locker Accessed Successfully');
+      }else{
+        throw Exception('Failed to access locker: ${response.statusCode}');
+      }
+    }catch(e){
+      print('Error accessing locker : $e');
+      Get.snackbar('Error', 'Failed to access locker : $e');
+    }finally{
+      isLoading.value=false;
+    }
+ }
+
+ //Method to unassign locker
+ Future<void> unassignLocker() async {
+  isLoading.value=true;
+  try{
+      final String? token=await authRepo.getUserToken();
+      if(token==null){
+        throw Exception('User not authenticated');
+      }
+      dioClient.updateHeader(token);
+
+      final response= await dioClient.getData(AppConstants.UNASSIGN_LOCKER_URI);
+
+      if(response.statusCode==200){
+        print('Locker unassigned successfully: ${response.data}');
+        Get.snackbar('Success', 'Locker unassigned successfully');
+      }else{
+        throw Exception('Failed to unassign locker: ${response.statusCode}');
+      }
+  }catch(e){
+    print('Error unassigning locker: $e');
+    Get.snackbar('Error', 'Failed to unassign locker : $e');
+  }finally{
+    isLoading.value=false;
+  }
+
+ }
 }

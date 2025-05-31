@@ -12,5 +12,7 @@ class AppConstants {
   static const String USER_INFO_URI='/api/v1/user/profile';
   static const String UNLOCK_LOCKER_URI='/api/v1/user/unlockLocker';
   static const String LOCKER_LOGS_URI='/api/v1/user/lockerLogs';
-  static const String EDIT_PROFILE_URI='/api/v1/user//editProfile';
+  static const String EDIT_PROFILE_URI='/api/v1/user/editProfile';
+  static const String ACCESS_LOCKER_URI='/api/v1/user/accessLocker';
+  static const String UNASSIGN_LOCKER_URI='/api/v1/user/unassign';
 }
