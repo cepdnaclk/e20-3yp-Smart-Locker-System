@@ -8,15 +8,15 @@ import java.util.List;
 public interface ILockerService {
 //    String unlockLocker(String username, Long clusterId);
 
-    String assignLocker(String username, Long clusterId);
+    void assignLocker(String username, Long clusterId);
 
-    String accessLocker(String username);
+    String accessLocker(String username, String source);
 
-    String unassignLocker(String username);
+    String unassignLocker(String username, String source);
 
-    List<Locker> getAllLockers();
+    List<LockerDto> getAllLockers();
 
-    List<Locker> getAllLockersByCluster(Long clusterId);
+    List<LockerDto> getAllLockersByCluster(Long clusterId);
 
     List<Locker> getAvailableLockersByCluster(Long clusterId);
 
@@ -24,7 +24,7 @@ public interface ILockerService {
 
     Locker addLockerToCluster(Long clusterId);
 
-    Locker updateLockerDetails(Long lockerId, LockerDto locker);
+    Locker updateLockerDetails(Long lockerId, Locker locker);
 
     void deleterLocker(Long lockerId);
 

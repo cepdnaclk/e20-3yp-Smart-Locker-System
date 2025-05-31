@@ -1,25 +1,36 @@
+.dialogbox .MuiDialog-paper {
+  background-color: #fff transparent; /* White background */
+  color: #000; /* Black text */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  min-width: 400px;
+  gap: 10px;
+  
+}
 
-.dialog-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.DileteDialog .MuiDialog-paper{
   min-width: 400px;
 }
 
-.dialog-actions {
+
+.dialog-content {
+  padding-top: 10px;
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 16px;
-}
+  flex-direction:column;
+  gap: 16px;
 
-.no-border input {
   
-  outline: none;
-  background-color: transparent;
-  padding: 8px 0;
 }
 
-.no-border .MuiOutlinedInput-notchedOutline {
-  border: none;
+.dialog-actions {
+  align-items:end ;
+  padding: 8px 10px;
+
 }
+
+.DTital{
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: 700;
+}
+
