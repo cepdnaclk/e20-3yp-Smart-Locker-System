@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   getLockerData,
@@ -67,9 +68,11 @@ const Locker = () => {
     handleLocker();
   }, []);
 
+
   return (
-    <div>
+    <div >
       <h2>Lockers</h2>
+
       <div className="ActionB">
         <Tooltip
           title="Add locker"
@@ -85,16 +88,17 @@ const Locker = () => {
             <SquarePlus size={20} />
           </button>
         </Tooltip>
+
       </div>
-      <table className="Ctable">
+      <table className='Ctable'>
         <thead>
-          <tr>
+          <tr> 
             <th>LockerID</th>
             <th>Disply Number</th>
             <th>Status</th>
-            {/* <th>Locker Log</th> */}
+            <th>Locker Log</th>
             <th>Locker Cluster</th>
-
+            
             <th>Action</th>
           </tr>
         </thead>
@@ -104,62 +108,21 @@ const Locker = () => {
               <td>{user.lockerId}</td>
               <td>{user.displayNumber}</td>
               <td>{user.lockerStatus}</td>
-              {/* <td>{user.lockerLogs}</td> */}
+              <td>{user.lockerLogs}</td>
               <td>{user.lockerClusterId}</td>
-              <td className="ActionF">
-                <Tooltip
-                  title="Edit"
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: "12px",
-                        backgroundcolor: "black",
-                        color: "#fff",
-                      },
-                    },
-                  }}
-                >
-                  <button className="EDITB">
-                    <SquarePen size={16} />
-                  </button>
+              <td className='ActionF'>
+                <Tooltip title = 'Edit'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+                  <button className='EDITB'><SquarePen size={16} /></button>
                 </Tooltip>
-
-                <Tooltip
-                  title="Unlock"
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: "12px",
-                        backgroundcolor: "black",
-                        color: "#fff",
-                      },
-                    },
-                  }}
-                >
-                  <button className="UNLOCKB">
-                    <KeyRound size={16} />
-                  </button>
+                
+                <Tooltip title = 'Unlock'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+                  <button className='UNLOCKB'><KeyRound size={16} /></button>
                 </Tooltip>
-
-                <Tooltip
-                  title="Delet"
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: "12px",
-                        backgroundcolor: "black",
-                        color: "#fff",
-                      },
-                    },
-                  }}
-                >
-                  <button className="DELETB">
-                    <Trash2 size={16} />
-                  </button>
+                
+                <Tooltip title = 'Delet'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
+                  <button className='DELETB'><Trash2 size={16}/></button>
                 </Tooltip>
+                
               </td>
             </tr>
           ))}
@@ -201,7 +164,7 @@ const Locker = () => {
         </Dialog>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default Locker;

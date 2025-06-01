@@ -10,9 +10,9 @@ public interface ILockerService {
 
     void assignLocker(String username, Long clusterId);
 
-    String accessLocker(String username);
+    String accessLocker(String username, String source);
 
-    String unassignLocker(String username);
+    String unassignLocker(String username, String source);
 
     List<LockerDto> getAllLockers();
 

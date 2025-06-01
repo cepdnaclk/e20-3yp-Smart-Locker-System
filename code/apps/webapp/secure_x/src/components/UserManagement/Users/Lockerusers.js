@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SquarePen, Trash2, RefreshCw, Search, X, Save } from "lucide-react";
+import { SquarePen, Trash2, RefreshCw, Search } from "lucide-react";
 import {
   getLockerUsresData,
   deletLockeUsresData,
@@ -26,7 +26,6 @@ const LockerUsers = () => {
   const [users, setUsers] = useState([]);
   const [username, setUsername] = useState("");
   const [openEdit, setOpenEdit] = useState(false);
-  const [openDelet, setOpenDelet] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   // Fetch locker users
   const handleLockerUsers = async () => {
@@ -48,7 +47,6 @@ const LockerUsers = () => {
     try {
       await deletLockeUsresData(id);
       alert(`User deleted with ID: ${id}`);
-      setOpenDelet(false);
       // Refresh the list after deleting
       handleLockerUsers();
     } catch (error) {
@@ -66,7 +64,7 @@ const LockerUsers = () => {
         : [response.data];
       setUsers(lockerUsers);
       console.log(response);
-      // alert(`User Finding with ID: ${id}`);
+      alert(`User Finding with ID: ${id}`);
     } catch (error) {
       console.error(`Error Finding user: ${id}`, error);
       alert(`Error Finding user: ${id}`);
@@ -76,11 +74,6 @@ const LockerUsers = () => {
   const handleEditClick = (user) => {
     setSelectedUser(user);
     setOpenEdit(true);
-  };
-
-  const handleDeleteClick = (user) => {
-    setSelectedUser(user);
-    setOpenDelet(true);
   };
 
   const handleEditChange = (e) => {
@@ -207,6 +200,7 @@ const LockerUsers = () => {
                           color: "#fff",
                         },
                       },
+
                     }}
                   >
                     <button
@@ -306,6 +300,7 @@ const LockerUsers = () => {
                 onChange={handleEditChange}
               />
               {/* <FormControl>
+
       <InputLabel>Role</InputLabel>
       <Select
         name="role"
@@ -319,6 +314,7 @@ const LockerUsers = () => {
       </Select>
     </FormControl> */}
             </DialogContent>
+
 
             <DialogActions className="dialog-actions">
               <button className="DELETB" onClick={() => setOpenEdit(false)}>
@@ -334,6 +330,7 @@ const LockerUsers = () => {
             </DialogActions>
           </Dialog>
         </div>
+
       </div>
     </div>
   );

@@ -211,7 +211,7 @@ public class AdminController {
 
     // add a new locker cluster.
     // when adding a new locker cluster it should be displayed in the map also
-    @PostMapping("/addLockerCluster/{clusterId}")
+    @PostMapping("/addLockerCluster")
     public ResponseEntity<LockerCluster> addLockerCluster(@RequestBody LockerClusterDto lockerClusterDto){
         try {
             LockerCluster lockerCluster = lockerClusterService.addLockerCluster(lockerClusterDto);

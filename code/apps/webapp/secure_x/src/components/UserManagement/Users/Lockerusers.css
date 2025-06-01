@@ -1,38 +1,67 @@
 .dialogbox .MuiDialog-paper {
-  background-color: #fff transparent; /* White background */
+  background-color: #fff; /* White background */
   color: #000; /* Black text */
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  min-width: 400px;
-  gap: 10px;
-  
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
-.DileteDialog .MuiDialog-paper{
-  min-width: 400px;
+.dialogbox .MuiDialogTitle-root {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 12px;
 }
-
 
 .dialog-content {
-  padding-top: 10px;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   gap: 16px;
+  margin-top: 8px;
+}
 
-  
+.dialogbox .MuiTextField-root .MuiOutlinedInput-root {
+  background-color: #f9f9f9;
+  color: #000;
+}
+
+.dialogbox .MuiTextField-root .MuiInputLabel-root {
+  color: #555;
+}
+
+.dialogbox .MuiTextField-root .MuiOutlinedInput-notchedOutline {
+  border-color: #ccc;
+}
+
+.dialogbox .MuiTextField-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #999;
+}
+
+.dialogbox .MuiTextField-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #1976d2; /* Blue on focus */
 }
 
 .dialog-actions {
-  align-items:end ;
-  padding: 8px 10px;
-
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
 }
 
-.DTital{
-  background-color: #000000;
-  color: #ffffff;
-  font-weight: 700;
+.dialog-actions .MuiButton-root {
+  text-transform: none;
+  font-weight: 500;
+  padding: 6px 16px;
+  margin-left: 8px;
 }
+
+.dialog-actions .MuiButton-contained {
+  background-color: #000;
+  color: #fff;
+}
+
 
 .WindowPU{
    display: flex;
@@ -55,3 +84,4 @@
     
 
 }
+

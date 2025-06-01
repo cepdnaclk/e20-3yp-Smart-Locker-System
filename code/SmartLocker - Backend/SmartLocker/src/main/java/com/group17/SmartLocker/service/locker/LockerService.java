@@ -110,7 +110,7 @@ public class LockerService implements ILockerService{
      * A helper method to the unlock locker function
      * Publish mqtt messages for given clusterId, lockerId and already assign state
      */
-    public void sendMqttMessageToLockerUnlock(Long clusterId, Long lockerId, String alreadyAssign){
+    public void sendMqttMessageToLockerUnlock(Long clusterId, Long lockerId, String alreadyAssign, String source){
         // publish the unlock Mqtt request message
 
         //create the message payload
@@ -120,6 +120,7 @@ public class LockerService implements ILockerService{
         payload.put("clusterID", clusterId.toString());
         payload.put("lockerID", lockerId.toString());
         payload.put("alreadyAssign", alreadyAssign);
+        payload.put("source", source);
 
         String message = null;
         try {
@@ -200,7 +201,7 @@ public class LockerService implements ILockerService{
             LockerLog lockerLog = new LockerLog(); // create a locker log
 
             // send Mqtt message to unlock (Unlocking a new existing locker)
-            sendMqttMessageToLockerUnlock(clusterId, locker.getLockerId(), "0");
+            sendMqttMessageToLockerUnlock(clusterId, locker.getLockerId(), "0", "0");
 
             // Todo: make this to send as notifications
             System.out.println(user.getFirstName() + ", Please use the locker with locker number: " + locker.getDisplayNumber());
@@ -255,7 +256,7 @@ public class LockerService implements ILockerService{
     }
 
     @Override
-    public String accessLocker(String username){
+    public String accessLocker(String username, String source){
 
         // Todo : Locker cluster should be checked before this, cluster must be same where the user puts his fingerprint
 
@@ -281,7 +282,7 @@ public class LockerService implements ILockerService{
             lockerLogRepository.save(activeLog);
 
             // send Mqtt message to unlock (Unlocking the assigned locker)
-            sendMqttMessageToLockerUnlock(clusterId, lockerId, "1");
+            sendMqttMessageToLockerUnlock(clusterId, lockerId, "1", source);
 
             // Delay execution for 1.5 minutes
             try {
@@ -323,7 +324,7 @@ public class LockerService implements ILockerService{
     }
 
     @Override
-    public String unassignLocker(String username){
+    public String unassignLocker(String username, String source){
         /*
         * This is for withdraw the things from the locker.
         * This can be done also using the mobile app and fingerprint
@@ -349,7 +350,7 @@ public class LockerService implements ILockerService{
              lockerLogRepository.save(activeLog);
 
              // send Mqtt message to unlock (Unlocking the assigned locker)
-             sendMqttMessageToLockerUnlock(clusterId, lockerId, "1");
+             sendMqttMessageToLockerUnlock(clusterId, lockerId, "1", source);
 
              // Delay execution for 1.5 minutes
              try {

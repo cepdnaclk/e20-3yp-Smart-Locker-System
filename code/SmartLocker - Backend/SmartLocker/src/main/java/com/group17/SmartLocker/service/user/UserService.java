@@ -244,9 +244,9 @@ public class UserService implements IUserService {
         if(action.equals("assign")){
             lockerService.assignLocker(username, clusterId);
         } else if (action.equals("access")) {
-            lockerService.accessLocker(username);
+            lockerService.accessLocker(username, "0");
         } else if (action.equals("unassign")) {
-            lockerService.unassignLocker(username);
+            lockerService.unassignLocker(username, "0");
         }
 
     }
