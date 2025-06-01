@@ -4,13 +4,22 @@ import {
   putLockeUsresData,
   rejectPendingUser,
 } from "../../Services/api.js";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import { Check, Ban, RefreshCw } from "lucide-react";
 import Tooltip from "@mui/material/Tooltip";
 import "../../Button/Button.css";
 import "../../TableStyle/Table.css";
+import "./Newusers.css";
 
 const Newusers = () => {
   const [users, setUsers] = useState([]);
+  const [openReject, setOpenReject] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   // Fetch pending users
   const fetchPendingUsers = async () => {
@@ -44,6 +53,7 @@ const Newusers = () => {
     try {
       await rejectPendingUser(id);
       alert(`User rejected with ID: ${id}`);
+      setOpenReject(false);
       fetchPendingUsers();
     } catch (error) {
       console.error(`Error rejecting user: ${id}`, error);
@@ -51,6 +61,13 @@ const Newusers = () => {
     }
   };
 
+  // handel reject btn dialog box
+  const handleRejectClick = (user) => {
+    setSelectedUser(user);
+    setOpenReject(true);
+  };
+
+  // fech data whe page load or refesh
   useEffect(() => {
     fetchPendingUsers();
   }, []); // no linter warning now
@@ -116,7 +133,7 @@ const Newusers = () => {
                   <Tooltip title="Reject" arrow>
                     <button
                       className="DELETB"
-                      onClick={() => rejectPendingUsers(user.id)}
+                      onClick={() => handleRejectClick(user.id)}
                     >
                       <Ban size={16} />
                     </button>
@@ -126,6 +143,37 @@ const Newusers = () => {
             ))}
           </tbody>
         </table>
+        <div>
+          {/* reject DIALOG */}
+          <Dialog
+            className="PendingDialog"
+            open={openReject}
+            onClose={() => setOpenReject(false)}
+          >
+            <DialogTitle className="DTital">Reject Pending User! </DialogTitle>
+            <DialogContent>
+              <p> Are you sure reject this pending user?</p>
+              <p>
+                ID - <i> {selectedUser}</i>
+              </p>
+              {/* <p>
+                First Name - <i> {selectedUser?.firstName}</i>
+              </p> */}
+            </DialogContent>
+            <DialogActions className="dialog-actions">
+              <button className="CANCELB" onClick={() => setOpenReject(false)}>
+                Cancel
+              </button>
+              <button
+                className="DELETEB"
+                onClick={() => rejectPendingUsers(selectedUser)}
+                variant="contained"
+              >
+                Reject
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
       </div>
     </div>
   );
