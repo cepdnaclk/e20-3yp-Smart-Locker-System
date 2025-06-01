@@ -48,7 +48,7 @@ const Lcluster = () => {
   const handleAddLockerCluster = async () => {
     console.log("Fetching locker cluster data");
     try {
-      await addLockerCluster(newCluster.id, newCluster);
+      await addLockerCluster(newCluster);
       setOpenAdd(false);
       handleLockerCluster();
     } catch (error) {
@@ -203,20 +203,16 @@ const Lcluster = () => {
           <DialogTitle className="DTital">Add Locker Cluster </DialogTitle>
           <div className="trance"></div>
           <DialogContent className="dialog-content">
-            <TextField
-              label="Cluster ID"
-              name="id"
-              variant="outlined"
-              className="no-border"
-              value={newCluster.id || ""}
-              onChange={handleAddChange}
-            />
+            <p>
+              <b>
+                <i>Cluster id will auto genarate </i>
+              </b>
+            </p>
             <TextField
               label="Total Locker Count"
               name="totalNumberOfLockers"
               variant="outlined"
               className="no-border"
-              value={newCluster.totalNumberOfLockers || ""}
               onChange={handleAddChange}
             />
             <TextField
@@ -224,7 +220,6 @@ const Lcluster = () => {
               name="clusterName"
               variant="outlined"
               className="no-border"
-              value={newCluster.clusterName || ""}
               onChange={handleAddChange}
             />
             <TextField
@@ -232,7 +227,6 @@ const Lcluster = () => {
               name="lockerClusterDescription"
               variant="outlined"
               className="no-border"
-              value={newCluster.lockerClusterDescription || ""}
               onChange={handleAddChange}
             />
           </DialogContent>
@@ -276,8 +270,13 @@ const Lcluster = () => {
               name="totalNumberOfLockers"
               variant="outlined"
               className="no-border"
-              value={selectedCluster?.totalNumberOfLockers || ""}
-              onChange={handleEditChange}
+              value={
+                selectedCluster?.totalNumberOfLockers + "     can't change"
+              }
+              disabled
+              InputProps={{
+                style: { fontStyle: "italic" },
+              }}
             />
             <TextField
               label="Cluster name"
