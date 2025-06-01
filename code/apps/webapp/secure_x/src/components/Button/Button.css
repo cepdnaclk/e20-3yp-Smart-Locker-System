@@ -107,6 +107,52 @@
   font-size: 15px;
 }
 
+.CANCELB{
+    background-color: rgb(66, 235, 86);
+  color: white;
+  border: 2px solid rgb(66, 235, 86);
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  min-width: 40px;
+  height: 36px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.CANCELB:hover {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 255, 76);
+  border-color: rgb(0, 255, 76);
+}
+
+/* Dlete btn */
+.DELETEB{
+   background-color: rgb(255, 0, 0);
+  color: white;
+  border: 2px solid rgb(255, 0, 0);
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  min-width: 40px;
+  height: 36px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.DELETEB:hover {
+  background-color: rgb(255, 255, 255);
+  color: rgb(255, 0, 0);
+  border-color: #ff0000;
+}
 
 
 

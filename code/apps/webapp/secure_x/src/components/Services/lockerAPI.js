@@ -34,13 +34,13 @@ export const updateLockerCluster = async (id, data) => {
   });
 };
 //add cluster to system
-export const addLockerCluster = async (id, data) => {
+export const addLockerCluster = async (data) => {
   if (!localStorage.getItem("token")) {
     console.error("JWT Token is missing! Check localStorage.sesion expire ");
     <Link to="/home"></Link>;
     return;
   }
-  return await api.post(`/addLockerCluster/${id}`, data, {
+  return await api.post(`/addLockerCluster`, data, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
       //"Content-Type": "application/json"
