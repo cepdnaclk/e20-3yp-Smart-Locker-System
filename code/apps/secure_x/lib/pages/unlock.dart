@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/utils/appcolors.dart';
@@ -27,8 +28,8 @@ class Unlock extends StatelessWidget {
         children: [
           Center(
             child: Container(
-              width: 800,
-              height: 350,
+              width: 800.w,
+              height: 350.h,
               alignment: Alignment.center,
               child: ClipRect(
                 child: Align(
@@ -42,63 +43,75 @@ class Unlock extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           Container(
-            padding: const EdgeInsets.all(20),
-            margin: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.all(20.h),
+            margin: EdgeInsets.symmetric(horizontal: 10.h),
             decoration: BoxDecoration(
               color: Colors.grey[300],
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              borderRadius: BorderRadius.all(Radius.circular(30.r)),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Location : xxxxxxxx ',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20.sp, 
+                    fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Access Time : xx:xx:xx ',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  'Recent Access Time : xx:xx:xx ',
+                  style: TextStyle(
+                    fontSize: 20.sp, 
+                    fontWeight: FontWeight.bold),
                 ),
                 Text(
                   'Locker No : xxx ',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20.sp, 
+                    fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 60,),
+          SizedBox(height: 60.h,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children:[
               ElevatedButton(
               style: ElevatedButton.styleFrom(
+                elevation: 6.h,
                 foregroundColor: AppColors.buttonBackgroundColor1,
                 backgroundColor: AppColors.buttonBackgroundColor2,
-                shape: const CircleBorder(
-                  side: BorderSide(color: Colors.black, width: 3.0),
+                shape: CircleBorder(
+                  side: BorderSide(color: Colors.black, width: 2.w),
                 ),
-                padding: const EdgeInsets.all(60),
+                padding: EdgeInsets.all(40.h),
               ),
               onPressed: () => _accessLocker(context),
-              child: const Text('Access', style: TextStyle(fontSize: 22)),
+              child: Text('Access', 
+              style: TextStyle(
+                fontSize: 22.sp)),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                elevation: 6.h,
                 foregroundColor: AppColors.buttonBackgroundColor1,
                 backgroundColor: AppColors.iconColor,
-                shape: const CircleBorder(
-                  side: BorderSide(color: AppColors.iconColor, width: 3.0),
+                shape: CircleBorder(
+                  side: BorderSide(color: AppColors.iconColor, width: 2.w),
                 ),
-                padding: const EdgeInsets.all(60),
+                padding: EdgeInsets.all(40.h),
               ),
               onPressed: () => _unassignLocker(context),
-              child: const Text('Unassign', style: TextStyle(fontSize: 22)),
+              child: Text('Unassign', 
+              style: TextStyle(
+                fontSize: 22.sp)),
             ),
             ] 
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: 30.h),
           
         ],
       ),

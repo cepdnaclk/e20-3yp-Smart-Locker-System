@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/data/repository/auth_repo.dart';
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/locker_logs_model.dart';
 import 'package:secure_x/models/response_model.dart';
 import 'package:secure_x/models/user_model.dart';
-import 'package:secure_x/pages/login_success.dart';
 import 'package:secure_x/pages/navigation.dart';
 import 'package:secure_x/utils/app_constants.dart';
 import 'package:secure_x/data/api/dio_client.dart';
@@ -22,7 +22,7 @@ class AuthController extends GetxController {
   var userToken = ''.obs; // Observable to store the token
 
   // Method to handle user login
-  Future<void> login(String username, String password) async {
+  Future<void> login(String username, String password, BuildContext context) async {
     isLoading.value = true; // Start loading
     print('User entered username: $username'); // Debug print
     print('User entered password: $password'); // Debug print
@@ -40,7 +40,29 @@ class AuthController extends GetxController {
         print('Login successful: ${response.message}'); // Debug print
         print('Token: $token'); // Debug print
         //Get.snackbar('Success', response.message); // Show a success message
-        CustomSnackBar(response.message, iserror: false, title: 'Login successful', duration: Duration(seconds: 4));
+        //CustomSnackBar(response.message, iserror: false, title: 'Login successful', duration: Duration(seconds: 4));
+        /*CustomSnackBar.show(
+          message: 'Login successful', 
+          title: 'Success', 
+          isError: false,
+          icon: Icons.check_circle_outline,
+          backgroundColor: Colors.green.shade600);*/
+
+        /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Login successful'),
+          backgroundColor: Colors.green.shade600,
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ));*/
+
+        CustomSnackBar.show(
+          context: context, 
+          message: 'Login successful',
+          title: 'Success',
+          isError: false,
+        );
+
+        await Future.delayed(Duration(milliseconds: 1500));
         
         // Fetch the signed-in user's details
         await getSignedInUser();

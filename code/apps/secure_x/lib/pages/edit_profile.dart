@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/models/user_model.dart';
@@ -55,22 +56,23 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: const CustomAppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.h),
         child: user == null
             ? const Center(child: Text('No user data available'))
             : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   //User Image
                   ClipOval(
                     child: Image.asset('assets/img/userImage.png',
-                    width:160,
-                    height:160,
+                    width:150.w,
+                    height:150.h,
                     fit:BoxFit.cover,),
                   ),
               
-                  SizedBox(height: 24,),
+                  SizedBox(height: 24.h,),
 
                   _buildEditableField("Email",_emailController),
                   _buildEditableField("First Name", _firstNameController),
@@ -78,17 +80,15 @@ class _EditProfileState extends State<EditProfile> {
                   _buildEditableField("Registration No", _regNoController),
                   _buildEditableField("Phone Number", _phoneNoController),
 
-                  SizedBox(height: 24,),
+                  SizedBox(height: 24.h,),
                   
-                  SizedBox(
-                    width: 120,
-                    height: 48,
-                    child: ElevatedButton(
+                  ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        elevation: 6.h,
                         backgroundColor: AppColors.buttonBackgroundColor2,
                         foregroundColor: AppColors.buttonBackgroundColor1,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                         )
                       ),
                       onPressed: () async{
@@ -105,8 +105,12 @@ class _EditProfileState extends State<EditProfile> {
                         );
                         }
                       }, 
-                      child: const Text('Submit')),
-                  )
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                        ),)),
                 ],
               ),
       ),
@@ -116,15 +120,15 @@ class _EditProfileState extends State<EditProfile> {
 
   Widget _buildEditableField(String title,TextEditingController controller,{bool readOnly=false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.symmetric(vertical: 8.h),
       child: 
       TextFormField(
         controller: controller,
         readOnly: readOnly,
         validator: (value) => value==null || value.isEmpty ? 'Please enter $title':null,
-        style:const TextStyle(
+        style:TextStyle(
           color: AppColors.appBarColor,
-          fontSize: 16,
+          fontSize: 16.sp,
         ),
         decoration: InputDecoration(
           labelText: title,
@@ -133,7 +137,7 @@ class _EditProfileState extends State<EditProfile> {
             color: AppColors.textPrimary,
             ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20.r),
             borderSide: const BorderSide(
               color: AppColors.appBarColor,
             )

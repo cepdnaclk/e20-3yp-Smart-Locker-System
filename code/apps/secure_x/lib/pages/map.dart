@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:secure_x/models/locker_location_model.dart';
+import 'package:secure_x/utils/appcolors.dart';
 
 class LockerMap extends StatefulWidget {
   const LockerMap({super.key});
@@ -51,10 +53,10 @@ class _LockerMapState extends State<LockerMap> {
 
   Widget content(){
     return FlutterMap(
-      options: MapOptions(
+      options:const MapOptions(
         initialCenter: LatLng(7.256197072872723, 80.59694481740117),
         initialZoom: 11,
-        interactionOptions: const InteractionOptions(
+        interactionOptions: InteractionOptions(
           flags: InteractiveFlag.all,
         )
       ),
@@ -65,48 +67,47 @@ class _LockerMapState extends State<LockerMap> {
             .where((location) => location.availableLockers > 0)
             .map((location) => Marker(
               point: LatLng(location.latitude, location.longitude),
-              width: 100,
-              height: 80,
+              width: 120.w,
+              height: 90.h,
               alignment: Alignment.topCenter,
               child: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 6.w, 
+                      vertical: 2.h),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(6.r),
                       boxShadow: [
-                        BoxShadow(color: Colors.black26, blurRadius: 3),
+                        BoxShadow(color: Colors.black26, blurRadius: 3.r),
                       ],
                     ),
               child: Text(
                 location.locationName,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 12,
+                style: TextStyle(
+                  fontSize: 10.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4.h),
             GestureDetector(
               onTap: () {
                 _showLockerDetails(context, location);
               },
-              child: const Icon(
+              child: Icon(
                 Icons.location_on,
-                size: 36,
-                color: Colors.green,
+                size: 38.sp,
+                color: Colors.red,
               ),
             ),
           ],
         ),
       ))
-
                 .toList(),
-          ),
-          
-        
+          ),        
       ],
     );
   }
@@ -115,57 +116,65 @@ class _LockerMapState extends State<LockerMap> {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
     ),
     builder: (context) {
       return DraggableScrollableSheet(
         expand: false,
-        initialChildSize: 0.3,  // Start at 30% height (adjust as needed)
-        minChildSize: 0.2,
-        maxChildSize: 0.7,
+        initialChildSize: 0.3.h,  
+        minChildSize: 0.2.h,
+        maxChildSize: 0.4.h,
         builder: (context, scrollController) {
           return SingleChildScrollView(
             controller: scrollController,
             padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 24,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 24, // Adjust for keyboard
+              left: 16.h,
+              right: 16.h,
+              top: 24.h,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 24.h,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Container(
-                    width: 40,
-                    height: 4,
-                    margin: const EdgeInsets.only(bottom: 16),
+                    width: 30.w,
+                    height: 4.h,
+                    margin: EdgeInsets.only(bottom: 16.h),
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: AppColors.textTertiary,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                 ),
                 Text(
                   location.locationName,
-                  style: const TextStyle(
-                    fontSize: 20,
+                  style: TextStyle(
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 Text(
                   "Available Lockers: ${location.availableLockers}",
-                  style: const TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Center(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 6.h,
+                      foregroundColor: AppColors.buttonBackgroundColor1,
+                      backgroundColor: AppColors.buttonForegroundColor1,
+                    ),
                     onPressed: () {
-                      // TODO: Trigger locker reservation
+                      //locker reservation not done yet
                     },
-                    child: const Text("Reserve Locker"),
+                    child: Text("Reserve Locker",style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),),
                   ),
                 ),
               ],
@@ -179,6 +188,6 @@ class _LockerMapState extends State<LockerMap> {
 }
 
 TileLayer get openStreetMapTileLayer=> TileLayer(
-  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // For demonstration only
+  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
   userAgentPackageName: 'dev.fleafleft.flutter_map.example',
 );

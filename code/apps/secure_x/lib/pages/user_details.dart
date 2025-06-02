@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/models/user_model.dart';
@@ -18,22 +19,23 @@ class UserDetails extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.h),
         child: user == null
             ? const Center(child: Text('No user data available'))
             : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   //User Image
                   ClipOval(
                     child: Image.asset('assets/img/userImage.png',
-                    width:160,
-                    height:160,
+                    width:160.w,
+                    height:160.w,
                     fit:BoxFit.cover,),
                   ),
               
-                  SizedBox(height: 24,),
+                  SizedBox(height: 24.h,),
 
                   _buildDetailItem("Email", user.email ?? 'Not provided'),
                   _buildDetailItem("First Name", user.firstName ?? 'Not provided'),
@@ -42,43 +44,41 @@ class UserDetails extends StatelessWidget {
                   _buildDetailItem("Registration No", user.regNo ?? 'Not provided'),
                   _buildDetailItem("Phone Number", user.phoneNo ?? 'Not provided'),
 
-                  SizedBox(height: 24,),
+                  SizedBox(height: 24.h,),
                   
-                  //Edit Profile
-                  SizedBox(
-                    width: 120,
-                    height: 48,
-                    child: ElevatedButton(
+                  //Edit Profile                 
+                  ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.buttonBackgroundColor2,
                         foregroundColor: AppColors.buttonBackgroundColor1,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                         )
                       ),
                       onPressed: (){
                         Get.to(() => EditProfile()); 
                       }, 
-                      child: const Text('Edit Profile')),
-                  )
-                ],
+                      child: Text('Edit Profile',
+                      style: TextStyle(
+                        fontSize: 20.h,
+                        fontWeight: FontWeight.bold,
+                      ),)),
+                ]             
               ),
-      ),
-      ),
+          ),
+        )
     );
   }
 
   Widget _buildDetailItem(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: 
-      //Text("$title: $value", style: const TextStyle(fontSize: 16)),
-      TextFormField(
+      padding:EdgeInsets.symmetric(vertical: 8.h),
+      child: TextFormField(
         initialValue: value,
         enabled: false,
-        style:const TextStyle(
+        style:TextStyle(
           color: AppColors.appBarColor,
-          fontSize: 16,
+          fontSize: 16.sp,
         ),
         decoration: InputDecoration(
           labelText: title,
@@ -87,7 +87,7 @@ class UserDetails extends StatelessWidget {
             color: AppColors.textPrimary,
             ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20.r),
             borderSide: const BorderSide(
               color: AppColors.appBarColor,
             )
