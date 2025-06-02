@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:secure_x/data/api/dio_client.dart'; // Use DioClient
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/locker_logs_model.dart';
@@ -210,51 +211,50 @@ class AuthRepo {
   }
 
   // Method to unlock the locker
-  // Method to unlock the locker
-Future<ResponseModel> unlockLocker(String token, int clusterId) async {
-  try {
-    // Debug: Print updating headers with token
-    print('Updating headers with token: $token');
+  /*Future<ResponseModel> unlockLocker(String token, int clusterId) async {
+    try {
+      // Debug: Print updating headers with token
+      print('Updating headers with token: $token');
 
-    // Update headers with the token
-    dioClient.updateHeader(token);
+      // Update headers with the token
+      dioClient.updateHeader(token);
 
-    // Prepare request body
-    final requestBody = {
-      'clusterId': clusterId, // ✅ Pass the required clusterId
-    };
+      // Prepare request body
+      final requestBody = {
+        'clusterId': clusterId, // ✅ Pass the required clusterId
+      };
 
-    // Debug: Print sending POST request
-    print('Sending POST request to: ${AppConstants.UNLOCK_LOCKER_URI} with body: $requestBody');
+      // Debug: Print sending POST request
+      print('Sending POST request to: ${AppConstants.UNLOCK_LOCKER_URI} with body: $requestBody');
 
-    // Send the POST request to the backend
-    final response = await dioClient.postData(
-      AppConstants.UNLOCK_LOCKER_URI,
-      requestBody,
-    );
-
-    // Debug: Print API response
-    print('Received API response: ${response.statusCode} - ${response.data}');
-
-    if (response.statusCode == 200) {
-      return ResponseModel(
-        isSuccess: true,
-        message: 'Locker unlocked successfully',
+      // Send the POST request to the backend
+      final response = await dioClient.postData(
+        AppConstants.UNLOCK_LOCKER_URI,
+        requestBody,
       );
-    } else {
+
+      // Debug: Print API response
+      print('Received API response: ${response.statusCode} - ${response.data}');
+
+      if (response.statusCode == 200) {
+        return ResponseModel(
+          isSuccess: true,
+          message: 'Locker unlocked successfully',
+        );
+      } else {
+        return ResponseModel(
+          isSuccess: false,
+          message: 'Failed to unlock locker: ${response.data}',
+        );
+      }
+    } catch (e) {
+      print('Network error during unlock: $e');
       return ResponseModel(
         isSuccess: false,
-        message: 'Failed to unlock locker: ${response.data}',
+        message: 'Network error: $e',
       );
     }
-  } catch (e) {
-    print('Network error during unlock: $e');
-    return ResponseModel(
-      isSuccess: false,
-      message: 'Network error: $e',
-    );
-  }
-}
+  }*/
 
   //method to get the user logs
   Future<List<LockerLogsModel>> getUserLogs() async{
@@ -326,4 +326,95 @@ Future<ResponseModel> unlockLocker(String token, int clusterId) async {
       );
     }
   }
+
+  //Method to Access the assigned locker
+  Future<ResponseModel> accessLocker() async{
+    try{
+      final String? token=sharedPreferences.getString(AppConstants.TOKEN);
+
+      if(token==null){
+        throw Exception('User not authenticated');
+      }
+
+      List<LockerLogsModel> lockerLogs= await getUserLogs();
+      LockerLogsModel? activeLocker;
+
+      try{
+        activeLocker=lockerLogs.firstWhere(
+        (log)=> log.status=='ACTIVE',);
+      }catch(e){
+        activeLocker=null;
+      }
+     
+      if(activeLocker==null){
+        return ResponseModel(
+          isSuccess: false, 
+          message: 'No active lockers found',);
+      }
+
+      final response=await dioClient.postData(AppConstants.ACCESS_LOCKER_URI, {});
+      if (response.statusCode == 200) {
+        return ResponseModel(
+          isSuccess: true,
+          message: 'Locker accessed successfully',
+        );
+      } else {
+        return ResponseModel(
+          isSuccess: false,
+          message: 'Error in accessing locker: ${response.data}',
+        );
+      }
+    }catch(e){
+      print('Access Locker Error : $e');
+      return ResponseModel(
+        isSuccess: false, 
+        message: 'Error : $e',);
+    }
+  }
+
+  //Method to unassign the assigned locker
+  Future<ResponseModel> unassignLocker(String token) async{
+    try{
+      final String? token=sharedPreferences.getString(AppConstants.TOKEN);
+
+      if(token==null){
+        throw Exception('User not authenticated');
+      }
+
+      List<LockerLogsModel> lockerLogs= await getUserLogs();
+      LockerLogsModel? activeLocker;
+
+      try{
+        activeLocker=lockerLogs.firstWhere(
+        (log)=> log.status=='ACTIVE',);
+      }catch(e){
+        activeLocker=null;
+      }
+     
+      if(activeLocker==null){
+        return ResponseModel(
+          isSuccess: false, 
+          message: 'No active lockers found',);
+      }
+
+      final response=await dioClient.postData(AppConstants.UNASSIGN_LOCKER_URI,{});
+      if (response.statusCode == 200) {
+        return ResponseModel(
+          isSuccess: true,
+          message: 'Locker unassigned successfully',
+        );
+      } else {
+        return ResponseModel(
+          isSuccess: false,
+          message: 'Error in unassigning locker: ${response.data}',
+        );
+      }
+    }catch(e){
+      print('Unassign Locker Error : $e');
+      return ResponseModel(
+        isSuccess: false, 
+        message: 'Error : $e',);
+    }
+  }
+
 }

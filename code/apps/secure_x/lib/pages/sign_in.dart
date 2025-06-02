@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:secure_x/pages/create_user.dart';
 import 'package:secure_x/utils/appcolors.dart';
-import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/pages/log_in.dart';
 
 class SignIn extends StatelessWidget {
@@ -9,8 +9,7 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth=MediaQuery.of(context).size.width;
-    double screenHeight=MediaQuery.of(context).size.height;
+    
     return Scaffold(
       backgroundColor: AppColors.mainColor,
       //appBar:const CustomAppBar(),
@@ -21,8 +20,8 @@ class SignIn extends StatelessWidget {
           children: [
             Center(
                 child: Container(
-                  width: screenWidth*0.95,
-                  height:screenHeight*0.35,
+                  width: 1.sw,
+                  height:0.5.sh,
                   alignment: Alignment.center,
                   child:ClipRect(
                     child: Align(
@@ -36,14 +35,14 @@ class SignIn extends StatelessWidget {
                   ),            
                 ),
               ),
-            const SizedBox(height: 50,),
+            SizedBox(height: 5.h,),
             Padding(
-                padding:const EdgeInsets.symmetric(horizontal: 20),
+                padding:EdgeInsets.symmetric(horizontal: 20.w),
                 child: Container(
-                  padding: const EdgeInsets.all(50),
+                  padding: EdgeInsets.all(50.w),
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -55,18 +54,21 @@ class SignIn extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => LogIn(),));
                         },
                         style: ElevatedButton.styleFrom(
+                          elevation: 6.h,
                           backgroundColor: AppColors.buttonBackgroundColor2,
                           foregroundColor: AppColors.buttonBackgroundColor1,
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.h),
                         ), 
-                        child: const Text('SIGN IN',style: TextStyle(
-                          fontSize: 22,
+                        child: Text('SIGN IN',style: TextStyle(
+                          fontSize: 22.sp,
                           fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20,),
-                      const Text('or'),
+                      SizedBox(height: 20.h,),
+                      Text('or', style: TextStyle(
+                        fontSize: 18.sp,
+                      ),),
                       TextButton(onPressed: (){
                         Navigator.push(
                           context,
@@ -75,13 +77,16 @@ class SignIn extends StatelessWidget {
                       style: TextButton.styleFrom(
                         foregroundColor: AppColors.textSecondary,
                       ),
-                      child: const Text('CREATE ACCOUNT')
+                      child: Text('CREATE ACCOUNT',style: TextStyle(
+                        fontSize: 19.sp,
+                        fontWeight: FontWeight.bold,
+                      ),)
                       ),
                     ],
                   ),
                 ),
               ),
-            const SizedBox(height: 20,)   
+            SizedBox(height: 20.h,)   
           ],
         ),
         
