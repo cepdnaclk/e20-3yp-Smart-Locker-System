@@ -1,0 +1,24 @@
+.AddDialog .MuiDialog-paper{
+  min-width: 400px;
+}
+
+.dialog-content {
+  padding-top: 10px;
+  display: flex;
+  flex-direction:column;
+  gap: 16px;
+
+  
+}
+
+.dialog-actions {
+  align-items:end ;
+  padding: 8px 10px;
+
+}
+
+.DTital{
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: 700;
+}

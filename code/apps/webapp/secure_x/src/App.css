@@ -114,7 +114,7 @@ body {
   padding: 10%;
   align-items:flex-end;
   justify-content: space-around;
-  background-image: url('./img/back.png');
+  background-image: url('../src/img/back.png');
 }
 .text-box {
   

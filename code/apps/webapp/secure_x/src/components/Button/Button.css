@@ -106,7 +106,6 @@
   font-weight: bold;
   font-size: 15px;
 }
-/* Cancel btn */
 
 .CANCELB{
     background-color: rgb(66, 235, 86);
@@ -154,4 +153,7 @@
   color: rgb(255, 0, 0);
   border-color: #ff0000;
 }
+
+
+
 /* label */

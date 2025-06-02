@@ -7,16 +7,16 @@ import {
   updateLockerUser,
 } from "../../Services/api.js";
 import {
-  Button,
+  //Button,
   TextField,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  // FormControl,
+  // InputLabel,
+  // Select,
+  // MenuItem,
 } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import "./Lockerusers.css";
@@ -90,7 +90,7 @@ const LockerUsers = () => {
 
   const handleEditSave = async () => {
     try {
-      await updateLockerUser(selectedUser.id, selectedUser); // Replace with your actual update function
+      await updateLockerUser(selectedUser.id, selectedUser);
       setOpenEdit(false);
       handleLockerUsers(); // Refresh data
     } catch (error) {
@@ -104,33 +104,11 @@ const LockerUsers = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Locker Users</h2>
-      <div className="ActionB">
-        <Tooltip
-          title="Refresh"
-          arrow
-          componentsProps={{
-            tooltip: {
-              sx: { fontSize: "12px", backgroundcolor: "black", color: "#fff" },
-            },
-          }}
-        >
-          <button className="ADDB" onClick={handleLockerUsers}>
-            <RefreshCw size={16} />
-          </button>
-        </Tooltip>
-        <div className="SearchB">
-          <input
-            className="inputS"
-            type="text"
-            placeholder="Enter username...."
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+    <div className="WindowPU">
+      <div className="WindowPU_t">
+        <h2>Locker Users</h2>
+        <div className="ActionB">
           <Tooltip
-            title="Search user"
             arrow
             componentsProps={{
               tooltip: {
@@ -142,165 +120,191 @@ const LockerUsers = () => {
               },
             }}
           >
-            <button className="ADDB" onClick={() => findLockerUser(username)}>
-              <Search size={16} />
+            <button className="ADDB" onClick={handleLockerUsers}>
+              <RefreshCw size={16} />
             </button>
           </Tooltip>
-        </div>
-      </div>
-
-      <table className="Ctable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Contact Number</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.firstName}</td>
-              <td>{user.lastName}</td>
-              <td>{user.contactNumber}</td>
-              <td>{user.email}</td>
-              <td>Locker {user.role}</td>
-              <td className="ActionF">
-                <Tooltip
-                  title="Edit User"
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: "12px",
-                        backgroundcolor: "black",
-                        color: "#fff",
-                      },
-                    },
-                  }}
-                >
-                  <button
-                    className="EDITB"
-                    onClick={() => handleEditClick(user)}
-                  >
-                    <SquarePen size={16} />
-                  </button>
-                </Tooltip>
-                <Tooltip
-                  title="Delete User"
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: "12px",
-                        backgroundcolor: "black",
-                        color: "#fff",
-                      },
-                    },
-                  }}
-                >
-                  <button
-                    className="DELETB"
-                    onClick={() => handleDeleteClick(user)}
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </Tooltip>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        {/* DELET DIALOG */}
-        <Dialog
-          className="DileteDialog"
-          open={openDelet}
-          onClose={() => setOpenDelet(false)}
-        >
-          <DialogTitle className="DTital">Delet User! </DialogTitle>
-          <DialogContent>
-            <p> Are you sure delet this user?</p>
-            <p>
-              ID - <i> {selectedUser?.id}</i>
-            </p>
-            <p>
-              First Name - <i> {selectedUser?.firstName}</i>
-            </p>
-          </DialogContent>
-          <DialogActions className="dialog-actions">
-            <button className="CANCELB" onClick={() => setOpenDelet(false)}>
-              Cancel
-            </button>
-            <button
-              className="DELETEB"
-              onClick={() => deleteLockerUser(selectedUser?.id)}
-              variant="contained"
-            >
-              Delete User
-            </button>
-          </DialogActions>
-        </Dialog>
-      </div>
-      <div>
-        {/* EDIT DIALOG */}
-        <Dialog
-          className="dialogbox"
-          open={openEdit}
-          onClose={() => setOpenEdit(false)}
-        >
-          <DialogTitle className="DTital">Edit User </DialogTitle>
-          <div className="trance"></div>
-          <DialogContent className="dialog-content">
-            <TextField
-              label="User id"
-              name="UserId"
-              variant="outlined"
-              className="no-border"
-              value={selectedUser?.id + "     can't change"}
-              disabled
-              InputProps={{
-                style: { fontStyle: "italic" },
+          <div className="SearchB">
+            <input
+              className="inputS"
+              type="text"
+              placeholder="Enter username...."
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <Tooltip
+              title="Search user"
+              arrow
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    fontSize: "12px",
+                    backgroundcolor: "black",
+                    color: "#fff",
+                  },
+                },
               }}
-            />
-            <TextField
-              label="First Name"
-              name="firstName"
-              variant="outlined"
-              className="no-border"
-              value={selectedUser?.firstName || ""}
-              onChange={handleEditChange}
-            />
-            <TextField
-              label="Last Name"
-              name="lastName"
-              variant="outlined"
-              className="no-border"
-              value={selectedUser?.lastName || ""}
-              onChange={handleEditChange}
-            />
-            <TextField
-              label="Contact Number"
-              name="contactNumber"
-              variant="outlined"
-              className="no-border"
-              value={selectedUser?.contactNumber || ""}
-              onChange={handleEditChange}
-            />
-            <TextField
-              label="Email"
-              name="email"
-              variant="outlined"
-              className="no-border"
-              value={selectedUser?.email || ""}
-              onChange={handleEditChange}
-            />
-            {/* <FormControl>
+            >
+              <button className="ADDB" onClick={() => findLockerUser(username)}>
+                <Search size={16} />
+              </button>
+            </Tooltip>
+          </div>
+        </div>
+
+        <table className="Ctable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Contact Number</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.firstName}</td>
+                <td>{user.lastName}</td>
+                <td>{user.contactNumber}</td>
+                <td>{user.email}</td>
+                <td>Locker {user.role}</td>
+                <td className="ActionF">
+                  <Tooltip
+                    title="Edit User"
+                    arrow
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          fontSize: "12px",
+                          backgroundcolor: "black",
+                          color: "#fff",
+                        },
+                      },
+                    }}
+                  >
+                    <button
+                      className="EDITB"
+                      onClick={() => handleEditClick(user)}
+                    >
+                      <SquarePen size={16} />
+                    </button>
+                  </Tooltip>
+                  <Tooltip
+                    title="Delete User"
+                    arrow
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          fontSize: "12px",
+                          backgroundcolor: "black",
+                          color: "#fff",
+                        },
+                      },
+                    }}
+                  >
+                    <button
+                      className="DELETB"
+                      onClick={() => handleDeleteClick(user)}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </Tooltip>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div>
+          {/* DELET DIALOG */}
+          <Dialog
+            className="DileteDialog"
+            open={openDelet}
+            onClose={() => setOpenDelet(false)}
+          >
+            <DialogTitle className="DTital">Delet User! </DialogTitle>
+            <DialogContent>
+              <p> Are you sure delet this user?</p>
+              <p>
+                ID - <i> {selectedUser?.id}</i>
+              </p>
+              <p>
+                First Name - <i> {selectedUser?.firstName}</i>
+              </p>
+            </DialogContent>
+            <DialogActions className="dialog-actions">
+              <button className="CANCELB" onClick={() => setOpenDelet(false)}>
+                Cancel
+              </button>
+              <button
+                className="DELETEB"
+                onClick={() => deleteLockerUser(selectedUser?.id)}
+                variant="contained"
+              >
+                Delete User
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
+        <div>
+          {/* EDIT DIALOG */}
+          <Dialog
+            className="dialogbox"
+            open={openEdit}
+            onClose={() => setOpenEdit(false)}
+          >
+            <DialogTitle className="DTital">Edit User </DialogTitle>
+            <div className="trance"></div>
+            <DialogContent className="dialog-content">
+              <TextField
+                label="User id"
+                name="UserId"
+                variant="outlined"
+                className="no-border"
+                value={selectedUser?.id + "     can't change"}
+                disabled
+                InputProps={{
+                  style: { fontStyle: "italic" },
+                }}
+              />
+              <TextField
+                label="First Name"
+                name="firstName"
+                variant="outlined"
+                className="no-border"
+                value={selectedUser?.firstName || ""}
+                onChange={handleEditChange}
+              />
+              <TextField
+                label="Last Name"
+                name="lastName"
+                variant="outlined"
+                className="no-border"
+                value={selectedUser?.lastName || ""}
+                onChange={handleEditChange}
+              />
+              <TextField
+                label="Contact Number"
+                name="contactNumber"
+                variant="outlined"
+                className="no-border"
+                value={selectedUser?.contactNumber || ""}
+                onChange={handleEditChange}
+              />
+              <TextField
+                label="Email"
+                name="email"
+                variant="outlined"
+                className="no-border"
+                value={selectedUser?.email || ""}
+                onChange={handleEditChange}
+              />
+              {/* <FormControl>
       <InputLabel>Role</InputLabel>
       <Select
         name="role"
@@ -313,21 +317,22 @@ const LockerUsers = () => {
         <MenuItem value="MANAGER">MANAGER</MenuItem>
       </Select>
     </FormControl> */}
-          </DialogContent>
+            </DialogContent>
 
-          <DialogActions className="dialog-actions">
-            <button className="DELETB" onClick={() => setOpenEdit(false)}>
-              <X size={20} />
-            </button>
-            <button
-              className="UNLOCKB"
-              onClick={handleEditSave}
-              variant="contained"
-            >
-              <Save size={20} />
-            </button>
-          </DialogActions>
-        </Dialog>
+            <DialogActions className="dialog-actions">
+              <button className="DELETB" onClick={() => setOpenEdit(false)}>
+                <X size={20} />
+              </button>
+              <button
+                className="UNLOCKB"
+                onClick={handleEditSave}
+                variant="contained"
+              >
+                <Save size={20} />
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
       </div>
     </div>
   );
