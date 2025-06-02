@@ -1,40 +1,94 @@
-import React, { useState, useEffect } from 'react';
-import { getLockerData } from '../../Services/lockerAPI';
-import { SquarePen,Trash2,SquarePlus,KeyRound } from 'lucide-react';
-import Tooltip from '@mui/material/Tooltip';
-import '../../Button/Button.css'
-import '../../TableStyle/Table.css'
-const Locker = () =>  {
 
-    const [locker, setLocker] = useState([]);
-      
-        // Fetch locker users
-        const handleLocker = async () => {
-        console.log("Fetching locker cluster data");
-        try {
-          const response = await getLockerData();
-          // Adjust the filtering as needed
-          const locker = response.data;
-          setLocker(locker);
-          console.log("Locker Data:", locker);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          alert(`Invalid Request: Token ${localStorage.getItem("token")}`);
-        }
-      };
-    
-      // Fetch data when the component mounts
-      useEffect(() => {
-        handleLocker();
-      }, []);
+import React, { useState, useEffect } from "react";
+import {
+  getLockerData,
+  addLockerTOLockerCluster,
+} from "../../Services/lockerAPI";
+import { SquarePen, Trash2, SquarePlus, KeyRound } from "lucide-react";
+import Tooltip from "@mui/material/Tooltip";
+import "../../Button/Button.css";
+import "../../TableStyle/Table.css";
+import "./Locker.css";
+import {
+  //Button,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  // FormControl,
+  // InputLabel,
+  // Select,
+  // MenuItem,
+} from "@mui/material";
+
+const Locker = () => {
+  const [locker, setLocker] = useState([]);
+  const [openAdd, setOpenAdd] = useState(false);
+  const [ClussterId, setClustersId] = useState(null);
+
+  // Fetch locker users
+  const handleLocker = async () => {
+    console.log("Fetching locker cluster data");
+    try {
+      const response = await getLockerData();
+      // Adjust the filtering as needed
+      const locker = response.data;
+      setLocker(locker);
+      console.log("Locker Data:", locker);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      alert(`Invalid Request: Token ${localStorage.getItem("token")}`);
+    }
+  };
+
+  // add locker to cluster
+  const handleAddLocker = async () => {
+    console.log("Fetching locker cluster data");
+    try {
+      await addLockerTOLockerCluster(ClussterId);
+      setOpenAdd(false);
+      handleAddLocker();
+      console.log("Locker Data:", locker);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      alert(`Invalid Request: Token ${localStorage.getItem("token")}`);
+    }
+  };
+  const handleAddClick = (e) => {
+    setOpenAdd(true);
+  };
+  const handleAddChange = (e) => {
+    const { value } = e.target;
+    setClustersId(value);
+  };
+
+  // Fetch data when the component mounts
+  useEffect(() => {
+    handleLocker();
+  }, []);
+
 
   return (
     <div >
       <h2>Lockers</h2>
-      <div className='ActionB'>
-          <Tooltip title = 'Add locker'arrow componentsProps={{tooltip: {sx: {fontSize: '12px',backgroundcolor:'black',color: '#fff'},},}}>
-            <button className='ADDB'><SquarePlus size={20}/></button>
-          </Tooltip>
+
+      <div className="ActionB">
+        <Tooltip
+          title="Add locker"
+          arrow
+          onClick={() => handleAddClick()}
+          componentsProps={{
+            tooltip: {
+              sx: { fontSize: "12px", backgroundcolor: "black", color: "#fff" },
+            },
+          }}
+        >
+          <button className="ADDB">
+            <SquarePlus size={20} />
+          </button>
+        </Tooltip>
+
       </div>
       <table className='Ctable'>
         <thead>
@@ -74,6 +128,41 @@ const Locker = () =>  {
           ))}
         </tbody>
       </table>
+      <div>
+        {/* ADD new locker dialog */}
+        <Dialog
+          className="AddDialog"
+          open={openAdd}
+          onClose={() => setOpenAdd(false)}
+        >
+          <DialogTitle className="DTital">
+            Add Locker To Locker Cluster{" "}
+          </DialogTitle>
+          <div className="trance"></div>
+          <DialogContent className="dialog-content">
+            <TextField
+              label="Cluster ID"
+              name="id"
+              variant="outlined"
+              className="no-border"
+              //value={newlocker.id || ""}
+              onChange={handleAddChange}
+            />
+          </DialogContent>
+          <DialogActions className="dialog-actions">
+            <button className="DELETEB" onClick={() => setOpenAdd(false)}>
+              Cancel
+            </button>
+            <button
+              className="CANCELB"
+              onClick={() => handleAddLocker()}
+              variant="contained"
+            >
+              Add Locker
+            </button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </div>
   )
 }
