@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:secure_x/data/repository/auth_repo.dart';
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/locker_logs_model.dart';
@@ -20,6 +21,7 @@ class AuthController extends GetxController {
   var isLoading = false.obs; // Observable for loading state
   var userModel = UserModel().obs; // Observable for user data
   var userToken = ''.obs; // Observable to store the token
+  var otpCode=''.obs;
 
   // Method to handle user login
   Future<void> login(String username, String password, BuildContext context) async {
@@ -57,7 +59,7 @@ class AuthController extends GetxController {
 
         CustomSnackBar.show(
           context: context, 
-          message: 'Login successful',
+          message: response.message,
           title: 'Success',
           isError: false,
         );
@@ -71,62 +73,85 @@ class AuthController extends GetxController {
         Get.offAll(() => Navigation());
       } else {
         print('Login failed: ${response.message}'); // Debug print
-        Get.snackbar('Error', response.message); // Show an error message
+        //Get.snackbar('Error', response.message); // Show an error message
+        CustomSnackBar.show(
+          context: context, 
+          message: response.message,
+          title: 'Error',
+          isError: true,
+        );
+
       }
     } catch (e) {
       print('An unexpected error occurred during login: $e'); // Debug print
       Get.snackbar('Error', 'An unexpected error occurred: $e'); // Show an error message
+      CustomSnackBar.show(
+          context: context, 
+          message: 'An unexpected error occurred: $e',
+          title: 'Error',
+          isError: true,
+        );
+
     } finally {
       isLoading.value = false; // Stop loading
     }
   }
 
   // Method to handle user registration
-  Future<ResponseModel<Map<String, dynamic>>> registration(CreateUserModel createUserModel) async {
+  Future<ResponseModel<Map<String, dynamic>>> registration(CreateUserModel createUserModel, BuildContext context) async {
+    isLoading.value=true;
     try {
       final Map<String, dynamic> registrationData = createUserModel.toJson();
 
-      final response = await dioClient.postData(
-        AppConstants.CREATE_USER_URI,
-        registrationData,
-      );
+      final ResponseModel<Map<String, dynamic>> response=await authRepo.registration(createUserModel);
 
-      print('Registration Response: ${response.statusCode} - ${response.data}');
+      if(response.isSuccess){
+        print('Registration successful : ${response.message}');
+      
+        CustomSnackBar.show(
+          context: context, 
+          message: response.message,
+          title: 'Registration successful',
+          isError: false,
+          icon: Icons.check_circle_outline,
+        );
 
-      switch (response.statusCode) {
-        case 200:
-          return ResponseModel<Map<String, dynamic>>(
-            isSuccess: true,
-            message: 'Registration successful',
-            data: response.data,
-          );
-        case 400:
-          return ResponseModel<Map<String, dynamic>>(
-            isSuccess: false,
-            message: 'Invalid input: ${response.data}',
-          );
-        case 409:
-          return ResponseModel<Map<String, dynamic>>(
-            isSuccess: false,
-            message: 'Registration conflict: ${response.data}',
-          );
-        case 403:
-          return ResponseModel<Map<String, dynamic>>(
-            isSuccess: false,
-            message: 'Access forbidden: ${response.data}',
-          );
-        default:
-          return ResponseModel<Map<String, dynamic>>(
-            isSuccess: false,
-            message: 'Unexpected error: ${response.statusCode}',
-          );
+        return ResponseModel<Map<String, dynamic>> (
+          isSuccess: true,
+          message: response.message,
+          data: response.data,
+        );
+      }else{
+        print('Registration Failed : ${response.message}');
+      
+        CustomSnackBar.show(
+          context: context, 
+          message: response.message,
+          title: 'Registration Failed',
+          isError: true,
+        );
+
+        return ResponseModel<Map<String, dynamic>> (
+          isSuccess: false,
+          message: response.message,
+        );
       }
-    } on DioException catch (dioError) {
-      print('Dio Error: ${dioError.response?.statusCode} - ${dioError.response?.data}');
-      return ResponseModel<Map<String, dynamic>>(
-        isSuccess: false,
-        message: 'Network Error: ${dioError.message}',
-      );
+    }catch(e){
+      print('An unexpected error occured during registration: $e');
+
+      CustomSnackBar.show(
+          context: context, 
+          message: 'An unexpected error occured : $e',
+          title: 'Error',
+          isError: true,
+        );
+
+        return ResponseModel<Map<String, dynamic>> (
+          isSuccess: false,
+          message:'An unexpected error occured : $e',
+        );
+    }finally{
+      isLoading.value=false;
     }
   }
 
@@ -142,6 +167,12 @@ class AuthController extends GetxController {
       if (token == null) {
         print('No valid token found or token expired. Please log in again.');
         Get.snackbar('Error', 'Session expired. Please log in again.');
+         /*CustomSnackBar.show(
+          context: context,
+          message: 'An unexpected error occurred: $e',
+          title: 'Error',
+          isError: true,
+        );*/
         return; // Token is null, do not continue with fetching user details.
       }
 
@@ -280,32 +311,112 @@ class AuthController extends GetxController {
     }finally{
       isLoading.value=false;
     }
- }
+  }
 
- //Method to unassign locker
- Future<void> unassignLocker() async {
-  isLoading.value=true;
-  try{
+  //Method to unassign locker
+  Future<void> unassignLocker() async {
+    isLoading.value=true;
+    try{
+        final String? token=await authRepo.getUserToken();
+        if(token==null){
+          throw Exception('User not authenticated');
+        }
+        dioClient.updateHeader(token);
+
+        final response= await dioClient.getData(AppConstants.UNASSIGN_LOCKER_URI);
+
+        if(response.statusCode==200){
+          print('Locker unassigned successfully: ${response.data}');
+          Get.snackbar('Success', 'Locker unassigned successfully');
+        }else{
+          throw Exception('Failed to unassign locker: ${response.statusCode}');
+        }
+    }catch(e){
+      print('Error unassigning locker: $e');
+      Get.snackbar('Error', 'Failed to unassign locker : $e');
+    }finally{
+      isLoading.value=false;
+    }
+
+  }
+
+  //Method to get OTP code
+  Future<void> getOTPCode(BuildContext context) async{
+    isLoading.value=true;
+
+    try{
       final String? token=await authRepo.getUserToken();
+
       if(token==null){
         throw Exception('User not authenticated');
       }
-      dioClient.updateHeader(token);
 
-      final response= await dioClient.getData(AppConstants.UNASSIGN_LOCKER_URI);
+      dioClient.updateHeader(token);
+      final response=await dioClient.getData(AppConstants.GET_OTP_CODE_URI);
 
       if(response.statusCode==200){
-        print('Locker unassigned successfully: ${response.data}');
-        Get.snackbar('Success', 'Locker unassigned successfully');
+        otpCode.value=response.data.toString();
+        CustomSnackBar.show(
+          context: context, 
+          message: 'Your OTP Code: ${otpCode.value}',
+          title: 'OTP Code',
+          icon: Icons.security,
+          isError: false,
+        );     
       }else{
-        throw Exception('Failed to unassign locker: ${response.statusCode}');
+        throw Exception('Failed to get OTP Code: ${response.statusCode}');
       }
-  }catch(e){
-    print('Error unassigning locker: $e');
-    Get.snackbar('Error', 'Failed to unassign locker : $e');
-  }finally{
-    isLoading.value=false;
+    }catch(e){
+      print('Error getting OTP Code: $e');
+      CustomSnackBar.show(
+        context: context, 
+        message: 'Failed to get OTP Code: $e',
+        title: 'Error',
+        isError: true,
+      );
+    }finally{
+      isLoading.value=false;
+    }
   }
 
- }
+  //Method to generate new OTP code
+  Future<void> generateNewOTPCode(BuildContext context) async{
+    isLoading.value=true;
+
+    try{
+      final String? token=await authRepo.getUserToken();
+
+      if(token==null){
+        throw Exception('User not authenticated');
+      }
+
+      dioClient.updateHeader(token);
+      final response=await dioClient.getData(AppConstants.GENERATE_NEW_OTP_CODE_URI);
+
+      if(response.statusCode==200){
+        otpCode.value=response.data.toString();
+        CustomSnackBar.show(
+          context: context, 
+          message: 'New OTP Code Generated: ${otpCode.value}',
+          title: 'New OTP Code',
+          icon: Icons.refresh,
+          isError: false,
+        );     
+      }else{
+        throw Exception('Failed to generate new OTP Code: ${response.statusCode}');
+      }
+    }catch(e){
+      print('Error generating new OTP Code: $e');
+      CustomSnackBar.show(
+        context: context, 
+        message: 'Failed to generate new OTP Code: $e',
+        title: 'Error',
+        isError: true,
+      );
+    }finally{
+      isLoading.value=false;
+    }
+  }
+
+
 }

@@ -164,6 +164,9 @@ public class UserController {
             lockerClusterDto.setTotalNumberOfLockers(lockerCluster.getTotalNumberOfLockers());
             lockerClusterDto.setAvailableNumberOfLockers(lockerCluster.getAvailableNumberOfLockers());
 
+            lockerClusterDto.setLatitude(lockerCluster.getLatitude());
+            lockerClusterDto.setLongitude(lockerCluster.getLongitude());
+
             return ResponseEntity.ok(lockerClusterDto);
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();

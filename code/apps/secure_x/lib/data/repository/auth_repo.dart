@@ -146,10 +146,22 @@ class AuthRepo {
         // Return a ResponseModel with the parsed data
         return ResponseModel<Map<String, dynamic>>(
           isSuccess: true,
-          message: 'Registration successful',
+          message: 'Registration successful. Your account is pending admin approval.',
           data: responseData,
         );
-      } else {
+      } else if(response.statusCode==409){
+        //conflict
+        return ResponseModel<Map<String, dynamic>>(
+          isSuccess: false,
+          message: 'User with this email or username already exists',
+        );
+      } else if (response.statusCode==400){
+        //bad request
+        return ResponseModel<Map<String, dynamic>>(
+          isSuccess: false,
+          message: 'Invalid registration data : ${response.data}',
+        );
+      }else {
         // Registration failed
         return ResponseModel<Map<String, dynamic>>(
           isSuccess: false,
@@ -414,6 +426,82 @@ class AuthRepo {
       return ResponseModel(
         isSuccess: false, 
         message: 'Error : $e',);
+    }
+  }
+
+  //Method to get OTP code
+  Future<ResponseModel<String>> getOtpCode() async{
+    try{
+      final String? token=sharedPreferences.getString(AppConstants.TOKEN);
+
+      if(token==null){
+        return ResponseModel<String>(
+          isSuccess:false,
+          message: 'User not authenticated' );
+      }
+
+      dioClient.updateHeader(token);
+      final response = await dioClient.getData(AppConstants.GET_OTP_CODE_URI);
+
+      print('Received OTP code response: ${response.statusCode}- ${response.data}');
+
+      if(response.statusCode==200){
+        return ResponseModel<String>(
+          isSuccess: true,
+          message: 'OTP code fetched successfully',
+          data: response.data.toString(),
+        );
+      }else{
+        return ResponseModel<String>(
+          isSuccess: false, 
+          message: 'Failed to fetch OTP code: ${response.data}',
+        );
+      }
+    }catch(e){
+      print('Error fetching OTP code: $e');
+      return ResponseModel<String>(
+        isSuccess: false,
+        message: 'Network error: $e',
+      );
+    }
+  }
+
+  //Method to generate new OTP code
+  Future<ResponseModel<String>> generateNewOtpCode() async{
+    try{
+      final String? token=sharedPreferences.getString(AppConstants.TOKEN);
+
+      if(token==null){
+        return ResponseModel<String>(
+          isSuccess: false,
+          message: 'User not authenticated',
+        );
+      }
+
+      dioClient.updateHeader(token);
+
+      final response=await dioClient.getData(AppConstants.GENERATE_NEW_OTP_CODE_URI);
+
+      print('Received new OTP code response: ${response.statusCode}- $response.data');
+
+      if(response.statusCode==200){
+        return ResponseModel<String>(
+          isSuccess: true,
+          message: 'OTP code retrieved successfully',
+          data: response.data.toString(),
+        );
+      }else{
+        return ResponseModel<String>(
+          isSuccess:false,
+          message: 'Failed to get OTP code : ${response.data}',
+        );
+      }
+    }catch(e){
+      print('Error generating new OTP code: $e');
+      return ResponseModel(
+        isSuccess: false, 
+        message: 'Network error: $e',
+      );
     }
   }
 
