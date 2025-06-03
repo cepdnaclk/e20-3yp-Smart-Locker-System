@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   getLockerClusterData,
   updateLockerCluster,
@@ -22,6 +22,10 @@ import {
   // Select,
   // MenuItem,
 } from "@mui/material";
+import {
+  Locationpick,
+  Locationpickwithcurrentval,
+} from "../../LocationPicker/Locationpick.js";
 const Lcluster = () => {
   const [clusters, setClusters] = useState([]);
   const [openAdd, setOpenAdd] = useState(false);
@@ -29,6 +33,7 @@ const Lcluster = () => {
   const [openDelet, setOpenDelet] = useState(false);
   const [selectedCluster, setSelectedCluster] = useState(null);
   const [newCluster, setNewCluster] = useState({});
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   // Fetch locker users
   const handleLockerCluster = async () => {
@@ -65,6 +70,16 @@ const Lcluster = () => {
     setNewCluster({ ...newCluster, [name]: value });
   };
 
+  const handleLocationChange = useCallback((coords) => {
+    setSelectedLocation(coords);
+    console.log("Selected location:", coords);
+    setNewCluster((prev) => ({
+      ...prev,
+      latitude: coords.lat,
+      longitude: coords.lng,
+    }));
+  }, []);
+
   // Edit dialog and data handaling
   const handleEditClick = (cluster) => {
     setSelectedCluster(cluster);
@@ -74,6 +89,15 @@ const Lcluster = () => {
     const { name, value } = e.target;
     setSelectedCluster({ ...selectedCluster, [name]: value });
   };
+  const handleEditLocationChange = useCallback((coords) => {
+    setSelectedLocation(coords);
+    console.log("Selected location:", coords);
+    setSelectedCluster((prev) => ({
+      ...prev,
+      latitude: coords.lat,
+      longitude: coords.lng,
+    }));
+  }, []);
 
   const handleEditSave = async () => {
     try {
@@ -135,6 +159,7 @@ const Lcluster = () => {
             <th>Avalable locker count</th>
             <th>Name</th>
             <th>Info.</th>
+            <th>Location</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -146,6 +171,9 @@ const Lcluster = () => {
               <td>{cluster.availableNumberOfLockers}</td>
               <td>{cluster.clusterName}</td>
               <td>{cluster.lockerClusterDescription}</td>
+              <td>
+                {cluster.latitude},{cluster.longitude}
+              </td>
               <td className="ActionF" arrow>
                 <Tooltip
                   title="Edit"
@@ -229,6 +257,7 @@ const Lcluster = () => {
               className="no-border"
               onChange={handleAddChange}
             />
+            <Locationpick onChange={handleLocationChange} />
           </DialogContent>
           <DialogActions className="dialog-actions">
             <button className="DELETEB" onClick={() => setOpenAdd(false)}>
@@ -293,6 +322,13 @@ const Lcluster = () => {
               className="no-border"
               value={selectedCluster?.lockerClusterDescription || ""}
               onChange={handleEditChange}
+            />
+            <Locationpickwithcurrentval
+              value={{
+                lat: selectedCluster?.latitude,
+                lng: selectedCluster?.longitude,
+              }}
+              onChange={handleEditLocationChange}
             />
           </DialogContent>
 
