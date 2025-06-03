@@ -15,4 +15,6 @@ class AppConstants {
   static const String EDIT_PROFILE_URI='/api/v1/user/editProfile';
   static const String ACCESS_LOCKER_URI='/api/v1/user/accessLocker';
   static const String UNASSIGN_LOCKER_URI='/api/v1/user/unassign';
+  static const String GET_OTP_CODE_URI='/api/v1/user/getOtpCode';
+  static const String GENERATE_NEW_OTP_CODE_URI='/api/v1/user/generateNewOtpCode';
 }
