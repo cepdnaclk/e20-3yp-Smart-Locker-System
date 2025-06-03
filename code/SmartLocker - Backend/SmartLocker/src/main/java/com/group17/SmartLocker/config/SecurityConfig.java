@@ -32,7 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults()) //This enables Spring Security to allow CORS
+//                .cors(Customizer.withDefaults()) //This enables Spring Security to allow CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/login", "/api/v1/newUsers/register", "/publish", "/subscribe" ,"/latest").permitAll()
 

@@ -13,7 +13,7 @@ public interface ILockerClusterService {
 
     List<LockerClusterDto> getAllLockerClusters();
 
-    LockerCluster updateLockerCluster(Long lockerClusterId, LockerClusterDto lockerCluster);
+    LockerClusterDto updateLockerCluster(Long lockerClusterId, LockerClusterDto lockerCluster);
 
     void deleteLockerClusterById(Long lockerClusterId);
 }
