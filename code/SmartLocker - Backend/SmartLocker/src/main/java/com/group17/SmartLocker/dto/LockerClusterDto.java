@@ -10,4 +10,7 @@ public class LockerClusterDto {
     private String lockerClusterDescription;
     private int totalNumberOfLockers;
     private int availableNumberOfLockers;
+
+    private double latitude;
+    private double longitude;
 }
