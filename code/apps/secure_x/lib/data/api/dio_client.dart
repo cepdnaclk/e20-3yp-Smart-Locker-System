@@ -18,7 +18,7 @@ class DioClient {
   }
 
   // Method to handle POST requests
-  Future<Response> postData(String uri, dynamic body) async {
+  Future<Response> postData(String uri, dynamic body, {bool requireAuth=false}) async {
     try {
       print('Sending POST request to: $uri'); // Debug print
       print('Request headers: ${_dio.options.headers}'); // Debug print

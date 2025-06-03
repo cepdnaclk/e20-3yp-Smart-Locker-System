@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/response_model.dart';
-import 'package:secure_x/pages/log_in.dart';
 import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
@@ -163,21 +162,60 @@ class _CreateUserState extends State<CreateUser> {
         //CustomSnackBar(response.message, iserror: false, title: 'Success');
         CustomSnackBar.show(
           context: context,
-          message:response.message,
-          title: 'Success',
+          message: 'Checking for admin approval...',
+          //title: '',
           isError: false,
-          icon: Icons.check_circle_outline,);
+          icon: Icons.hourglass_top,);
+
+          bool isApproved=false;
+          int attempts=0;
+          const int maxAttempts=12;
+
+          while(!isApproved && attempts<maxAttempts){
+            await Future.delayed(const Duration(seconds: 5));
+
+            isApproved=await _authController.checkApprovalStatus(email,password);
+
+            attempts++;
+          }
+
+          if(isApproved){
+            await _authController.getOTPCode(context);
+
+            showDialog(
+              context: context, 
+              builder: (context)=>AlertDialog(
+                title: const Text('Approved'),
+                content: Text('Your OTP Code is : ${_authController.otpCode.value}'),
+                actions: [
+                  TextButton(
+                    onPressed: ()=>Navigator.pop(context),
+                    child: const Text('OK'),
+                  )
+                ],
+              ),
+            );
+          }
         Get.offAllNamed('/login'); // Navigate to the login screen after successful registration
       } else {
         CustomSnackBar.show(
           context: context,
-          message: response.message,
+          message: 'Admin approval pending. Try again later.',
           title: 'Warning',
           isError: true,
-          icon: Icons.warning_amber_rounded,
-          textColor: Colors.white,);
+          icon: Icons.lock_clock,
+          textColor: Colors.white,
+        );
       }
-    }
+      }else{
+        CustomSnackBar.show(
+          context: context, 
+          message: 'Admin approval failed',
+          title: 'Registration Failed',
+          isError: true,
+          icon: Icons.warning_amber_rounded,
+        );
+      }
   }
 
   @override
@@ -322,7 +360,7 @@ class _CreateUserState extends State<CreateUser> {
                         SizedBox(height: 24.h),
                         ElevatedButton(
                           onPressed: (){
-                            _registration;
+                            _registration();
                             /*Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => LogIn(),));*/
