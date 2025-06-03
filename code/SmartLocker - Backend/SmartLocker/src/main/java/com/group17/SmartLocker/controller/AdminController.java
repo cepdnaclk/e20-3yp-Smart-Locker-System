@@ -244,9 +244,9 @@ public class AdminController {
     }
 
     @PutMapping("/updateLockerCluster/{clusterId}")
-    public ResponseEntity<LockerCluster> updateLockerDetails(@PathVariable Long clusterId, @RequestBody LockerClusterDto lockerClusterDto){
+    public ResponseEntity<LockerClusterDto> updateLockerDetails(@PathVariable Long clusterId, @RequestBody LockerClusterDto lockerClusterDto){
         try {
-            LockerCluster newLockerCluster = lockerClusterService.updateLockerCluster(clusterId, lockerClusterDto);
+            LockerClusterDto newLockerCluster = lockerClusterService.updateLockerCluster(clusterId, lockerClusterDto);
             return ResponseEntity.ok(newLockerCluster);
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
