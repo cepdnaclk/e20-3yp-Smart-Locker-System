@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:secure_x/utils/appcolors.dart';
 
 class CustomSnackBar {
   static void show({
@@ -49,7 +50,7 @@ class CustomSnackBar {
         ],
       ),
       backgroundColor: backgroundColor ??
-        (isError ? Colors.red.shade700 : Colors.green.shade700),
+        (isError ? AppColors.textPrimary : AppColors.textSecondary),
       duration: duration,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(

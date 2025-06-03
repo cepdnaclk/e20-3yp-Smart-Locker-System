@@ -157,7 +157,7 @@ class _CreateUserState extends State<CreateUser> {
       );
 
       // Call the registration method in AuthController
-      final ResponseModel response = await _authController.registration(createUserModel);
+      final ResponseModel response = await _authController.registration(createUserModel,context);
 
       if (response.isSuccess) {
         //CustomSnackBar(response.message, iserror: false, title: 'Success');
@@ -166,8 +166,7 @@ class _CreateUserState extends State<CreateUser> {
           message:response.message,
           title: 'Success',
           isError: false,
-          icon: Icons.check_circle_outline,
-          backgroundColor: Colors.green.shade600);
+          icon: Icons.check_circle_outline,);
         Get.offAllNamed('/login'); // Navigate to the login screen after successful registration
       } else {
         CustomSnackBar.show(
@@ -176,7 +175,6 @@ class _CreateUserState extends State<CreateUser> {
           title: 'Warning',
           isError: true,
           icon: Icons.warning_amber_rounded,
-          backgroundColor: Colors.orange.shade700,
           textColor: Colors.white,);
       }
     }
@@ -325,9 +323,9 @@ class _CreateUserState extends State<CreateUser> {
                         ElevatedButton(
                           onPressed: (){
                             _registration;
-                            Navigator.push(
+                            /*Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LogIn(),));
+                          MaterialPageRoute(builder: (context) => LogIn(),));*/
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.buttonBackgroundColor2,
