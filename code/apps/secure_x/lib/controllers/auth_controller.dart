@@ -101,6 +101,8 @@ class AuthController extends GetxController {
   Future<ResponseModel<Map<String, dynamic>>> registration(CreateUserModel createUserModel, BuildContext context) async {
     isLoading.value=true;
     try {
+      print('Registration data: ${createUserModel.toJson()}');
+
       final Map<String, dynamic> registrationData = createUserModel.toJson();
 
       final ResponseModel<Map<String, dynamic>> response=await authRepo.registration(createUserModel);
@@ -416,6 +418,11 @@ class AuthController extends GetxController {
     }finally{
       isLoading.value=false;
     }
+  }
+
+  //Method to check user approval
+  Future<bool> checkApprovalStatus(String email,String password) async{
+    return await authRepo.checkApprovalStatus(email, password);
   }
 
 
