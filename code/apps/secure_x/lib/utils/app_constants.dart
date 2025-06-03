@@ -1,8 +1,8 @@
 class AppConstants {
   static const String APP_NAME='Securex';
 
-  //static const String BASE_URL='http://192.168.8.185:8080';
-  static const String BASE_URL='http://10.0.2.2:9191';
+  //static const String BASE_URL='http://192.168.8.185:9090';
+  static const String BASE_URL='http://10.0.2.2:9090';
   //static const String BASE_URL='http://localhost:8080';
 
   static const String TOKEN = "token";
@@ -12,5 +12,7 @@ class AppConstants {
   static const String USER_INFO_URI='/api/v1/user/profile';
   static const String UNLOCK_LOCKER_URI='/api/v1/user/unlockLocker';
   static const String LOCKER_LOGS_URI='/api/v1/user/lockerLogs';
-  static const String EDIT_PROFILE_URI='/api/v1/user//editProfile';
+  static const String EDIT_PROFILE_URI='/api/v1/user/editProfile';
+  static const String ACCESS_LOCKER_URI='/api/v1/user/accessLocker';
+  static const String UNASSIGN_LOCKER_URI='/api/v1/user/unassign';
 }

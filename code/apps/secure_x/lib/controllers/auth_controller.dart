@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/data/repository/auth_repo.dart';
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/locker_logs_model.dart';
 import 'package:secure_x/models/response_model.dart';
 import 'package:secure_x/models/user_model.dart';
-import 'package:secure_x/pages/login_success.dart';
 import 'package:secure_x/pages/navigation.dart';
 import 'package:secure_x/utils/app_constants.dart';
 import 'package:secure_x/data/api/dio_client.dart';
@@ -22,7 +22,7 @@ class AuthController extends GetxController {
   var userToken = ''.obs; // Observable to store the token
 
   // Method to handle user login
-  Future<void> login(String username, String password) async {
+  Future<void> login(String username, String password, BuildContext context) async {
     isLoading.value = true; // Start loading
     print('User entered username: $username'); // Debug print
     print('User entered password: $password'); // Debug print
@@ -40,7 +40,29 @@ class AuthController extends GetxController {
         print('Login successful: ${response.message}'); // Debug print
         print('Token: $token'); // Debug print
         //Get.snackbar('Success', response.message); // Show a success message
-        CustomSnackBar(response.message, iserror: false, title: 'Login successful', duration: Duration(seconds: 4));
+        //CustomSnackBar(response.message, iserror: false, title: 'Login successful', duration: Duration(seconds: 4));
+        /*CustomSnackBar.show(
+          message: 'Login successful', 
+          title: 'Success', 
+          isError: false,
+          icon: Icons.check_circle_outline,
+          backgroundColor: Colors.green.shade600);*/
+
+        /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Login successful'),
+          backgroundColor: Colors.green.shade600,
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ));*/
+
+        CustomSnackBar.show(
+          context: context, 
+          message: 'Login successful',
+          title: 'Success',
+          isError: false,
+        );
+
+        await Future.delayed(Duration(milliseconds: 1500));
         
         // Fetch the signed-in user's details
         await getSignedInUser();
@@ -158,37 +180,36 @@ class AuthController extends GetxController {
   }
 
   // Method to unlock the locker
-  // Method to unlock the locker
-Future<ResponseModel> unlockLocker(String token, int clusterId) async {
-  isLoading.value = true; // Start loading
-  try {
-    print('Sending unlock request to backend for cluster $clusterId...');
+  /*Future<ResponseModel> unlockLocker(String token, int clusterId) async {
+    isLoading.value = true; // Start loading
+    try {
+      print('Sending unlock request to backend for cluster $clusterId...');
 
-    final response = await authRepo.unlockLocker(token, clusterId);
+      final response = await authRepo.unlockLocker(token, clusterId);
 
-    print('API Response: ${response.message}');
+      print('API Response: ${response.message}');
 
-    if (response.isSuccess) {
-      return ResponseModel(
-        isSuccess: true,
-        message: 'Locker unlocked successfully',
-      );
-    } else {
+      if (response.isSuccess) {
+        return ResponseModel(
+          isSuccess: true,
+          message: 'Locker unlocked successfully',
+        );
+      } else {
+        return ResponseModel(
+          isSuccess: false,
+          message: 'Failed to unlock locker: ${response.message}',
+        );
+      }
+    } catch (e) {
+      print('Unexpected error during unlock: $e');
       return ResponseModel(
         isSuccess: false,
-        message: 'Failed to unlock locker: ${response.message}',
+        message: 'An unexpected error occurred: $e',
       );
+    } finally {
+      isLoading.value = false; // Stop loading
     }
-  } catch (e) {
-    print('Unexpected error during unlock: $e');
-    return ResponseModel(
-      isSuccess: false,
-      message: 'An unexpected error occurred: $e',
-    );
-  } finally {
-    isLoading.value = false; // Stop loading
-  }
-}
+  }*/
 
   //method to get the user logs
   Future<List<LockerLogsModel>> getUserLogs() async{
@@ -236,4 +257,55 @@ Future<ResponseModel> unlockLocker(String token, int clusterId) async {
       isLoading.value=false;
     }
   }
+
+  //Method to access the assigned locker
+  Future<void> accessLocker() async{
+    isLoading.value=true;
+    try{
+      final String? token=await authRepo.getUserToken();
+      if(token==null){
+        throw Exception('User not authenticated');
+      }
+      dioClient.updateHeader(token);
+      final response= await dioClient.getData(AppConstants.ACCESS_LOCKER_URI);
+      if(response.statusCode==200){
+        print('Locker access successful : ${response.data}');
+        Get.snackbar('Success','Locker Accessed Successfully');
+      }else{
+        throw Exception('Failed to access locker: ${response.statusCode}');
+      }
+    }catch(e){
+      print('Error accessing locker : $e');
+      Get.snackbar('Error', 'Failed to access locker : $e');
+    }finally{
+      isLoading.value=false;
+    }
+ }
+
+ //Method to unassign locker
+ Future<void> unassignLocker() async {
+  isLoading.value=true;
+  try{
+      final String? token=await authRepo.getUserToken();
+      if(token==null){
+        throw Exception('User not authenticated');
+      }
+      dioClient.updateHeader(token);
+
+      final response= await dioClient.getData(AppConstants.UNASSIGN_LOCKER_URI);
+
+      if(response.statusCode==200){
+        print('Locker unassigned successfully: ${response.data}');
+        Get.snackbar('Success', 'Locker unassigned successfully');
+      }else{
+        throw Exception('Failed to unassign locker: ${response.statusCode}');
+      }
+  }catch(e){
+    print('Error unassigning locker: $e');
+    Get.snackbar('Error', 'Failed to unassign locker : $e');
+  }finally{
+    isLoading.value=false;
+  }
+
+ }
 }

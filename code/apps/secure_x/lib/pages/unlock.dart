@@ -1,73 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
-import 'package:secure_x/pages/login_success.dart';
+import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
-import 'package:secure_x/utils/custom_snackbar.dart';
 
 class Unlock extends StatelessWidget {
-  const Unlock({super.key});
+  
+  Unlock({super.key});
 
-  // Method to handle unlocking the locker
-  void _unlockLocker(BuildContext context) async {
-    final AuthController authController = Get.find<AuthController>();
-    final String? token = await authController.getUserToken();
+  final AuthController authController=Get.find<AuthController>();
+  void _accessLocker(BuildContext context){
+    authController.accessLocker();
+  }
 
-    print('Token: $token');
-
-    if (token == null) {
-      print('Error: User not authenticated');
-      CustomSnackBar('User not authenticated', iserror: true);
-      return;
-    }
-
-    // 🔒 Hardcoded cluster ID
-    const int clusterId = 1;
-
-    try {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(child: CircularProgressIndicator()),
-      );
-
-      print('Sending unlock request...');
-
-      final response = await authController.unlockLocker(token, clusterId);
-
-      Navigator.of(context).pop();
-
-      if (response.isSuccess) {
-        print('Locker unlocked successfully');
-        CustomSnackBar(response.message, iserror: false, title: 'Success');
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginSuccess()),
-        );
-      } else {
-        print('Failed to unlock locker: ${response.message}');
-        CustomSnackBar(response.message, iserror: true);
-      }
-    } catch (e) {
-      Navigator.of(context).pop();
-      print('Unexpected error: $e');
-      CustomSnackBar('An unexpected error occurred: $e', iserror: true);
-    }
+  void _unassignLocker(BuildContext context){
+    authController.unassignLocker();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppColors.mainColor,
       appBar: const CustomAppBar(),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Center(
             child: Container(
-              width: 800,
-              height: 350,
+              width: 800.w,
+              height: 350.h,
               alignment: Alignment.center,
               child: ClipRect(
                 child: Align(
@@ -81,45 +43,76 @@ class Unlock extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 10),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.black,
-              backgroundColor: Colors.white,
-              shape: const CircleBorder(
-                side: BorderSide(color: Colors.black, width: 3.0),
-              ),
-              padding: const EdgeInsets.all(60),
-            ),
-            onPressed: () => _unlockLocker(context),
-            child: const Text('Unlock', style: TextStyle(fontSize: 22)),
-          ),
-          const SizedBox(height: 30),
+          SizedBox(height: 10.h),
           Container(
-            padding: const EdgeInsets.all(20),
-            margin: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.all(20.h),
+            margin: EdgeInsets.symmetric(horizontal: 10.h),
             decoration: BoxDecoration(
               color: Colors.grey[300],
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              borderRadius: BorderRadius.all(Radius.circular(30.r)),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Location : xxxxxxxx ',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20.sp, 
+                    fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Access Time : xx:xx:xx ',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  'Recent Access Time : xx:xx:xx ',
+                  style: TextStyle(
+                    fontSize: 20.sp, 
+                    fontWeight: FontWeight.bold),
                 ),
                 Text(
                   'Locker No : xxx ',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20.sp, 
+                    fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
+          SizedBox(height: 60.h,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:[
+              ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 6.h,
+                foregroundColor: AppColors.buttonBackgroundColor1,
+                backgroundColor: AppColors.buttonBackgroundColor2,
+                shape: CircleBorder(
+                  side: BorderSide(color: Colors.black, width: 2.w),
+                ),
+                padding: EdgeInsets.all(40.h),
+              ),
+              onPressed: () => _accessLocker(context),
+              child: Text('Access', 
+              style: TextStyle(
+                fontSize: 22.sp)),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 6.h,
+                foregroundColor: AppColors.buttonBackgroundColor1,
+                backgroundColor: AppColors.iconColor,
+                shape: CircleBorder(
+                  side: BorderSide(color: AppColors.iconColor, width: 2.w),
+                ),
+                padding: EdgeInsets.all(40.h),
+              ),
+              onPressed: () => _unassignLocker(context),
+              child: Text('Unassign', 
+              style: TextStyle(
+                fontSize: 22.sp)),
+            ),
+            ] 
+          ),
+          SizedBox(height: 30.h),
+          
         ],
       ),
     );

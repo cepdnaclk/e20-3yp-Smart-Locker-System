@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secure_x/pages/find.dart';
 import 'package:secure_x/pages/login_success.dart';
-import 'package:secure_x/pages/sign_in.dart';
 import 'package:secure_x/pages/user.dart';
 import 'package:secure_x/utils/appcolors.dart';
 

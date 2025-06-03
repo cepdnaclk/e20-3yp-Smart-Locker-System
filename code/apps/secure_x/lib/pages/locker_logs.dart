@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/models/locker_logs_model.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
@@ -31,7 +31,7 @@ class LockerLogs extends StatelessWidget {
               itemBuilder: (context, index) {
                 final log = logs[index];
                 return Card(
-                  margin: const EdgeInsets.all(8),
+                  margin: EdgeInsets.all(8.h),
                   child: ListTile(
                     leading: const Icon(Icons.lock),
                     title: Text('Status: ${log.status}'),
