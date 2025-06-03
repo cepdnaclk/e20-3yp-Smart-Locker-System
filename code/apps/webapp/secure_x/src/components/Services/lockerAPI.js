@@ -86,3 +86,43 @@ export const addLockerTOLockerCluster = async (id) => {
     },
   });
 };
+
+export const deleteLocker = async (id) => {
+  if (!localStorage.getItem("token")) {
+    console.error("JWT Token is missing! Check localStorage.sesion expire ");
+    <Link to="/home"></Link>;
+    return;
+  }
+  return await api.delete(`/deleteLocker/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
+    },
+  });
+};
+
+export const updateLockers = async (id, data) => {
+  if (!localStorage.getItem("token")) {
+    console.error("JWT Token is missing! Check localStorage.sesion expire ");
+    <Link to="/home"></Link>;
+    return;
+  }
+  return await api.put(`/updateLockerDetails/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
+      //"Content-Type": "application/json"
+    },
+  });
+};
+
+export const unlockeLocker = async (id) => {
+  if (!localStorage.getItem("token")) {
+    console.error("JWT Token is missing! Check localStorage.sesion expire ");
+    <Link to="/home"></Link>;
+    return;
+  }
+  return await api.delete(`/unlockLocker/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
+    },
+  });
+};
