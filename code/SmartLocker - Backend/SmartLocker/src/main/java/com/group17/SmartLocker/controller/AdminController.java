@@ -8,6 +8,8 @@ import com.group17.SmartLocker.model.Locker;
 import com.group17.SmartLocker.model.LockerCluster;
 import com.group17.SmartLocker.model.NewUser;
 import com.group17.SmartLocker.model.User;
+import com.group17.SmartLocker.repsponse.ApiResponse;
+import com.group17.SmartLocker.service.email.EmailService;
 import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.lockerCluster.LockerClusterService;
 import com.group17.SmartLocker.service.newUser.NewUserService;
@@ -34,6 +36,7 @@ public class AdminController {
     private final UserService userService;
     private final LockerService lockerService;
     private final LockerClusterService lockerClusterService;
+    private final EmailService emailService;
 
     // api endpoints to manage new users
 
@@ -129,9 +132,9 @@ public class AdminController {
 
     // get all lockers in the system
     @GetMapping("/getAllLockers")
-    public ResponseEntity<List<Locker>> getAllLockers(){
+    public ResponseEntity<List<LockerDto>> getAllLockers(){
         try {
-            List<Locker> lockers = lockerService.getAllLockers();
+            List<LockerDto> lockers = lockerService.getAllLockers();
             return ResponseEntity.ok(lockers);
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
@@ -140,9 +143,9 @@ public class AdminController {
 
     // get all the lockers in a specific cluster
     @GetMapping("/getLockerByCluster/{clusterId}")
-    public ResponseEntity<List<Locker>> getAllLockersByCluster(@PathVariable Long clusterId){
+    public ResponseEntity<List<LockerDto>> getAllLockersByCluster(@PathVariable Long clusterId){
         try {
-            List<Locker> lockers = lockerService.getAllLockersByCluster(clusterId);
+            List<LockerDto> lockers = lockerService.getAllLockersByCluster(clusterId);
             return ResponseEntity.ok(lockers);
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
@@ -184,7 +187,7 @@ public class AdminController {
 
     // update locker
     @PutMapping("/updateLockerDetails/{lockerId}")
-    public ResponseEntity<Locker> updateLockerDetails(@PathVariable Long lockerId, @RequestBody LockerDto locker){
+    public ResponseEntity<Locker> updateLockerDetails(@PathVariable Long lockerId, @RequestBody Locker locker){
         try {
             Locker newLocker = lockerService.updateLockerDetails(lockerId, locker);
             return ResponseEntity.ok(newLocker);
@@ -208,7 +211,7 @@ public class AdminController {
 
     // add a new locker cluster.
     // when adding a new locker cluster it should be displayed in the map also
-    @PostMapping("/addLockerCluster/{clusterId}")
+    @PostMapping("/addLockerCluster")
     public ResponseEntity<LockerCluster> addLockerCluster(@RequestBody LockerClusterDto lockerClusterDto){
         try {
             LockerCluster lockerCluster = lockerClusterService.addLockerCluster(lockerClusterDto);
@@ -231,9 +234,9 @@ public class AdminController {
 
     // find all locker clusters
     @GetMapping("/getAllLockerClusters")
-    public ResponseEntity<List<LockerCluster>> getAllLockerClusters(){
+    public ResponseEntity<List<LockerClusterDto>> getAllLockerClusters(){
         try {
-            List<LockerCluster> lockerClusters = lockerClusterService.getAllLockerClusters();
+            List<LockerClusterDto> lockerClusters = lockerClusterService.getAllLockerClusters();
             return ResponseEntity.ok(lockerClusters);
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
@@ -241,9 +244,9 @@ public class AdminController {
     }
 
     @PutMapping("/updateLockerCluster/{clusterId}")
-    public ResponseEntity<LockerCluster> updateLockerDetails(@PathVariable Long clusterId, @RequestBody LockerClusterDto lockerClusterDto){
+    public ResponseEntity<LockerClusterDto> updateLockerDetails(@PathVariable Long clusterId, @RequestBody LockerClusterDto lockerClusterDto){
         try {
-            LockerCluster newLockerCluster = lockerClusterService.updateLockerCluster(clusterId, lockerClusterDto);
+            LockerClusterDto newLockerCluster = lockerClusterService.updateLockerCluster(clusterId, lockerClusterDto);
             return ResponseEntity.ok(newLockerCluster);
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
@@ -262,4 +265,18 @@ public class AdminController {
     }
 
 
+
+//    // send and email for a test
+//    @PostMapping("/sendEmail")
+//    public ResponseEntity<HttpStatus> sendEmail(@RequestBody String email){
+//        try {
+//            System.out.println(email);
+//            emailService.sendSimpleEmail(email, "Welcome to SmartLocker", "Your locker access has been registered successfully.");
+//            System.out.println("Email sent successfully");
+//            return ResponseEntity.status(OK).build();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
 }

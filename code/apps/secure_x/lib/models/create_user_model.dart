@@ -18,10 +18,10 @@ class CreateUserModel {
   Map<String, dynamic> toJson() {
     return {
       'email': email,
-      'first_name': firstName,
-      'last_name': lastName,
-      'reg_no': regNo,
-      'contact_number': phoneNo,
+      'firstName': firstName,
+      'lastName': lastName,
+      'regNo': regNo,
+      'contactNumber': phoneNo,
       'password': password,
     };
   }

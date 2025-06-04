@@ -11,9 +11,9 @@ public interface ILockerClusterService {
 
     LockerCluster getLockerClusterById(Long clusterId);
 
-    List<LockerCluster> getAllLockerClusters();
+    List<LockerClusterDto> getAllLockerClusters();
 
-    LockerCluster updateLockerCluster(Long lockerClusterId, LockerClusterDto lockerCluster);
+    LockerClusterDto updateLockerCluster(Long lockerClusterId, LockerClusterDto lockerCluster);
 
     void deleteLockerClusterById(Long lockerClusterId);
 }

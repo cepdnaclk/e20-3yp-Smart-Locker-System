@@ -1,0 +1,57 @@
+
+.WindowPU{
+   display: flex;
+    height: 20%;
+    color: #000000;
+    padding-top: 10px;
+}
+
+.WindowPU_t{
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2);
+    border-color: #000000;
+    border-width: 20px;
+    width: 98%;
+    /* text-align: center; */
+    font-size: 130%;
+    height: 20%;
+
+}
+
+.dialogbox .MuiDialog-paper {
+  background-color: #fff transparent; /* White background */
+  color: #000; /* Black text */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  min-width: 400px;
+  gap: 10px;
+  
+}
+
+.PendingDialog .MuiDialog-paper{
+  min-width: 400px;
+}
+
+
+.dialog-content {
+  padding-top: 10px;
+  display: flex;
+  flex-direction:column;
+  gap: 16px;
+
+  
+}
+
+.dialog-actions {
+  align-items:end ;
+  padding: 8px 10px;
+
+}
+
+.DTital{
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: 700;
+}

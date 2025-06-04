@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/routes/route_helper.dart';
-import 'package:secure_x/utils/colors.dart';
+import 'package:secure_x/utils/appcolors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,7 +16,8 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 2),()=>
-      Get.offNamed(RouteHelper.getInitial()),
+      //Get.offNamed(RouteHelper.getInitial()),
+      Get.offNamed(RouteHelper.getSignin()),
     );
   }
 

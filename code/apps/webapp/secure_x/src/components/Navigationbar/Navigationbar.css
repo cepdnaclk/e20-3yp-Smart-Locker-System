@@ -28,6 +28,8 @@
 
 .nav-links li {
   width: auto;
+  align-items: center;
+  
 }
 
 .nav-links a {
@@ -49,3 +51,4 @@
   margin-left: 270px; /* Adjust based on navbar width */
   padding: 20px;
 }
+

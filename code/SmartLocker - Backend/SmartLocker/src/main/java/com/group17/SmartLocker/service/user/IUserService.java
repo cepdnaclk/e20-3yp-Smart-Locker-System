@@ -1,6 +1,8 @@
 package com.group17.SmartLocker.service.user;
 
+import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
+import com.group17.SmartLocker.model.LockerLog;
 import com.group17.SmartLocker.model.User;
 
 import java.util.List;
@@ -20,4 +22,15 @@ public interface IUserService {
     void deleteUser(String id);
 
     String getUserIdByUsername(String username);
+
+    // this method is to send the otp code via mqtt publish to the topic
+    void sendOtpCode(String message);
+
+    String generateOtpCode(String username);
+
+    String generateOtpCodeManually(String username);
+
+    String getOtpCode(String username);
+
+    List<LockerLogDto> getLockerLogs(String s);
 }

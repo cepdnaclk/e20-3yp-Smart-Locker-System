@@ -6,11 +6,19 @@ import com.group17.SmartLocker.model.Locker;
 import java.util.List;
 
 public interface ILockerService {
-    String unlockLocker(String username, Long clusterId);
+//    String unlockLocker(String username, Long clusterId);
 
-    List<Locker> getAllLockers();
+    void unlockByAdmin(Long clusterId, Long lockerId);
 
-    List<Locker> getAllLockersByCluster(Long clusterId);
+    void assignLocker(String username, Long clusterId);
+
+    String accessLocker(String username, String source);
+
+    String unassignLocker(String username, String source);
+
+    List<LockerDto> getAllLockers();
+
+    List<LockerDto> getAllLockersByCluster(Long clusterId);
 
     List<Locker> getAvailableLockersByCluster(Long clusterId);
 
@@ -18,7 +26,7 @@ public interface ILockerService {
 
     Locker addLockerToCluster(Long clusterId);
 
-    Locker updateLockerDetails(Long lockerId, LockerDto locker);
+    Locker updateLockerDetails(Long lockerId, Locker locker);
 
     void deleterLocker(Long lockerId);
 

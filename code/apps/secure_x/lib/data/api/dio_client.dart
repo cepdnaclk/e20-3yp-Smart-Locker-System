@@ -18,7 +18,7 @@ class DioClient {
   }
 
   // Method to handle POST requests
-  Future<Response> postData(String uri, dynamic body) async {
+  Future<Response> postData(String uri, dynamic body, {bool requireAuth=false}) async {
     try {
       print('Sending POST request to: $uri'); // Debug print
       print('Request headers: ${_dio.options.headers}'); // Debug print
@@ -48,6 +48,24 @@ class DioClient {
       return response;
     } catch (e) {
       print('Error during GET request: $e'); // Debug print
+      rethrow;
+    }
+  }
+
+  //Method to handle PUT requests
+  Future<Response> putData(String uri,dynamic body) async{
+    try{
+      print('Sending PUT request to: $uri'); // Debug print
+      print('Request headers: ${_dio.options.headers}'); // Debug print
+      print('Request body: $body'); // Debug print
+
+      final response = await _dio.put(uri, data: body);
+
+      print('Received response: ${response.statusCode} - ${response.data}'); // Debug print
+
+      return response;
+    } catch (e) {
+      print('Error during PUT request: $e'); // Debug print
       rethrow;
     }
   }

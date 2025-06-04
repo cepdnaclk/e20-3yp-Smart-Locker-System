@@ -10,55 +10,121 @@ body {
   height: 100%;
 }
 
-.App {
-  text-align: center;
-}
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-Zoom-in-out infinite 10s linear;
-  }
-}
-
-.App-header {
-  background-color: #ffffff;
-  min-height: 80%;
+/* App.css */
+.container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: black;
+  height: 100vh;
 }
-
-.App-link {
-  color: #61dafb;
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 20px;
 }
-
-@keyframes App-logo-Zoom-in-out {
-  0% {
-    scale: 80%;
-  }
-  50% {
-    scale: 120%;
-  }
-  100% {
-    scale: 80%;
-  }
-}
-
-.Home_buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
-  justify-content: center; 
-  align-items: center; 
-  width: 100%; 
+.headflex{
+    width: 100%; /* Fixed sidebar width */
+    height: 8%; /* Full viewport height */
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 200 px;
+    position: fixed; /* Keeps navbar fixed on the left */
+    justify-content: space-between;
   
 }
+.hedbtnflex{
+    padding-right: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    
+    
+}
+/*  log in btn */
+.btnlogin {
+  padding: 8px 25px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: 0;
+  background-color: white;
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.5s ease;
+  color: #000;
+}
+
+.btnlogin:hover {
+  letter-spacing: 3px;
+  background-color: hsl(0, 0%, 4%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(0, 0, 0) 0px 7px 29px 0px;
+}
+
+.btnlogin:active {
+  letter-spacing: 3px;
+  background-color: hsl(0, 0%, 0%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
+  transform: translateY(5px);
+  transition: 100ms;
+}
+/*  Join btn */
+.btnJoin {
+  padding: 8px 25px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: 0;
+  background-color: #333;
+  color: #ffffff;
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.5s ease;
+  border: 2px solid rgb(255, 255, 255);
+}
+
+.btnJoin:hover {
+  letter-spacing: 3px;
+  background-color: hsl(0, 0%, 100%);
+  color: hsl(0, 0%, 0%);
+  box-shadow: rgb(0, 0, 0) 0px 7px 29px 0px;
+}
+
+.btnJoin:active {
+  letter-spacing: 3px;
+  background-color: hsl(0, 0%, 100%);
+  color: hsl(0, 0%, 0%);
+  box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px;
+  transform: translateY(5px);
+  transition: 100ms;
+}
+
+/*///////////////*/
+.main {
+  flex: 1;
+  display: flex;
+  padding: 10%;
+  align-items:flex-end;
+  justify-content: space-around;
+  background-image: url('../src/img/back.png');
+}
+.text-box {
+  
+  background-color:#ffffff;
+  padding: 20px;
+  width: auto;
+  height: auto;
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: rgb(123, 123, 123) 10px 10px 10px 0px;
+
+}
+

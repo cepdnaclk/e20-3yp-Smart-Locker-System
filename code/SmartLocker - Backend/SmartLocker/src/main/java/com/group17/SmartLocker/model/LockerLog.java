@@ -1,5 +1,7 @@
 package com.group17.SmartLocker.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.group17.SmartLocker.enums.LockerLogStatus;
 import jakarta.persistence.*;
 import lombok.*;
