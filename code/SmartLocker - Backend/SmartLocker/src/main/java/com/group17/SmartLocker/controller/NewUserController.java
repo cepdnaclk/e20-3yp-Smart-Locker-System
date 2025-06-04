@@ -30,5 +30,12 @@ public class NewUserController {
         System.out.println("✅ /debug-put endpoint was reached via PUT");
         return "PUT is supported on /debug-put";
     }
+
+    @PostMapping("/debug-post")
+    public String debugPost(@RequestBody(required = false) String body) {
+        System.out.println("✅ /debug-post endpoint was reached via POST");
+        System.out.println("📦 Received body: " + body);
+        return "POST is supported on /debug-post";
+    }
 }
 
