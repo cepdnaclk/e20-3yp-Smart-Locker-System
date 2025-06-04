@@ -24,5 +24,11 @@ public class NewUserController {
         System.out.println("✅ /debug-get endpoint was reached via GET");
         return "GET is supported on /debug-get";
     }
+
+    @PutMapping("/debug-put")
+    public String debugPut() {
+        System.out.println("✅ /debug-put endpoint was reached via PUT");
+        return "PUT is supported on /debug-put";
+    }
 }
 
