@@ -17,5 +17,12 @@ public class NewUserController {
     public NewUser registerUser(@RequestBody NewUser newUSer) {
         return newUserService.registerUser(newUSer);
     }
+
+    // check the azure deployed backend
+    @GetMapping("/debug-get")
+    public String debugGet() {
+        System.out.println("✅ /debug-get endpoint was reached via GET");
+        return "GET is supported on /debug-get";
+    }
 }
 
