@@ -1,10 +1,12 @@
 package com.group17.SmartLocker.service.lockerLog;
 
+import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.model.LockerLog;
 import com.group17.SmartLocker.repository.LockerLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.group17.SmartLocker.enums.LockerLogStatus.ACTIVE;
@@ -15,6 +17,30 @@ import static com.group17.SmartLocker.enums.LockerLogStatus.UNSAFE;
 public class LockerLogService implements ILockerLogService{
 
     private final LockerLogRepository lockerLogRepository;
+
+
+    @Override
+    public List<LockerLogDto> getAllLockerLogs(){
+
+        List<LockerLogDto> lockerLogs = new ArrayList<>();
+        List<LockerLog> lockerLogsAll = lockerLogRepository.findAll();
+
+        for(int i = 0; i < lockerLogsAll.size(); i++){
+
+            LockerLogDto lockerLogDto = new LockerLogDto();
+
+            lockerLogDto.setLogId(lockerLogsAll.get(i).getLogId());
+            lockerLogDto.setAccessTime(lockerLogsAll.get(i).getAccessTime());
+            lockerLogDto.setReleasedTime(lockerLogsAll.get(i).getReleasedTime());
+            lockerLogDto.setStatus(lockerLogsAll.get(i).getStatus());
+            lockerLogDto.setLockerId(lockerLogsAll.get(i).getLocker().getLockerId());
+
+            lockerLogs.add(lockerLogDto);
+
+        }
+
+        return lockerLogs;
+    }
 
     @Override
     public LockerLog findActiveLog(String userId) {
