@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:secure_x/data/api/dio_client.dart'; // Use DioClient
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/locker_logs_model.dart';
@@ -133,7 +134,8 @@ class AuthRepo {
       // Send the POST request to the backend
       final response = await dioClient.postData(
         AppConstants.CREATE_USER_URI,
-        registrationData,
+        createUserModel.toJson(),
+        requireAuth: false,
       );
 
       print('Received registration response: ${response.statusCode} - ${response.data}'); // Debug print
@@ -502,6 +504,39 @@ class AuthRepo {
         isSuccess: false, 
         message: 'Network error: $e',
       );
+    }
+  }
+
+  //check approval status
+  Future<bool> checkApprovalStatus(String email, String password) async{
+    try{
+      final response=await dioClient.postData(
+        AppConstants.LOG_IN_URI,
+        {
+          'email': email,
+          'password':password,
+        },
+      );
+
+      if(response.statusCode==200){
+        print('Login Response: ${response.data}');
+
+        final user=UserModel.fromJson(response.data);
+
+        final token=response.data['token'];
+
+        if(token!=null){
+          await sharedPreferences.setString(AppConstants.TOKEN, token);
+          dioClient.updateHeader(token);       
+        }
+        return user.role=='USER';
+      }else{
+        print('Login failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error checking approval (AuthRepo): $e');
+      return false;
     }
   }
 
