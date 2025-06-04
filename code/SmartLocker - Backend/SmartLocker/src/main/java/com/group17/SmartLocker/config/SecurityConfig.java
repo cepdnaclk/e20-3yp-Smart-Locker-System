@@ -47,7 +47,7 @@ public class SecurityConfig {
                         ).permitAll()
 
                         // ✅ Allow pre-flight CORS OPTIONS requests
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/api/v1/**").permitAll()
 
                         // ✅ Role-based access
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
