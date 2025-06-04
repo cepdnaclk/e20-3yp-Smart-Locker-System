@@ -128,7 +128,7 @@ public class UserService implements IUserService {
     // this method is to send the otp code via mqtt publish to the topic
     @Override
     public void sendOtpCode(String message){
-
+//        System.out.println("ok");
         //get the user Id from the message
         String registrationId = "";
 
@@ -137,7 +137,7 @@ public class UserService implements IUserService {
             JsonNode root = mapper.readTree(message);
             registrationId = root.get("registrationID").asText();  // spelling preserved as is
             registrationId = "E" + registrationId;
-//            System.out.println(registrationId);
+//            System.out.println(registrationId);20
 
         } catch (Exception e) {
             System.err.println("Failed to parse MQTT message: " + e.getMessage());
@@ -149,6 +149,7 @@ public class UserService implements IUserService {
         String otp = user.getOtp();
 
         try {
+//            System.out.println("message published");
             mqttPublisher.publish("esp32/password", "{\"password\":\"" + otp + "\"}" );
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -167,6 +168,7 @@ public class UserService implements IUserService {
             registrationId = root.get("registrationID").asText();  // spelling preserved as is
             registrationId = "E" + registrationId;
 //            System.out.println(registrationId);
+            fingerPrintId = root.get("fingerprintID").asText();
 
         } catch (Exception e) {
             System.err.println("Failed to parse MQTT message: " + e.getMessage());
@@ -176,8 +178,10 @@ public class UserService implements IUserService {
         User user = userRepository.findById(registrationId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        System.out.println("Fingerprint id :" + fingerPrintId);
+
         user.setFingerPrintId(fingerPrintId);
-        user.setOtp(null); // to ensure the otp is used only once
+//        user.setOtp(null); // to ensure the otp is used only once
         userRepository.save(user);
         System.out.println("Fingerprint id saved successfully");
     }
@@ -236,6 +240,8 @@ public class UserService implements IUserService {
         } catch (Exception e) {
             System.err.println("Failed to parse MQTT message: " + e.getMessage());
         }
+
+        System.out.println(action);
 
         User user = userRepository.findByFingerPrintId(userFingerPrintId);
 
