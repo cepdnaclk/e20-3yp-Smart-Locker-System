@@ -86,7 +86,7 @@ public class UserController {
 
         try {
             String username = jwtService.extractUsername(jwtToken);
-            return ResponseEntity.ok(lockerService.unassignLocker(username, "1"));
+            return ResponseEntity.ok(lockerService.unassignLocker(username, "2"));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
