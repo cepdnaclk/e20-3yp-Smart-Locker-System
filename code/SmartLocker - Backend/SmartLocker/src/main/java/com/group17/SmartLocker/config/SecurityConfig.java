@@ -4,6 +4,7 @@ import com.group17.SmartLocker.filter.JwtAuthenticationFilter;
 import com.group17.SmartLocker.service.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -37,6 +38,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/login", "/api/v1/newUsers/register", "/publish", "/subscribe" ,"/latest").permitAll()
 
 //                        .requestMatchers("/login", "/api/**").permitAll() // this line used to manually create an admin for the system
+//
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // This line was added due to an error in the deployment
+
 
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/user/**").hasRole("USER")
