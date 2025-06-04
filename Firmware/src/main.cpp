@@ -1,3 +1,4 @@
+#include <Keypad_I2C.h>
 #include <Keypad.h> 
 #include <Wire.h> 
 #include <Arduino.h>
@@ -8,32 +9,35 @@
 #include "solenoid.h"
 #include <Adafruit_Fingerprint.h>
 #include "ultraSonic.h"
-#include "PCF8574.h"
+
 
 #define ROWS  4
 #define COLS  4
 #define RELAY_PIN 5
 #define RXD2 16 // ESP32 RX2 pin (connect to sensor TX)
 #define TXD2 17 // ESP32 TX2 pin (connect to sensor RX)
-#define LOCKER_DISTANCE_THRESHOLD 10 // Distance threshold in cm for abnormal detection
+#define LOCKER_DISTANCE_THRESHOLD 21.7// Distance threshold in cm for abnormal detection
 #define clusterId 1
+#define DISTANCE_TOLERANCE 1.00
+#define I2CADDR 0x24
+
+//define pins for MC38
+const int DOORSENSOR[NUMLOCKERS] = {13,25,5};
+
+//Define LED pins
+const int LEDPINS[NUMLOCKERS] = {14,33,19}; // GPIO pins for LEDs
+
+const int LOCKERPINS[NUMLOCKERS] = {P0,P1,P2}; // GPIO pins for lockers
 
 
-const int LOCKERPINS[NUMLOCKERS] = {4,23,13}; // GPIO pins for lockers
-
-
-char keyMap[ROWS][COLS] = {
+char keys[ROWS][COLS] = {
   {'1','2','3', 'A'},
   {'4','5','6', 'B'},
   {'7','8','9', 'C'},
   {'*','0','#', 'D'}
 };
 
-//locker status :
-// 0 = empty = not assigned and closed
-// 1 = unsafe - assigned and not yet closed
-// 2 = safe - assigned and closed
-// 3 = abnormal - not assigned and open or something inside
+
 
 typedef struct{
   uint8_t lockerId;
@@ -41,33 +45,16 @@ typedef struct{
   float sensorDistance;
   uint8_t status = 0;
   uint8_t lockerPin;
+  unsigned long timer = 0;
+  int doorStatus;
 }locker;
 
 locker lockers[NUMLOCKERS];
 
 uint8_t abnormalLockerId [NUMLOCKERS]; // Array to store abnormal locker IDs
 
-void updateStatus() {
-  for (int i = 0; i < NUMLOCKERS; i++) {
-    read_ultraSonic(); // Read the ultrasonic sensor data
-    lockers[i].sensorDistance = sensors[i].distanceCm; // Update the locker distance
-    if ((LOCKER_DISTANCE_THRESHOLD < lockers[i].sensorDistance < LOCKER_DISTANCE_THRESHOLD) && lockers[i].assignedId == -1) {
-      abnormalLockerId[i] = 1; // Return the locker ID if distance is below threshold
-      lockers[i].status = 3; // Set status to abnormal
-    }
-    else if (lockers[i].sensorDistance == LOCKER_DISTANCE_THRESHOLD && lockers[i].assignedId != -1) {
-      lockers[i].status = 2; // Set status to safe
-      abnormalLockerId[i] = 0; // Return the locker ID if distance is above threshold
-    }else{
-      lockers[i].status = 1; // Set status to unsafe
-      abnormalLockerId[i] = 0; // Return the locker ID if distance is above threshold
-    }
-  }
-}
-
-
-uint8_t rowPins[ROWS] = {14, 27, 26, 25}; // GPIO14, GPIO27, GPIO26, GPIO25
-uint8_t colPins[COLS] = {33, 32, 18, 19}; // GPIO33, GPIO32, GPIO18, GPIO19
+uint8_t rowPins[ROWS] = {0,1,2,3}; // GPIO14, GPIO27, GPIO26, GPIO25
+uint8_t colPins[COLS] = {4,5,6,7}; // GPIO33, GPIO32, GPIO18, GPIO19
 uint8_t LCD_CursorPosition = 0;
 String InputStr = "";
 uint8_t idS = 1;
@@ -79,11 +66,70 @@ char key;
 
 
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial2);
-PCF8574 pcf8574(0x20);
-Keypad keypad = Keypad(makeKeymap(keyMap), rowPins, colPins, ROWS, COLS);
+Keypad_I2C keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS, I2CADDR, 1 );
 TaskHandle_t Task1;
 TaskHandle_t Task2;
 
+bool isNearThreshold(float distance) {
+  return abs(distance - LOCKER_DISTANCE_THRESHOLD) < DISTANCE_TOLERANCE;
+}
+
+void read_status() {
+    for (int i = 0; i < NUMLOCKERS; i++) {
+        // Clear the trigPin
+        digitalWrite(sensors[i].trigPin, LOW);
+        delayMicroseconds(2);
+
+        // Set the trigPin HIGH for 10 microseconds
+        pcf8574.digitalWrite(sensors[i].trigPin, HIGH);
+        delayMicroseconds(10);
+        pcf8574.digitalWrite(sensors[i].trigPin, LOW);
+
+        // Read the echoPin, return the sound wave travel time in microseconds
+        sensors[i].duration = pulseIn(sensors[i].echoPin, HIGH);
+
+        // Calculate the distance in cm
+        lockers[i].sensorDistance = (sensors[i].duration * SOUND_SPEED) / 2;
+        lockers[i].doorStatus = digitalRead(DOORSENSOR[i]);
+    }
+}
+
+//locker status :
+// 0 = available = not assigned and closed and empty
+// 1 = unsafe - assigned and not yet closed
+// 2 = safe - assigned and closed
+// 3 = abnormal - not assigned and open or something inside
+void updateStatus() {
+  //read_status(); // Read the ultrasonic sensor data
+  
+  for (int i = 0; i < NUMLOCKERS; i++) {
+    lockers[i].doorStatus = digitalRead(DOORSENSOR[i]); // Read the door status
+    if (lockers[i].assignedId == -1 && (!isNearThreshold(lockers[i].sensorDistance) || lockers[i].doorStatus == HIGH)) {
+      abnormalLockerId[i] = 1; // Return the locker ID if distance is below threshold
+      lockers[i].status = 3; // Set status to abnormal
+      //digitalWrite(LEDPINS[i], HIGH);
+    }
+    else if (lockers[i].doorStatus == LOW && lockers[i].assignedId != -1) {
+      lockers[i].status = 2; // Set status to safe
+      abnormalLockerId[i] = 0; // Return the locker ID if distance is above threshold
+      //digitalWrite(LEDPINS[i],LOW);
+    }else if (lockers[i].doorStatus == HIGH && lockers[i].assignedId != -1) {
+      lockers[i].status = 1;
+      abnormalLockerId[i] = 0; // Return the locker ID if distance is above threshold
+      /*if(millis() - lockers[i].timer > 60000){
+        publishSendNotification(lockers[i].assignedId);
+        lockers[i].timer = millis(); // reset the timer
+      }*/
+      //digitalWrite(LEDPINS[i], HIGH);
+
+    }else if(lockers[i].assignedId == -1 && isNearThreshold(lockers[i].sensorDistance) && lockers[i].doorStatus == LOW){
+      lockers[i].status = 0; // Set status to empty
+      abnormalLockerId[i] = 0; // Return the locker ID if distance is above threshold
+      digitalWrite(LEDPINS[i], HIGH); // Turn on the LED
+    }
+    delay(1);
+  }
+}
 
 void init_finger() {
   Serial2.begin(57600, SERIAL_8N1, RXD2, TXD2);
@@ -453,9 +499,12 @@ uint8_t getFingerprintID()
 void unlock(uint8_t lockerid){
   for(uint8_t i = 0; i < NUMLOCKERS; i++){
         if(lockers[i].lockerId == lockerid){
-          digitalWrite(lockers[i].lockerPin, LOW);  // Unlock
+          pcf8574.digitalWrite(lockers[i].lockerPin, LOW);  // Unlock
           delay(5000);
-          digitalWrite(lockers[i].lockerPin, HIGH); // Lock agai
+          pcf8574.digitalWrite(lockers[i].lockerPin, HIGH); // Lock agai
+          Serial.print("Locker ");
+          Serial.print(lockers[i].lockerId);
+          digitalWrite(LEDPINS[i], HIGH); // Turn off the LED
         }
 }
 }
@@ -463,6 +512,7 @@ void unlock(uint8_t lockerid){
 void codeForTask1( void * parameter )
 {
   for (;;) {
+
     if(WiFi.status() != WL_CONNECTED){
         Serial.println("WiFi not connected! Attempting to reconnect...");
         initWiFi();
@@ -504,16 +554,18 @@ void codeForTask1( void * parameter )
                 I2C_LCD.print(passKey);
             }
         }
+        passwordReceived = false; // Reset the flag
         publishGetPassword(user); // Publish the registration ID
-        client.loop();
-        delay(1000);
+        //client.loop();
+        //delay(1000);
 
         // Wait for the password to be received
         I2C_LCD.clear();
         scrollText(0,"Waiting for the Code.....");
         I2C_LCD.setCursor(0, 3);
         I2C_LCD.print("Press 'B' to Cancel");
-        passwordReceived = false; // Reset the flag
+        
+        Serial.print("before Waiting... "); Serial.println(passwordReceived);
         while (!passwordReceived) {
             client.loop(); // Keep the MQTT client running
             delay(100);    // Small delay to avoid busy-waiting
@@ -568,7 +620,8 @@ void codeForTask1( void * parameter )
         // Check the entered code against the received password
         if (InputStr == PassWord) {
             I2C_LCD.clear();
-            scrollText(0,"Registering fingerprint...");
+            I2C_LCD.setCursor(0, 0);
+            I2C_LCD.print("Registering fingerprint...");
             delay(2000);
 
             // Proceed with fingerprint registration
@@ -597,7 +650,7 @@ void codeForTask1( void * parameter )
 
         if (match > 0) { // Check if a valid fingerprint ID is returned
           Serial.println("Fingerprint Matched!");
-          publishFingerprintID(match,clusterId); // Publish the fingerprint ID
+          publishFingerprintID(match,clusterId,"assign"); // Publish the fingerprint ID
           I2C_LCD.clear();
           scrollText(0,"Assigning a locker...");
           I2C_LCD.setCursor(0, 3);
@@ -626,15 +679,16 @@ void codeForTask1( void * parameter )
           if(alreadyAssign == 1){
               I2C_LCD.clear();
               I2C_LCD.setCursor(0, 0);
-              I2C_LCD.print("Locker Unlocked!");
+              I2C_LCD.print("Alrady Assigned!");
               I2C_LCD.setCursor(0, 1);
-              I2C_LCD.print("Please Remove your");
-              I2C_LCD.setCursor(0, 2);
+              I2C_LCD.print("Choose another option");
+              delay(2000);
+              /*I2C_LCD.setCursor(0, 2);
               I2C_LCD.print("belongings");
               unlock(unlockLockerId);
               delay(2000);
               lockers[unlockLockerId-1].assignedId = -1; // Assign the locker ID
-              lockers[unlockLockerId-1].status = 0; // Set status to unsafe
+              lockers[unlockLockerId-1].status = 3; // Set status to abnormal*/
 
           }else{
               I2C_LCD.clear();
@@ -647,7 +701,8 @@ void codeForTask1( void * parameter )
               delay(2000);
               lockers[unlockLockerId-1].assignedId = match; // Assign the locker ID
               lockers[unlockLockerId-1].status = 1; // Set status to unsafe
-
+              lockers[unlockLockerId-1].timer = millis(); // Set the timer
+              digitalWrite(LEDPINS[unlockLockerId-1],LOW); 
           }
         } else {
             Serial.println("No Match Found.");
@@ -658,77 +713,216 @@ void codeForTask1( void * parameter )
         }
 
         startScreen(); // Go back to the main menu
-    } else {
-        // Handle other cases if necessary
-        // For now, this block is intentionally left empty
-    }
+    } else if(key == 'C') {
+        I2C_LCD.clear();
+        scrollText(0,"Place Finger on Sensor...");
+        Serial.println("Place Finger on Sensor...");
 
+        uint8_t match = getFingerprintIDez();  // Try reading a fingerprint
+
+        if (match > 0) { // Check if a valid fingerprint ID is returned
+          Serial.println("Fingerprint Matched!");
+          publishFingerprintID(match,clusterId,"access"); // Publish the fingerprint ID
+          I2C_LCD.clear();
+          scrollText(0,"Accessing the locker...");
+          I2C_LCD.setCursor(0, 3);
+          I2C_LCD.print("Press 'B' to Cancel");
+          unlockLocker = false; // Reset the flag
+          while (!unlockLocker) {
+              client.loop(); // Keep the MQTT client running
+              delay(100);
+              key = keypad.getKey();
+              if(key == 'B'){
+                I2C_LCD.clear();
+                I2C_LCD.setCursor(0, 0);
+                I2C_LCD.print("Cancelled!");
+                delay(2000);
+                startScreen(); // Go back to the main menu
+                cancelled = true;
+                break; // Break the password waiting loop
+              }    // Small delay to avoid busy-waiting
+          }
+          
+          if (cancelled) {
+              continue; // Continue the for(;;) loop, restarting from the top
+          }
+
+          delay(2000);
+          if(alreadyAssign == 1){
+              I2C_LCD.clear();
+              I2C_LCD.setCursor(0, 0);
+              I2C_LCD.print("Locker ");
+              I2C_LCD.print(unlockLockerId);
+              I2C_LCD.print(" is unlocked!");
+              /*I2C_LCD.setCursor(0, 2);
+              I2C_LCD.print("belongings");*/
+              unlock(unlockLockerId);
+              delay(2000);
+              lockers[unlockLockerId-1].status = 1; // Set status to unsafe
+              lockers[unlockLockerId-1].timer = millis(); // Set the timer
+
+          }else{
+              I2C_LCD.clear();
+              I2C_LCD.setCursor(0, 0);
+              I2C_LCD.print("No locker allocated!");
+              I2C_LCD.setCursor(0, 1);
+              I2C_LCD.print("Assign a locker first.");
+              delay(2000);
+          }
+        } else {
+            Serial.println("No Match Found.");
+            I2C_LCD.clear();
+            I2C_LCD.setCursor(0, 0);
+            I2C_LCD.print("Access Denied!");
+            delay(2000);
+        }
+
+        startScreen(); // Go back to the main men
+
+    }else if(key == 'D'){
+        I2C_LCD.clear();
+        scrollText(0,"Place Finger on Sensor...");
+        Serial.println("Place Finger on Sensor...");
+
+        uint8_t match = getFingerprintIDez();  // Try reading a fingerprint
+
+        if (match > 0) { // Check if a valid fingerprint ID is returned
+          Serial.println("Fingerprint Matched!");
+          publishFingerprintID(match,clusterId,"release"); // Publish the fingerprint ID
+          I2C_LCD.clear();
+          scrollText(0,"Realeasing the locker...");
+          I2C_LCD.setCursor(0, 3);
+          I2C_LCD.print("Press 'B' to Cancel");
+          unlockLocker = false;
+          while (!unlockLocker) {
+              client.loop(); // Keep the MQTT client running
+              delay(100);
+              key = keypad.getKey();
+              if(key == 'B'){
+                I2C_LCD.clear();
+                I2C_LCD.setCursor(0, 0);
+                I2C_LCD.print("Cancelled!");
+                delay(2000);
+                startScreen(); // Go back to the main menu
+                cancelled = true;
+                break; // Break the password waiting loop
+              }    // Small delay to avoid busy-waiting
+          }
+          if (cancelled) {
+              continue; // Continue the for(;;) loop, restarting from the top
+          }
+          delay(2000);
+          if(alreadyAssign == 0){
+              I2C_LCD.clear();
+              I2C_LCD.setCursor(0, 0);
+              I2C_LCD.print("No locker allocated!");
+              I2C_LCD.setCursor(0, 1);
+              I2C_LCD.print("Assign a locker first.");
+              delay(2000);
+          }else{
+              I2C_LCD.clear();
+              I2C_LCD.setCursor(0, 0);
+              I2C_LCD.print("Locker ");
+              I2C_LCD.print(unlockLockerId);
+              I2C_LCD.print(" is unlocked!");
+              /*I2C_LCD.setCursor(0, 2);
+              I2C_LCD.print("belongings");*/
+              unlock(unlockLockerId);
+              delay(2000);
+              lockers[unlockLockerId-1].assignedId = -1; // Assign the locker ID
+              lockers[unlockLockerId-1].status = 3; // Set status to abnormal
+          }
+    }   }
   }
 }
 
 void codeForTask2( void * parameter )
 {
   for (;;) {
-    
+    if(WiFi.status() != WL_CONNECTED){
+        Serial.println("WiFi not connected! Attempting to reconnect...");
+        initWiFi();
+    }
 
+    if (!client.connected()) {
+            Serial.println("MQTT Client not connected! Attempting to reconnect...");
+            connectAWS(); // Reconnect to AWS IoT
+    }
+    client.loop();
+    delay(100); // Small delay to avoid busy-waiting
+    if(mUnlockLocker == true){
+        unlock(unlockLockerId); // Unlock the locker
+        lockers[unlockLockerId-1].assignedId = -1; // Assign the locker ID
+        lockers[unlockLockerId-1].status = 3; // Set status to abnormal
+        mUnlockLocker = false; // Reset the flag
+    }
+
+    unsigned long currentTime = millis();
+    if (currentTime - previousTime >= interval) {
+      //Serial.println("Checking locker status...");
+      previousTime = currentTime;
+      
+      updateStatus(); // Check for abnormal lockers
+      //publishAbnormalLockers(abnormalLockerId, NUMLOCKERS);
+    }
 
     if(statusCheck == true){
         publishLockerStatus(checkLockerId, lockers[checkLockerId-1].status); // Publish locker status
         statusCheck = false; // Reset the flag
     }
-    
-    unsigned long currentTime = millis();
-    if (currentTime - previousTime >= interval) {
-        previousTime = currentTime;
+    //previousTime = millis();
 
-        updateStatus(); // Check for abnormal lockers
-        publishAbnormalLockers(abnormalLockerId, NUMLOCKERS);
-    }
-    previousTime = millis();
+    vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
 
 void setup(){
   Wire.begin();
+  keypad.begin( makeKeymap(keys) );
   Serial.begin(9600);
   init_ultraSonic();
-  
-
+  Serial.println("Ultrasonic sensor initialized");
+  pcf8574.begin();
+  Serial.println("PCF8574 initialized");
   for(int i = 0; i < NUMLOCKERS; i++){
     lockers[i].lockerId = i+1;
-    lockers[i].sensorDistance = 0.0;
+    lockers[i].sensorDistance = 21.7;
     lockers[i].lockerPin = LOCKERPINS[i];
-    pinMode(lockers[i].lockerPin, OUTPUT);
-    digitalWrite(lockers[i].lockerPin, HIGH); // Activate solenoid
+    pcf8574.pinMode(lockers[i].lockerPin, OUTPUT);
+    pcf8574.digitalWrite(lockers[i].lockerPin, HIGH); // Activate solenoid
+    pinMode(DOORSENSOR[i], INPUT_PULLUP);
+    pinMode(LEDPINS[i], OUTPUT);
+    digitalWrite(LEDPINS[i], HIGH); 
+    lockers[i].doorStatus = digitalRead(DOORSENSOR[i]);
   }
-  pcf8574.begin();
   initWiFi();
   connectAWS();
   //initESPNOW();
   initLCD();
   init_finger();
+  Serial.println("Fingerprint sensor initialized");
   startScreen();
   xTaskCreatePinnedToCore(
     codeForTask1,
     "led1Task",
-    8192,
+    6114,
     NULL,
     1,
     &Task1,
     1);
 
   delay(500);  // needed to start-up task1
-    /*
   xTaskCreatePinnedToCore(
     codeForTask2,
     "led2Task",
-    1000,
+    6000,
     NULL,
     1,
     &Task2,
-    0);*/
+    0);
 }
 
 void loop() {
   // Empty loop, all tasks are handled in the task functions
+  delay(1);
 }
