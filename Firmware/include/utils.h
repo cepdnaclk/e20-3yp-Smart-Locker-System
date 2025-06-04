@@ -29,8 +29,8 @@
 #define AWS_IOT_ABNORMAL_TOPIC "esp32/abnormal_lockers"
 
 //locker status
-#define AWS_IOT_SUBSCRIBE_CHECK_LOCKER_TOPIC "esp32/check_locker_status"
-#define AWS_IOT_PUBLISH_LOCKER_STATUS_TOPIC "esp32/locker_status"
+#define AWS_IOT_SUBSCRIBE_CHECK_LOCKER_TOPIC "esp32/checkLockerStatus"
+#define AWS_IOT_PUBLISH_LOCKER_STATUS_TOPIC "esp32/lockerStatus"
 
 //Release locker
 #define AWS_IOT_PUB_RELEASE_TOPIC "esp32/realeaseFingerprint"
@@ -40,7 +40,7 @@ WiFiClientSecure net;
 PubSubClient client(net); 
 
 // Global variable to store the password
-bool passwordReceived = false; // Flag to indicate password reception
+volatile bool passwordReceived = false; // Flag to indicate password reception
 String PassWord = "";
 
 //global variable to store the user ID
@@ -143,6 +143,9 @@ void initWiFi() {
 void messageHandler(char* topic, byte* payload, unsigned int length) {
     Serial.print("Incoming message from: ");
     Serial.println(topic);
+    Serial.print("Task addr: ");
+    Serial.println((uint32_t)&passwordReceived, HEX);
+
 
     // Convert payload to a string
     String message;
@@ -182,7 +185,7 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
         }
 
         // Extract the locker ID
-        if (doc.containsKey("lockerId")) {
+        if (doc.containsKey("lockerID") && doc["clusterID"] == "1" ) {
             checkLockerId = doc["lockerId"];
             statusCheck = true; // Set the flag to true
             Serial.println("Locker ID received: " + String(checkLockerId));
@@ -222,7 +225,11 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
         // Extract the locker ID
         if (doc.containsKey("lockerID") && doc["clusterID"] == "1" ) {
             unlockLockerId = doc["lockerID"];
-            unlockLocker = true; // Set the flag to true
+            if(doc["source"] == "0"){
+                unlockLocker = true; // Set the flag to true
+            } else{
+                mUnlockLocker = true;
+            }
             alreadyAssign = doc["alreadyAssign"];
             Serial.println("Locker ID received: " + String(checkLockerId));
         } else {
@@ -465,6 +472,7 @@ void publishLockerStatus(int lockerId, int status) {
     }
 
     StaticJsonDocument<200> doc;
+    doc["clusterId"] = "1";
     doc["lockerId"] = lockerId;
     doc["status"] = status;
 
@@ -508,7 +516,7 @@ void publishRegID_FinID(String registrationID, uint8_t fingerprintID) {
     }
 }
 
-void publishFingerprintID(uint8_t fingerprintID,uint8_t clusterId) {
+void publishFingerprintID(uint8_t fingerprintID,uint8_t clusterId, String action) {
     // Check if MQTT client is connected
     if (!client.connected()) {
         Serial.println("MQTT Client not connected! Attempting to reconnect...");
@@ -519,6 +527,8 @@ void publishFingerprintID(uint8_t fingerprintID,uint8_t clusterId) {
     StaticJsonDocument<200> doc;
     doc["fingerprintID"] = fingerprintID;
     doc["clusterID"] = clusterId;
+    doc["action"] = action; // Add action field
+    // This field can be "assign", "unlock", or "release" based on the action you want to perform
 
     char jsonBuffer[1024];
     serializeJson(doc, jsonBuffer);

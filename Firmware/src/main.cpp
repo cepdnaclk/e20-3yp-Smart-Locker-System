@@ -16,7 +16,7 @@
 #define RELAY_PIN 5
 #define RXD2 16 // ESP32 RX2 pin (connect to sensor TX)
 #define TXD2 17 // ESP32 TX2 pin (connect to sensor RX)
-#define LOCKER_DISTANCE_THRESHOLD 10.00 // Distance threshold in cm for abnormal detection
+#define LOCKER_DISTANCE_THRESHOLD 21.7// Distance threshold in cm for abnormal detection
 #define clusterId 1
 #define DISTANCE_TOLERANCE 1.00
 #define I2CADDR 0x24
@@ -107,25 +107,25 @@ void updateStatus() {
     if (lockers[i].assignedId == -1 && (!isNearThreshold(lockers[i].sensorDistance) || lockers[i].doorStatus == HIGH)) {
       abnormalLockerId[i] = 1; // Return the locker ID if distance is below threshold
       lockers[i].status = 3; // Set status to abnormal
-      digitalWrite(LEDPINS[i], HIGH);
+      //digitalWrite(LEDPINS[i], HIGH);
     }
     else if (lockers[i].doorStatus == LOW && lockers[i].assignedId != -1) {
       lockers[i].status = 2; // Set status to safe
       abnormalLockerId[i] = 0; // Return the locker ID if distance is above threshold
-      digitalWrite(LEDPINS[i],LOW);
+      //digitalWrite(LEDPINS[i],LOW);
     }else if (lockers[i].doorStatus == HIGH && lockers[i].assignedId != -1) {
       lockers[i].status = 1;
       abnormalLockerId[i] = 0; // Return the locker ID if distance is above threshold
-      if(millis() - lockers[i].timer > 60000){
+      /*if(millis() - lockers[i].timer > 60000){
         publishSendNotification(lockers[i].assignedId);
         lockers[i].timer = millis(); // reset the timer
-      }
-      digitalWrite(LEDPINS[i], HIGH);
+      }*/
+      //digitalWrite(LEDPINS[i], HIGH);
 
     }else if(lockers[i].assignedId == -1 && isNearThreshold(lockers[i].sensorDistance) && lockers[i].doorStatus == LOW){
       lockers[i].status = 0; // Set status to empty
       abnormalLockerId[i] = 0; // Return the locker ID if distance is above threshold
-      digitalWrite(LEDPINS[i], LOW); // Turn on the LED
+      digitalWrite(LEDPINS[i], HIGH); // Turn on the LED
     }
     delay(1);
   }
@@ -512,6 +512,7 @@ void unlock(uint8_t lockerid){
 void codeForTask1( void * parameter )
 {
   for (;;) {
+
     if(WiFi.status() != WL_CONNECTED){
         Serial.println("WiFi not connected! Attempting to reconnect...");
         initWiFi();
@@ -553,16 +554,18 @@ void codeForTask1( void * parameter )
                 I2C_LCD.print(passKey);
             }
         }
+        passwordReceived = false; // Reset the flag
         publishGetPassword(user); // Publish the registration ID
-        client.loop();
-        delay(1000);
+        //client.loop();
+        //delay(1000);
 
         // Wait for the password to be received
         I2C_LCD.clear();
         scrollText(0,"Waiting for the Code.....");
         I2C_LCD.setCursor(0, 3);
         I2C_LCD.print("Press 'B' to Cancel");
-        passwordReceived = false; // Reset the flag
+        
+        Serial.print("before Waiting... "); Serial.println(passwordReceived);
         while (!passwordReceived) {
             client.loop(); // Keep the MQTT client running
             delay(100);    // Small delay to avoid busy-waiting
@@ -617,7 +620,8 @@ void codeForTask1( void * parameter )
         // Check the entered code against the received password
         if (InputStr == PassWord) {
             I2C_LCD.clear();
-            scrollText(0,"Registering fingerprint...");
+            I2C_LCD.setCursor(0, 0);
+            I2C_LCD.print("Registering fingerprint...");
             delay(2000);
 
             // Proceed with fingerprint registration
@@ -646,7 +650,7 @@ void codeForTask1( void * parameter )
 
         if (match > 0) { // Check if a valid fingerprint ID is returned
           Serial.println("Fingerprint Matched!");
-          publishFingerprintID(match,clusterId); // Publish the fingerprint ID
+          publishFingerprintID(match,clusterId,"assign"); // Publish the fingerprint ID
           I2C_LCD.clear();
           scrollText(0,"Assigning a locker...");
           I2C_LCD.setCursor(0, 3);
@@ -698,6 +702,7 @@ void codeForTask1( void * parameter )
               lockers[unlockLockerId-1].assignedId = match; // Assign the locker ID
               lockers[unlockLockerId-1].status = 1; // Set status to unsafe
               lockers[unlockLockerId-1].timer = millis(); // Set the timer
+              digitalWrite(LEDPINS[unlockLockerId-1],LOW); 
           }
         } else {
             Serial.println("No Match Found.");
@@ -717,7 +722,7 @@ void codeForTask1( void * parameter )
 
         if (match > 0) { // Check if a valid fingerprint ID is returned
           Serial.println("Fingerprint Matched!");
-          publishFingerprintID(match,clusterId); // Publish the fingerprint ID
+          publishFingerprintID(match,clusterId,"access"); // Publish the fingerprint ID
           I2C_LCD.clear();
           scrollText(0,"Accessing the locker...");
           I2C_LCD.setCursor(0, 3);
@@ -783,13 +788,13 @@ void codeForTask1( void * parameter )
 
         if (match > 0) { // Check if a valid fingerprint ID is returned
           Serial.println("Fingerprint Matched!");
-          publishReleaseFingerprintID(match,clusterId); // Publish the fingerprint ID
+          publishFingerprintID(match,clusterId,"release"); // Publish the fingerprint ID
           I2C_LCD.clear();
           scrollText(0,"Realeasing the locker...");
           I2C_LCD.setCursor(0, 3);
           I2C_LCD.print("Press 'B' to Cancel");
-          releaseLocker = false;
-          while (!releaseLocker) {
+          unlockLocker = false;
+          while (!unlockLocker) {
               client.loop(); // Keep the MQTT client running
               delay(100);
               key = keypad.getKey();
@@ -807,7 +812,7 @@ void codeForTask1( void * parameter )
               continue; // Continue the for(;;) loop, restarting from the top
           }
           delay(2000);
-          if(releaseLockerId == -1){
+          if(alreadyAssign == 0){
               I2C_LCD.clear();
               I2C_LCD.setCursor(0, 0);
               I2C_LCD.print("No locker allocated!");
@@ -818,14 +823,14 @@ void codeForTask1( void * parameter )
               I2C_LCD.clear();
               I2C_LCD.setCursor(0, 0);
               I2C_LCD.print("Locker ");
-              I2C_LCD.print(releaseLockerId);
+              I2C_LCD.print(unlockLockerId);
               I2C_LCD.print(" is unlocked!");
               /*I2C_LCD.setCursor(0, 2);
               I2C_LCD.print("belongings");*/
-              unlock(releaseLockerId);
+              unlock(unlockLockerId);
               delay(2000);
-              lockers[releaseLockerId-1].assignedId = -1; // Assign the locker ID
-              lockers[releaseLockerId-1].status = 3; // Set status to abnormal
+              lockers[unlockLockerId-1].assignedId = -1; // Assign the locker ID
+              lockers[unlockLockerId-1].status = 3; // Set status to abnormal
           }
     }   }
   }
@@ -844,8 +849,11 @@ void codeForTask2( void * parameter )
             connectAWS(); // Reconnect to AWS IoT
     }
     client.loop();
+    delay(100); // Small delay to avoid busy-waiting
     if(mUnlockLocker == true){
-        unlock(mUnlockLockerId); // Unlock the locker
+        unlock(unlockLockerId); // Unlock the locker
+        lockers[unlockLockerId-1].assignedId = -1; // Assign the locker ID
+        lockers[unlockLockerId-1].status = 3; // Set status to abnormal
         mUnlockLocker = false; // Reset the flag
     }
 
@@ -878,13 +886,13 @@ void setup(){
   Serial.println("PCF8574 initialized");
   for(int i = 0; i < NUMLOCKERS; i++){
     lockers[i].lockerId = i+1;
-    lockers[i].sensorDistance = 10;
+    lockers[i].sensorDistance = 21.7;
     lockers[i].lockerPin = LOCKERPINS[i];
     pcf8574.pinMode(lockers[i].lockerPin, OUTPUT);
     pcf8574.digitalWrite(lockers[i].lockerPin, HIGH); // Activate solenoid
     pinMode(DOORSENSOR[i], INPUT_PULLUP);
     pinMode(LEDPINS[i], OUTPUT);
-    digitalWrite(LEDPINS[i], LOW); // Activate pull-up resistor
+    digitalWrite(LEDPINS[i], HIGH); 
     lockers[i].doorStatus = digitalRead(DOORSENSOR[i]);
   }
   initWiFi();
@@ -907,7 +915,7 @@ void setup(){
   xTaskCreatePinnedToCore(
     codeForTask2,
     "led2Task",
-    3000,
+    6000,
     NULL,
     1,
     &Task2,
