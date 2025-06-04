@@ -17,5 +17,25 @@ public class NewUserController {
     public NewUser registerUser(@RequestBody NewUser newUSer) {
         return newUserService.registerUser(newUSer);
     }
+
+    // check the azure deployed backend
+    @GetMapping("/debug-get")
+    public String debugGet() {
+        System.out.println("✅ /debug-get endpoint was reached via GET");
+        return "GET is supported on /debug-get";
+    }
+
+    @PutMapping("/debug-put")
+    public String debugPut() {
+        System.out.println("✅ /debug-put endpoint was reached via PUT");
+        return "PUT is supported on /debug-put";
+    }
+
+    @PostMapping("/debug-post")
+    public String debugPost(@RequestBody(required = false) String body) {
+        System.out.println("✅ /debug-post endpoint was reached via POST");
+        System.out.println("📦 Received body: " + body);
+        return "POST is supported on /debug-post";
+    }
 }
 

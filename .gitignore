@@ -8,3 +8,5 @@ code/SmartLocker - Backend/SmartLocker/src/main/resources/application.properties
 code/SmartLocker - Backend/SmartLocker/src/main/resources/application.properties
 code/SmartLocker - Backend/SmartLocker/src/main/java/com/group17/SmartLocker/SmartLockerApplication.java
 code/SmartLocker - Backend/SmartLocker/src/main/resources/application.properties
+*.properties
+code/SmartLocker - Backend/SmartLocker/src/main/resources/application.properties
