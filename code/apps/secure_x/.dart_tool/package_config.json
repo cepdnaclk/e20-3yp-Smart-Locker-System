@@ -379,7 +379,7 @@
       "packageUri": "lib/",
       "languageVersion": "3.4"
     }
-  ],
+    {
   "generator": "pub",
   "generatorVersion": "3.8.0",
   "flutterRoot": "file:///C:/flutter",

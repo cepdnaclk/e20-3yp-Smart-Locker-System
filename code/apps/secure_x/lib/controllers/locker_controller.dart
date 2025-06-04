@@ -20,6 +20,17 @@ class LockerController extends GetxController {
       fetchProgress(0.0);
       
       final clusters = await lockerRepo.getAllLockerClusters();
+
+      // Print details of each cluster
+      clusters.forEach((cluster) {
+        print('''
+        [DEBUG] Cluster Details:
+        Name: ${cluster.clusterName}
+        Location: (${cluster.latitude}, ${cluster.longitude})
+        Available: ${cluster.availableNumberOfLockers}/${cluster.totalNumberOfLockers}
+        ''');
+      });
+      
       lockerClusters.assignAll(clusters);
       
       // Update progress as each cluster is fetched
