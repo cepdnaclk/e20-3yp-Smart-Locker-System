@@ -15,7 +15,8 @@ public class CorsConfig {
 
                 registry.addMapping("/**") // Apply to all API endpoints
                         .allowedOriginPatterns("*")
-                        .allowedOrigins("http://localhost:3000") // Allow frontend (put frontend address here instead of *)
+
+//                        .allowedOrigins("http://localhost:3000") // Allow frontend (put frontend address here instead of *)
 //                        .allowedOrigins("*") // Allow frontend (put frontend address here instead of *)
 
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

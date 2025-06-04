@@ -39,6 +39,32 @@ public class LockerService implements ILockerService{
     private final MqttPublisher mqttPublisher;
     private final NotificationService notificationService;
 
+    @Override
+    public void unlockByAdmin(Long clusterId, Long lockerId){
+        /*
+        * This function forcefully unlock the locker by admin
+        */
+
+        Locker locker = lockerRepository.findById(lockerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Locker not found"));
+
+        LockerLog lockerLog = lockerLogRepository.findByLocker_LockerIdAndStatus(lockerId, LockerLogStatus.ACTIVE);
+
+        /*
+        * send mqtt message to unlock the locker forcefully
+        * source should be 2
+        */
+        sendMqttMessageToLockerUnlock(clusterId, lockerId, "1", "1");
+
+        locker.setLockerStatus(LockerStatus.AVAILABLE);
+
+        lockerLog.setReleasedTime(LocalDateTime.now());
+        lockerLog.setStatus(LockerLogStatus.OLD);
+
+        lockerRepository.save(locker);
+        lockerLogRepository.save(lockerLog);
+
+    }
 
 //    @Override
 //    public String unlockLocker(String username, Long clusterId) {
