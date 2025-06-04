@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults()) //This enables Spring Security to allow CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/login", "/api/v1/newUsers/register", "/publish", "/subscribe" ,"/latest").permitAll()
+                        .requestMatchers("/api/v1/login", "/api/v1/newUsers/register", "/publish", "/subscribe" ,"/latest", "/api/v1/newUsers/debug-get").permitAll()
 
 //                        .requestMatchers("/login", "/api/**").permitAll() // this line used to manually create an admin for the system
 //

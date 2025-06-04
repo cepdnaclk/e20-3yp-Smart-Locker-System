@@ -241,6 +241,8 @@ public class UserService implements IUserService {
             System.err.println("Failed to parse MQTT message: " + e.getMessage());
         }
 
+        System.out.println(action);
+
         User user = userRepository.findByFingerPrintId(userFingerPrintId);
 
         String username = user.getUsername();

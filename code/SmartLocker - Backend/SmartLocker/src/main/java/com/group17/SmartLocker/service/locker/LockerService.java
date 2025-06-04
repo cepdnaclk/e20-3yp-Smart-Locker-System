@@ -201,6 +201,9 @@ public class LockerService implements ILockerService{
         * User should unlock and assign a locker using the fingerprint
         * User cannot assign a locker using the mobile app
         */
+
+        System.out.println("assign locker");
+
         String userId = username;
         User user = userRepository.findByUsername(username);
 
