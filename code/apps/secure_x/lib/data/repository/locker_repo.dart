@@ -13,7 +13,11 @@ class LockerRepo {
 
   Future<LockerClusterModel> getLockerClusterDetails(int clusterId) async{
     try{
-      final response=await dioClient.getData(AppConstants.LOCKER_AVAILABILITY_URI);
+      final uri = AppConstants.LOCKER_AVAILABILITY_URI
+          .replaceFirst('{clusterId}', clusterId.toString());
+      
+      final response = await dioClient.getData(uri);
+      
       if (response.statusCode == 200) {
         return LockerClusterModel.fromJson(response.data);
       } else {

@@ -356,6 +356,14 @@ class AuthRepo {
       try{
         activeLocker=lockerLogs.firstWhere(
         (log)=> log.status=='ACTIVE',);
+
+        print('[DEBUG] Active locker found!');
+        print('[DEBUG] Active Locker Details:');
+        print('[DEBUG] - ID: ${activeLocker.id}');
+        print('[DEBUG] - DateTime: ${activeLocker.dateTime}');
+        print('[DEBUG] - Status: ${activeLocker.status}');
+        print('[DEBUG] - Cluster ID: ${activeLocker.clusterId}');
+
       }catch(e){
         activeLocker=null;
       }
