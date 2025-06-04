@@ -1,5 +1,5 @@
 class LockerClusterModel {
-  final int id;
+  final int? id;
   final String clusterName;
   final String lockerClusterDescription;
   final int totalNumberOfLockers;
@@ -20,20 +20,20 @@ class LockerClusterModel {
   // Optional: Add fromJson/toJson if you're getting data from an API
   factory LockerClusterModel.fromJson(Map<String, dynamic> json) {
     return LockerClusterModel(
-      id: json['id'],
-      clusterName: json['lockerClusterName'],
-      lockerClusterDescription: json['lockerClusterDescription'],
-      totalNumberOfLockers: json['totalNumberOfLockers'],
-      availableNumberOfLockers: json['availableNumberOfLockers'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
+      id: json['id'] as int? ?? 0,
+      clusterName: json['clusterName'] as String? ?? '',
+      lockerClusterDescription: json['lockerClusterDescription'] as String? ?? '',
+      totalNumberOfLockers: json['totalNumberOfLockers'] as int? ?? 0 ,
+      availableNumberOfLockers: json['availableNumberOfLockers'] as int? ?? 0,
+      latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
+      longitude: (json['longitude'] as num?)?.toDouble()?? 0.0,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id':id,
-      'lockerClusterName': clusterName,
+      'clusterName': clusterName,
       'lockerClusterDescription': lockerClusterDescription,
       'totalNumberOfLockers': totalNumberOfLockers,
       'availableNumberOfLockers': availableNumberOfLockers,

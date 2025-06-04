@@ -55,19 +55,19 @@ class Unlock extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Location : xxxxxxxx ',
+                  'Location : Department of Computer Engineering ',
                   style: TextStyle(
                     fontSize: 20.sp, 
                     fontWeight: FontWeight.bold),
                 ),
-                Text(
+                /*Text(
                   'Recent Access Time : xx:xx:xx ',
                   style: TextStyle(
                     fontSize: 20.sp, 
                     fontWeight: FontWeight.bold),
-                ),
+                ),*/
                 Text(
-                  'Locker No : xxx ',
+                  'Locker No : 102',
                   style: TextStyle(
                     fontSize: 20.sp, 
                     fontWeight: FontWeight.bold),

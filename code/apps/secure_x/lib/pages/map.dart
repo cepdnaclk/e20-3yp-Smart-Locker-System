@@ -34,22 +34,33 @@ class _LockerMapState extends State<LockerMap> {
   }
 
   Widget content(){
-    return FlutterMap(
-      options:const MapOptions(
-        initialCenter: LatLng(7.256197072872723, 80.59694481740117),
-        initialZoom: 11,
-        interactionOptions: InteractionOptions(
-          flags: InteractiveFlag.all,
+    return Obx((){
+      return FlutterMap(
+        options:const MapOptions(
+          initialCenter: LatLng(7.256197072872723, 80.59694481740117),
+          initialZoom: 16,
+          interactionOptions: InteractionOptions(
+            flags: InteractiveFlag.all,
+          )
+        ),
+        children: [
+          openStreetMapTileLayer,
+          MarkerLayer(markers: _buildMarkers(),
         )
-      ),
-      children: [
-        openStreetMapTileLayer,
-        MarkerLayer(
-          markers: lockerController.lockerClusters
+        ],
+      );
+    });
+  }
+
+  List<Marker> _buildMarkers(){
+    lockerController.lockerClusters.forEach((cluster) {
+  });
+
+    return  lockerController.lockerClusters
             .where((cluster) => cluster.availableNumberOfLockers > 0)
             .map((cluster) => Marker(
               point: LatLng(cluster.latitude, cluster.longitude),
-              width: 120.w,
+              width: 150.w,
               height: 90.h,
               alignment: Alignment.topCenter,
               child: Column(
@@ -62,14 +73,16 @@ class _LockerMapState extends State<LockerMap> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(6.r),
                       boxShadow: [
-                        BoxShadow(color: Colors.black26, blurRadius: 3.r),
+                        BoxShadow(
+                          color: Colors.black26, 
+                          blurRadius: 3.r),
                       ],
                     ),
               child: Text(
-                cluster.clusterName,
+                cluster.lockerClusterDescription,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: 11.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -81,17 +94,14 @@ class _LockerMapState extends State<LockerMap> {
               },
               child: Icon(
                 Icons.location_on,
-                size: 38.sp,
+                size: 40.sp,
                 color: Colors.red,
               ),
             ),
           ],
         ),
       ))
-                .toList(),
-          ),        
-      ],
-    );
+                .toList();
   }
 
   void _showLockerDetails(BuildContext context, LockerClusterModel cluster) {
@@ -122,7 +132,7 @@ class _LockerMapState extends State<LockerMap> {
                   Center(
                     child: Container(
                       width: 30.w,
-                      height: 4.h,
+                      height: 6.h,
                       margin: EdgeInsets.only(bottom: 16.h),
                       decoration: BoxDecoration(
                         color: AppColors.textTertiary,
@@ -131,9 +141,9 @@ class _LockerMapState extends State<LockerMap> {
                     ),
                   ),
                   Text(
-                    cluster.clusterName,
+                    cluster.lockerClusterDescription,
                     style: TextStyle(
-                      fontSize: 20.sp,
+                      fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -142,13 +152,13 @@ class _LockerMapState extends State<LockerMap> {
                     "Total Lockers: ${cluster.totalNumberOfLockers}",
                     style: TextStyle(fontSize: 16.sp),
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 10.h),
                   Text(
                     "Available Lockers: ${cluster.availableNumberOfLockers}",
                     style: TextStyle(fontSize: 16.sp),
                   ),
                   SizedBox(height: 20.h),
-                  Center(
+                  /*Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         elevation: 6.h,
@@ -163,7 +173,7 @@ class _LockerMapState extends State<LockerMap> {
                         fontWeight: FontWeight.bold,
                       ),),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
