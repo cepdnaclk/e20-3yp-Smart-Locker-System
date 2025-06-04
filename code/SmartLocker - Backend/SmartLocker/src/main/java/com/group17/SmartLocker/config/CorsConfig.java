@@ -1,4 +1,4 @@
-package com.example.project.config; // Replace with your actual package name
+package com.group17.SmartLocker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +14,10 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
 
                 registry.addMapping("/**") // Apply to all API endpoints
-//                        .allowedOriginPatterns("*")
-                        .allowedOrigins("*") // Allow frontend (put frontend address here instead of *)
+                        .allowedOriginPatterns("*")
+
+//                        .allowedOrigins("http://localhost:3000") // Allow frontend (put frontend address here instead of *)
+//                        .allowedOrigins("*") // Allow frontend (put frontend address here instead of *)
 
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")

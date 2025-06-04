@@ -8,6 +8,7 @@ import com.group17.SmartLocker.service.locker.LockerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,6 +27,8 @@ public class LockerClusterService implements ILockerClusterService{
         newLockerCluster.setLockerClusterDescription(lockerCluster.getLockerClusterDescription());
         newLockerCluster.setTotalNumberOfLockers(lockerCluster.getTotalNumberOfLockers());
         newLockerCluster.setAvailableNumberOfLockers(lockerCluster.getTotalNumberOfLockers());
+        newLockerCluster.setLatitude(lockerCluster.getLatitude());
+        newLockerCluster.setLongitude(lockerCluster.getLongitude());
 
         newLockerCluster = lockerClusterRepository.save(newLockerCluster);
 
@@ -42,22 +45,57 @@ public class LockerClusterService implements ILockerClusterService{
     }
 
     @Override
-    public List<LockerCluster> getAllLockerClusters() {
-        return lockerClusterRepository.findAll();
+    public List<LockerClusterDto> getAllLockerClusters() {
+        List<LockerCluster> lockerClusters =  lockerClusterRepository.findAll();
+        List<LockerClusterDto> lockerClustersList = new ArrayList<>();
+
+        for(int i = 0; i < lockerClusters.size(); i++){
+            LockerClusterDto lockerCluster = new LockerClusterDto();
+
+            lockerCluster.setId(lockerClusters.get(i).getId());
+            lockerCluster.setClusterName(lockerClusters.get(i).getClusterName());
+            lockerCluster.setLockerClusterDescription(lockerClusters.get(i).getLockerClusterDescription());
+            lockerCluster.setTotalNumberOfLockers(lockerClusters.get(i).getTotalNumberOfLockers());
+            lockerCluster.setAvailableNumberOfLockers(lockerClusters.get(i).getAvailableNumberOfLockers());
+
+            // locker location
+            lockerCluster.setLatitude(lockerClusters.get(i).getLatitude());
+            lockerCluster.setLongitude(lockerClusters.get(i).getLongitude());
+
+            lockerClustersList.add(lockerCluster);
+        }
+
+        return lockerClustersList;
     }
 
     @Override
-    public LockerCluster updateLockerCluster(Long lockerClusterId, LockerClusterDto lockerCluster) {
+    public LockerClusterDto updateLockerCluster(Long lockerClusterId, LockerClusterDto lockerCluster) {
 
         LockerCluster updatedLockerCluster = lockerClusterRepository.findById(lockerClusterId)
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid cluster Id!"));
 
         updatedLockerCluster.setClusterName(lockerCluster.getClusterName());
         updatedLockerCluster.setLockerClusterDescription(lockerCluster.getLockerClusterDescription());
+
         updatedLockerCluster.setTotalNumberOfLockers(lockerCluster.getTotalNumberOfLockers());
         updatedLockerCluster.setAvailableNumberOfLockers(lockerCluster.getTotalNumberOfLockers());
 
-        return lockerClusterRepository.save(updatedLockerCluster);
+        // locker location
+        updatedLockerCluster.setLatitude(lockerCluster.getLatitude());
+        updatedLockerCluster.setLongitude(lockerCluster.getLongitude());
+
+        lockerClusterRepository.save(updatedLockerCluster);
+
+        // set the dto
+        lockerCluster.setId(updatedLockerCluster.getId());
+        lockerCluster.setClusterName(updatedLockerCluster.getClusterName());
+        lockerCluster.setLockerClusterDescription(updatedLockerCluster.getLockerClusterDescription());
+        lockerCluster.setTotalNumberOfLockers(updatedLockerCluster.getTotalNumberOfLockers());
+        lockerCluster.setAvailableNumberOfLockers(updatedLockerCluster.getAvailableNumberOfLockers());
+        lockerCluster.setLatitude(updatedLockerCluster.getLatitude());
+        lockerCluster.setLongitude(updatedLockerCluster.getLongitude());
+
+        return lockerCluster;
     }
 
     @Override

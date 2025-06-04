@@ -1,0 +1,135 @@
+.AddDialog .MuiDialog-paper{
+  min-width: 400px;
+}
+
+.dialog-content {
+  padding-top: 10px;
+  display: flex;
+  flex-direction:column;
+  gap: 16px;
+
+  
+}
+
+.dialog-actions {
+  align-items:end ;
+  padding: 8px 10px;
+
+}
+
+.DTital{
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: 700;
+}
+/* filtr  */
+.LFilter{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 2px solid rgb(82, 81, 81);
+  height: 60px;
+  padding:4px;
+  border-radius: 0.5rem;
+  gap:10px;
+}
+/* radio btn */
+.filter-occupency {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 0.5rem;
+    background-color: #dcdcdc;
+    box-sizing: border-box;
+    /* box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06); */
+    padding: 0.25rem;
+    width: 240px;
+    
+    font-size: 14px;
+  }
+  
+  .filter-occupency label {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+  
+  .filter-occupency label input {
+    display: none;
+  }
+  
+  .filter-occupency label .name {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    border: none;
+    padding: .5rem 0;
+    color: rgba(51, 65, 85, 1);
+    transition: all .15s ease-in-out;
+  }
+  
+  .filter-occupency label input:checked + .name {
+    background-color: #000000;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+
+  /* drop doun menu */
+
+  .select-container {
+  position: relative;
+  display: inline-block;
+  width: 160px;
+}
+
+select {
+  width: 100%;
+  padding: 12px 40px 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  background-color: white;
+  border: 2px solid #000;
+  border-radius: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+select:hover {
+  border-color: #666;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+select:focus {
+  outline: none;
+  border-color: #000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+select:disabled {
+  background-color: #f9f9f9;
+  color: #999;
+  cursor: not-allowed;
+  border-color: #ccc;
+}
+
+/* Custom arrow */
+.select-container::after {
+  content: '▼';
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #333;
+  font-size: 12px;
+}
+
+.select-container.disabled::after {
+  color: #999;
+}

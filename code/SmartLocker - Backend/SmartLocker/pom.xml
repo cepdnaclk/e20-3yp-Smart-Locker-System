@@ -63,6 +63,10 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -103,6 +107,11 @@
 			<groupId>io.opencensus</groupId>
 			<artifactId>opencensus-api</artifactId>
 			<version>0.31.1</version> <!-- Or the latest compatible version -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
 		<dependency>

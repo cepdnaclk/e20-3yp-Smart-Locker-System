@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:secure_x/pages/find.dart';
 import 'package:secure_x/pages/unlock.dart';
+import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
 class LoginSuccess extends StatelessWidget {
@@ -9,24 +11,24 @@ class LoginSuccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppColors.mainColor,
       appBar:const CustomAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20,), 
-          const Center(
+          SizedBox(height: 20.h,), 
+          Center(
             child: Text('Welcome!', style: TextStyle(
-              fontSize: 30,
+              fontSize: 30.sp,
               fontWeight: FontWeight.bold,
             ),
             ),
           ),        
           Center(
             child: Container(
-              width: 800,
-              height:350,
+              width: 800.w,
+              height:350.h,
               alignment: Alignment.center,
               child:ClipRect(
                 child: Align(
@@ -39,39 +41,46 @@ class LoginSuccess extends StatelessWidget {
               )             
             ),
           ),
-          const SizedBox(height: 10,),
+          SizedBox(height: 10.h,),
           Center(
-            child: TextButton(onPressed: (){
+            child: ElevatedButton(onPressed: (){
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Unlock(),));
+                MaterialPageRoute(
+                  builder: (context) =>  Unlock(),));
+                  //builder: (context) => const Navigation(selectedIndex: 3),
+                //));
             },
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.blue,
+            style: ElevatedButton.styleFrom(
+              elevation: 6.h,
+              foregroundColor: AppColors.textHighlight,
+              backgroundColor: AppColors.textMuted
             ),
-            child: const Text('Unlock my Locker' ,style: TextStyle(
-              fontSize: 22,
+            child: Text('Unlock my Locker' ,style: TextStyle(
+              fontSize: 22.sp,
               fontWeight: FontWeight.bold,
             ),)
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           Center(
-            child: TextButton(onPressed: (){
+            child: ElevatedButton(onPressed: (){
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Find(),));
             },
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.blue,
+            style: ElevatedButton.styleFrom(
+              elevation: 6.h,
+              foregroundColor: AppColors.textHighlight,
+              backgroundColor: AppColors.textMuted,
             ),
-            child: const Text('Search a Locker' ,style: TextStyle(
-              fontSize: 22,
+            child: Text('Search a Locker' ,style: TextStyle(
+              fontSize: 22.sp,
               fontWeight: FontWeight.bold,
             ),)
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
         ],
       ),
     );

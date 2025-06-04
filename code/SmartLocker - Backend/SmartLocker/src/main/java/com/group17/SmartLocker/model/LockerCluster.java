@@ -19,10 +19,16 @@ public class LockerCluster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String clusterName;
     private String lockerClusterDescription;
     private int totalNumberOfLockers;
     private int availableNumberOfLockers;
+
+    // Cluster location
+    private double latitude;
+    private double longitude;
 
     @OneToMany(mappedBy = "lockerCluster", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Locker> lockers;

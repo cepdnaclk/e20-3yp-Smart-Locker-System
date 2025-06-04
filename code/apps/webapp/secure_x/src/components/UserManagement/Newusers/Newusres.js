@@ -1,20 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { getPendingUsresData, putLockeUsresData } from '../../Services/api.js';
+import React, { useState, useEffect } from "react";
+import {
+  getPendingUsresData,
+  putLockeUsresData,
+  rejectPendingUser,
+} from "../../Services/api.js";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import { Check, Ban, RefreshCw } from "lucide-react";
+import Tooltip from "@mui/material/Tooltip";
+import "../../Button/Button.css";
+import "../../TableStyle/Table.css";
+import "./Newusers.css";
 
 const Newusers = () => {
   const [users, setUsers] = useState([]);
+  const [openReject, setOpenReject] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   // Fetch pending users
-  const handlePendingUsers = async (e) => {
-    e.preventDefault();
+  const fetchPendingUsers = async () => {
     try {
       const response = await getPendingUsresData();
-      setUsers(response.data);
-      if(users == null){
-        alert('No pending users');
+      const data = response.data;
+      setUsers(data);
+      if (!data || data.length === 0) {
+        alert("No pending users");
       }
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
       alert(`Invalid Request: Token ${localStorage.getItem("token")}`);
     }
   };
@@ -24,55 +41,140 @@ const Newusers = () => {
     try {
       await putLockeUsresData(id);
       alert(`User accepted with ID: ${id}`);
-      // Refresh the list after accepting
-      handlePendingUsers(new Event('fetch'));
+      fetchPendingUsers(); // no need to fake Event
     } catch (error) {
       console.error(`Error accepting user: ${id}`, error);
       alert(`Error accepting user: ${id}`);
     }
   };
-  
+
+  // Reject user function
+  const rejectPendingUsers = async (id) => {
+    try {
+      await rejectPendingUser(id);
+      alert(`User rejected with ID: ${id}`);
+      setOpenReject(false);
+      fetchPendingUsers();
+    } catch (error) {
+      console.error(`Error rejecting user: ${id}`, error);
+      alert(`Error rejecting user: ${id}`);
+    }
+  };
+
+  // handel reject btn dialog box
+  const handleRejectClick = (user) => {
+    setSelectedUser(user);
+    setOpenReject(true);
+  };
+
+  // fech data whe page load or refesh
+  useEffect(() => {
+    fetchPendingUsers();
+  }, []); // no linter warning now
 
   return (
-    <div>
-      <h2>Pending Users</h2>
-      <button onClick={handlePendingUsers}>Get Data</button>
+    <div className="WindowPU">
+      <div className="WindowPU_t">
+        <h2>Pending Users</h2>
+        <div className="ActionB">
+          <Tooltip
+            title="Refresh"
+            arrow
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  fontSize: "12px",
+                  backgroundcolor: "black",
+                  color: "#fff",
+                },
+              },
+            }}
+          >
+            <button className="ADDB" onClick={fetchPendingUsers}>
+              <RefreshCw size={16} />
+            </button>
+          </Tooltip>
+        </div>
 
-      <table border="1" style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr> 
-            <th>ID</th>
-            <th>Reg No</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Contact Number</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.regNo}</td>
-              <td>{user.firstName}</td>
-              <td>{user.lastName}</td>
-              <td>{user.contactNumber}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>{user.status}</td>
-              <td>
-                <button onClick={() => acceptPendingUser(user.id)}>Accept</button>
-                <button style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }}>
-                  Reject
-                </button>
-              </td>
+        <table className="Ctable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Reg No</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Contact Number</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.regNo}</td>
+                <td>{user.firstName}</td>
+                <td>{user.lastName}</td>
+                <td>{user.contactNumber}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>{user.status}</td>
+                <td className="ActionF">
+                  <Tooltip title="Accept" arrow>
+                    <button
+                      className="UNLOCKB"
+                      onClick={() => acceptPendingUser(user.id)}
+                    >
+                      <Check size={16} />
+                    </button>
+                  </Tooltip>
+                  <Tooltip title="Reject" arrow>
+                    <button
+                      className="DELETB"
+                      onClick={() => handleRejectClick(user.id)}
+                    >
+                      <Ban size={16} />
+                    </button>
+                  </Tooltip>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div>
+          {/* reject DIALOG */}
+          <Dialog
+            className="PendingDialog"
+            open={openReject}
+            onClose={() => setOpenReject(false)}
+          >
+            <DialogTitle className="DTital">Reject Pending User! </DialogTitle>
+            <DialogContent>
+              <p> Are you sure reject this pending user?</p>
+              <p>
+                ID - <i> {selectedUser}</i>
+              </p>
+              {/* <p>
+                First Name - <i> {selectedUser?.firstName}</i>
+              </p> */}
+            </DialogContent>
+            <DialogActions className="dialog-actions">
+              <button className="CANCELB" onClick={() => setOpenReject(false)}>
+                Cancel
+              </button>
+              <button
+                className="DELETEB"
+                onClick={() => rejectPendingUsers(selectedUser)}
+                variant="contained"
+              >
+                Reject
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      </div>
     </div>
   );
 };

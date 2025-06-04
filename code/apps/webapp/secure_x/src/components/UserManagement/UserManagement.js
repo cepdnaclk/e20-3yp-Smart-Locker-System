@@ -13,6 +13,7 @@ const UserManagement = () => {
         <h1>User Management Page</h1>
         <div className="header">
           <Newusres/>
+          
           <Lockerusers/>
         </div>
 

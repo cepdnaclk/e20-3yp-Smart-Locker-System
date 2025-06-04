@@ -29,7 +29,7 @@ public class NewUser{
     @Column(nullable = false, unique = true)
     private String contactNumber;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)

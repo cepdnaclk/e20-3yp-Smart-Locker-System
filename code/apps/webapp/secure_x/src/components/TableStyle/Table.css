@@ -1,0 +1,119 @@
+.Ctable {
+padding-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  
+  
+}
+
+.Ctable thead {
+  background-color: black;
+  color: rgb(255, 255, 255);
+  
+}
+
+.Ctable th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 14px;
+  
+  border-right: none;
+}
+
+
+
+/* Table Body Styles */
+.Ctable tbody tr {
+  border: none;
+}
+
+
+.Ctable td {
+  padding: 5px 15px;
+  color: black;
+  font-size: 15px;
+  vertical-align: middle;
+  border-bottom: 1px solid #818080; 
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  
+}
+
+/* Action Column Styles */
+.ActionF {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px; 
+}
+
+.ActionB {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 20px;
+  min-width: 120px; 
+  align-items: center;
+}
+/* serch bar */
+.SearchB{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+}
+
+.inputS{
+   width: 100%;
+  height: 36px;
+  line-height: 28px;
+  padding: 0 1rem;
+  padding-left: 2.5rem;
+  border: 2px solid rgba(142, 140, 139, 0.4);
+  border-radius: 8px;
+  outline: none;
+  background-color: #f3f3f4;
+  color: #0d0c22;
+  transition: 0.3s ease;
+  text-align: right;
+  font-style: italic;
+}
+.inputS::placeholder {
+  color: #9e9ea7;
+}
+
+.inputS:focus,
+inputS:hover {
+  outline: none;
+  border-color: rgba(142, 140, 139, 0.4);
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(73, 72, 72, 0.1);
+}
+
+.FilterB{
+  display: flex;
+  gap: 8px;
+  align-items: end;
+}
+
+.FilterOption{
+  background-color: black;
+  color: white;
+  border: 2px solid black;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  min-width: 40px;
+  height: 36px;
+
+}
+
+
+

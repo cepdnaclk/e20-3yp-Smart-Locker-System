@@ -1,0 +1,1 @@
+C:\e20-3yp-Smart-Locker-System\code\apps\secure_x\build\app\intermediates\cxx\Debug\e654u5h5\obj\arm64-v8a

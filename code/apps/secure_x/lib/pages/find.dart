@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:secure_x/pages/map.dart';
+import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
 class Find extends StatefulWidget {
@@ -18,51 +21,50 @@ class _FindState extends State<Find> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppColors.mainColor,
       appBar:const CustomAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 10,), 
-          const Text('Locker near me', style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
+          SizedBox(height: 10.h,), 
+          Center(
+            child: Text('Locker Near Me', 
+            style: TextStyle(
+              fontSize: 25.sp,
+              fontWeight: FontWeight.bold,
+            ),
+            ),
           ),        
           Center(
             child: Container(
-              width: 400,
-              height:600,
+              width: 400.w,
+              height:600.h,
               alignment: Alignment.center,
-              child:ClipRect(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Image.asset('assets/img/map.png',
-                  fit: BoxFit.contain,             
-                ),
-                ),
-              )             
+              child:LockerMap(),         
             ),
           ),
-          const SizedBox(height: 10,),
+          SizedBox(height: 10.h,),
           Center(
             child: ElevatedButton(
               onPressed:(){
               },
               style: ElevatedButton.styleFrom(
+                elevation: 6.h,
                 backgroundColor: Colors.black,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                padding: EdgeInsets.symmetric(
+                  vertical: 12.h, 
+                  horizontal: 24.w),
               ), 
-              child: const Text('FIND',style: TextStyle(
-                fontSize: 25,
+              child: Text('FIND',style: TextStyle(
+                fontSize: 20.h,
                 fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
         ],
       ),
     );

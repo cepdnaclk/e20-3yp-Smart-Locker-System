@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart' as dio; // Import Dio for Response type with alias
 import 'package:secure_x/data/api/dio_client.dart'; // Use DioClient
 import 'package:secure_x/utils/app_constants.dart';
-import 'package:get/get.dart';
 
 class UserRepo {
   final DioClient dioClient; // Use DioClient instead of ApiClient
