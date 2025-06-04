@@ -256,7 +256,7 @@ public class LockerService implements ILockerService{
 
             // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(5000); // 90000 milliseconds = 1.5 minutes
+                Thread.sleep(60000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // good practice
                 System.err.println("Thread was interrupted");
@@ -270,6 +270,9 @@ public class LockerService implements ILockerService{
 //            return "Please use the locker with locker number: " + locker.getDisplayNumber(); // change this accordingly
         }
         else{
+
+            Locker locker = activeOrUnsafeLog.getLocker();
+
             // Todo: make this to send notification
             System.out.println(user.getFirstName() + ", You have already used a locker.");
             notificationService.sendAndSave(
@@ -278,6 +281,9 @@ public class LockerService implements ILockerService{
                     "You have already used a locker!",
                     "ERROR"
             );
+
+            sendMqttMessageToLockerUnlock(clusterId, locker.getLockerId(), "1", "0");
+
 //            return "You have already used a locker.";
         }
 
@@ -315,7 +321,7 @@ public class LockerService implements ILockerService{
 
             // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(5000); // 90000 milliseconds = 1.5 minutes
+                Thread.sleep(60000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 System.err.println("Thread was interrupted");
@@ -383,7 +389,7 @@ public class LockerService implements ILockerService{
 
              // Delay execution for 1.5 minutes
              try {
-                 Thread.sleep(5000); // 90000 milliseconds = 1.5 minutes
+                 Thread.sleep(60000); // 90000 milliseconds = 1.5 minutes
              } catch (InterruptedException e) {
                  Thread.currentThread().interrupt();
                  System.err.println("Thread was interrupted");

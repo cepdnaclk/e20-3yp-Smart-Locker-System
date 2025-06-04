@@ -181,7 +181,7 @@ public class UserService implements IUserService {
         System.out.println("Fingerprint id :" + fingerPrintId);
 
         user.setFingerPrintId(fingerPrintId);
-        user.setOtp(null); // to ensure the otp is used only once
+//        user.setOtp(null); // to ensure the otp is used only once
         userRepository.save(user);
         System.out.println("Fingerprint id saved successfully");
     }
