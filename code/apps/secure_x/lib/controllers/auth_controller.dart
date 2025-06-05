@@ -94,8 +94,8 @@ class AuthController extends GetxController {
 
     } finally {
       isLoading.value = false; // Stop loading
-    }
-  }
+}
+}
 
   // Method to handle user registration
   Future<ResponseModel<Map<String, dynamic>>> registration(CreateUserModel createUserModel, BuildContext context) async {
