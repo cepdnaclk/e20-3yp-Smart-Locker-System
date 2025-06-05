@@ -119,10 +119,8 @@ class AuthRepo {
       return ResponseModel<String>(
         isSuccess: false,
         message: 'Network error: $e',
-      );
-    }
-  }
-
+  );
+}}
   // Method to handle user registration
   Future<ResponseModel<Map<String, dynamic>>> registration(CreateUserModel createUserModel) async {
     try {
@@ -545,7 +543,6 @@ class AuthRepo {
     } catch (e) {
       print('Error checking approval (AuthRepo): $e');
       return false;
-    }
-  }
-
+}
+}
 }

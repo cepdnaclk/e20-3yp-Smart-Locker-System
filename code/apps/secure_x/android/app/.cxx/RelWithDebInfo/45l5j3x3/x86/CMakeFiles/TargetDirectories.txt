@@ -1,0 +1,2 @@
+C:/e20-3yp-Smart-Locker-System/code/apps/secure_x/android/app/.cxx/RelWithDebInfo/45l5j3x3/x86/CMakeFiles/edit_cache.dir
+C:/e20-3yp-Smart-Locker-System/code/apps/secure_x/android/app/.cxx/RelWithDebInfo/45l5j3x3/x86/CMakeFiles/rebuild_cache.dir

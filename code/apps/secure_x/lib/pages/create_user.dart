@@ -156,6 +156,8 @@ class _CreateUserState extends State<CreateUser> {
         password: password,
       );
 
+      //Get.to(() => LogIn());
+
       // Call the registration method in AuthController
       final ResponseModel response = await _authController.registration(createUserModel,context);
 
@@ -163,17 +165,17 @@ class _CreateUserState extends State<CreateUser> {
         //CustomSnackBar(response.message, iserror: false, title: 'Success');
         CustomSnackBar.show(
           context: context,
-          message: 'Checking for admin approval...',
+          message: 'Checking for admin approval... Try to login',
           //title: '',
           isError: false,
           icon: Icons.hourglass_top,);
 
           bool isApproved=false;
           int attempts=0;
-          const int maxAttempts=12;
+          const int maxAttempts=3;
 
           while(!isApproved && attempts<maxAttempts){
-            await Future.delayed(const Duration(seconds: 5));
+            await Future.delayed(const Duration(seconds: 2));
 
             isApproved=await _authController.checkApprovalStatus(email,password);
 
@@ -201,7 +203,7 @@ class _CreateUserState extends State<CreateUser> {
       } else {
         CustomSnackBar.show(
           context: context,
-          message: 'Admin approval pending. Try again later.',
+          message: 'Admin approval pending. Try to login',
           title: 'Warning',
           isError: true,
           icon: Icons.lock_clock,
@@ -218,8 +220,8 @@ class _CreateUserState extends State<CreateUser> {
           icon: Icons.warning_amber_rounded,
         );
       }
-  }
-
+      //Get.offAllNamed('/login');
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -232,12 +234,13 @@ class _CreateUserState extends State<CreateUser> {
               : SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [         
               Center(
                 child: Container(
                   width: 1.sw,
-                  height:250.h,
+                  height:200.h,
                   alignment: Alignment.center,
                   child:ClipRect(
                     child: Align(
@@ -375,6 +378,26 @@ class _CreateUserState extends State<CreateUser> {
                               horizontal: 24.w),
                           ), 
                           child: Text('Create Account',
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold),),
+                        ),
+                      SizedBox(height: 10.h,),
+                      ElevatedButton(
+                          onPressed: (){
+                          //  _registration();
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LogIn(),));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.buttonBackgroundColor2,
+                            foregroundColor: AppColors.textInverse,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 12.h, 
+                              horizontal: 24.w),
+                          ), 
+                          child: Text('Log In',
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold),),
