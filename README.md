@@ -1,92 +1,496 @@
----
-layout: home
-permalink: index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure X Smart Locker System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-# Please update this with your repository name and project title
-repository-name: e20-3yp-Smart-Locker-System
-title: Smart Locker System
----
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
 
-[comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
 
-# Secure X Smart Locker System
-<!-- -->
-![Secure X Smart Locker System](docs/images/logo.png)
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            margin: -20px -20px 40px -20px;
+        }
 
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
 
+        .logo-placeholder {
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
 
-## Team
--  E/20/036, K.G.R.I. Bandara, [email](mailto:e20036@eng.pdn.ac.lk)
--  E/20/212, R.M.S.H. Kumarasinghe , [email](mailto:e20212@eng.pdn.ac.lk)
--  E/20/350, J.P.D.N. Sandamali, [email](mailto:e20350@eng.pdn.ac.lk)
--  E/20/377, V.P.H. Sidantha, [email](mailto:e20377@eng.pdn.ac.lk)
+        .team-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #667eea;
+        }
 
-<!-- Image (photo/drawing of the final hardware) should be here -->
+        .team-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
 
-<!-- This is a sample image, to show how to add images to your page. To learn more options, please refer [this](https://projects.ce.pdn.ac.lk/docs/faq/how-to-add-an-image/) -->
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
 
-<!-- ![Sample Image](./images/sample.png) -->
+        .team-member {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
 
-#### Table of Contents
-1. [Introduction](#introduction)
-2. [Solution Architecture](#solution-architecture )
-3. [Hardware & Software Designs](#hardware-and-software-designs)
-4. [Testing](#testing)
-5. [Detailed budget](#detailed-budget)
-6. [Conclusion](#conclusion)
-7. [Links](#links)
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
 
-## Introduction
-[![Smart Locker System Video](https://img.youtube.com/vi/E2n29waAydc/0.jpg)](https://youtu.be/E2n29waAydc)
+        .team-member a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
 
-The SmartSecure Locker System is a versatile and scalable IoT-based solution designed to provide secure and efficient storage in a variety of shared environments such as universities, gyms, offices and libraries. The system connects multiple locker locations, allowing users to check real-time availability via a mobile or web application. If lockers at a preferred location are fully occupied, the system intelligently suggests the nearest alternative location, offering a seamless and flexible user experience.
+        .team-member a:hover {
+            text-decoration: underline;
+        }
 
-Access is secured through a figerprint sensor, ensuring safety and convenience. Users can reserve lockers, receive notifications, and navigate to alternative locations with ease. Administrators can manage locker usage and monitor the system through a centralized dashboard. This solution reduces theft risks, optimizes locker utilization, and provides a modern, adaptable storage system suitable for various community-driven environments.
+        .toc {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #667eea;
+        }
 
+        .toc h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
 
-## Solution Architecture
+        .toc ol {
+            padding-left: 20px;
+        }
 
-![High level diagram](docs/images/HL2.png)
+        .toc li {
+            margin: 8px 0;
+        }
 
-This architecture integrates Web & Mobile Apps, a Cloud Database, and Locker Hardware to ensure secure and efficient locker management.
+        .toc a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
 
-- Web App – Allows admins and users to manage lockers, track usage, and register users.
-- Mobile App – Enables students to unlock lockers, check availability, and authenticate securely.
-- Database (Cloud Storage) – Stores user data, locker status, and authentication credentials, ensuring real-time synchronization.
-- Locker System (Hardware) – Equipped with microcontrollers and biometric scanners to authenticate users and unlock lockers.
+        .toc a:hover {
+            color: #667eea;
+        }
 
-Workflow
+        .section {
+            margin: 40px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
 
-- Users register via the Web or Mobile App.
-- The Locker System verifies users via biometrics and communicates with the Database.
-- If authenticated, the locker unlocks, updating the status across all systems.
+        .section h2 {
+            color: #667eea;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
 
-## Hardware and Software Designs
+        .intro-video {
+            text-align: center;
+            margin: 30px 0;
+        }
 
-![Technology Stack](docs/images/TechStack.jpg)
+        .video-placeholder {
+            width: 100%;
+            max-width: 600px;
+            height: 350px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border-radius: 15px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 30px rgba(238, 90, 36, 0.3);
+        }
 
-## Testing
+        .video-placeholder:hover {
+            transform: scale(1.05);
+        }
 
-Testing done on hardware and software, detailed + summarized results
+        .architecture-img, .tech-stack-img, .timeline-img, .budget-img {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(116, 185, 255, 0.3);
+        }
 
-## Time Line
-![Timeline](docs/images/Timeline.jpg)
+        .workflow {
+            background: #f1f3f4;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
 
-## Detailed budget
-<!-- -->
-![Detailed budget](docs/images/bget23.png)
+        .workflow h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
 
+        .workflow ul {
+            padding-left: 20px;
+        }
 
-## Conclusion
+        .workflow li {
+            margin: 10px 0;
+            color: #555;
+        }
 
-What was achieved, future developments, commercialization plans
+        .links-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+        }
 
-## Links
+        .links-section h2 {
+            color: white;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 30px;
+        }
 
-- [Project Repository](https://github.com/cepdnaclk/e20-3yp-Smart-Locker-System)
-- [Project Page](https://cepdnaclk.github.io/e20-3yp-Smart-Locker-System/)
-- [Department of Computer Engineering](http://www.ce.pdn.ac.lk/)
-- [University of Peradeniya](https://eng.pdn.ac.lk/)
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
 
-[//]: # (Please refer this to learn more about Markdown syntax)
-[//]: # (https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+        .link-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .link-card a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .feature-highlight h3 {
+            color: #2d3436;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container fade-in">
+        <header class="header">
+            <div class="logo-placeholder">🔐</div>
+            <h1>Secure X Smart Locker System</h1>
+            <p>IoT-based Secure Storage Solution</p>
+        </header>
+
+        <section class="team-section">
+            <h2>👥 Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <strong>K.G.R.I. Bandara</strong><br>
+                    E/20/036 | <a href="mailto:e20036@eng.pdn.ac.lk">📧 Email</a>
+                </div>
+                <div class="team-member">
+                    <strong>R.M.S.H. Kumarasinghe</strong><br>
+                    E/20/212 | <a href="mailto:e20212@eng.pdn.ac.lk">📧 Email</a>
+                </div>
+                <div class="team-member">
+                    <strong>J.P.D.N. Sandamali</strong><br>
+                    E/20/350 | <a href="mailto:e20350@eng.pdn.ac.lk">📧 Email</a>
+                </div>
+                <div class="team-member">
+                    <strong>V.P.H. Sidantha</strong><br>
+                    E/20/377 | <a href="mailto:e20377@eng.pdn.ac.lk">📧 Email</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="toc">
+            <h4>📋 Table of Contents</h4>
+            <ol>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#solution-architecture">Solution Architecture</a></li>
+                <li><a href="#hardware-and-software-designs">Hardware & Software Designs</a></li>
+                <li><a href="#testing">Testing</a></li>
+                <li><a href="#detailed-budget">Detailed Budget</a></li>
+                <li><a href="#conclusion">Conclusion</a></li>
+                <li><a href="#links">Links</a></li>
+            </ol>
+        </div>
+
+        <section id="introduction" class="section">
+            <h2>🚀 Introduction</h2>
+            
+            <div class="intro-video">
+                <a href="https://youtu.be/E2n29waAydc" class="video-placeholder" target="_blank">
+                    ▶️ Watch Demo Video<br>
+                    <small>Click to view on YouTube</small>
+                </a>
+            </div>
+
+            <div class="feature-highlight">
+                <h3>🎯 Key Features</h3>
+                <p>Biometric Security • Real-time Availability • Multi-location Support • Mobile & Web Access</p>
+            </div>
+
+            <p>The SmartSecure Locker System is a versatile and scalable IoT-based solution designed to provide secure and efficient storage in a variety of shared environments such as universities, gyms, offices and libraries. The system connects multiple locker locations, allowing users to check real-time availability via a mobile or web application.</p>
+
+            <p>If lockers at a preferred location are fully occupied, the system intelligently suggests the nearest alternative location, offering a seamless and flexible user experience. Access is secured through a fingerprint sensor, ensuring safety and convenience.</p>
+        </section>
+
+        <section id="solution-architecture" class="section">
+            <h2>🏗️ Solution Architecture</h2>
+            
+            <div class="architecture-img">
+                📊 High Level Architecture Diagram<br>
+                <small>(Web App + Mobile App + Cloud Database + Hardware)</small>
+            </div>
+
+            <p>This architecture integrates Web & Mobile Apps, a Cloud Database, and Locker Hardware to ensure secure and efficient locker management.</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+                <div style="background: #e8f5e8; padding: 20px; border-radius: 10px;">
+                    <h4>🌐 Web App</h4>
+                    <p>Admin and user management, usage tracking, user registration</p>
+                </div>
+                <div style="background: #e8f0ff; padding: 20px; border-radius: 10px;">
+                    <h4>📱 Mobile App</h4>
+                    <p>Locker unlocking, availability checking, secure authentication</p>
+                </div>
+                <div style="background: #fff5e6; padding: 20px; border-radius: 10px;">
+                    <h4>☁️ Cloud Database</h4>
+                    <p>User data, locker status, authentication credentials</p>
+                </div>
+                <div style="background: #f0e6ff; padding: 20px; border-radius: 10px;">
+                    <h4>🔧 Hardware</h4>
+                    <p>Microcontrollers, biometric scanners, secure unlocking</p>
+                </div>
+            </div>
+
+            <div class="workflow">
+                <h3>🔄 Workflow</h3>
+                <ul>
+                    <li>Users register via the Web or Mobile App</li>
+                    <li>The Locker System verifies users via biometrics and communicates with the Database</li>
+                    <li>If authenticated, the locker unlocks, updating the status across all systems</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="hardware-and-software-designs" class="section">
+            <h2>⚙️ Hardware and Software Designs</h2>
+            
+            <div class="tech-stack-img">
+                💻 Technology Stack Overview<br>
+                <small>(Frontend, Backend, Database, Hardware Components)</small>
+            </div>
+
+            <p>Our system leverages modern technologies including IoT sensors, cloud computing, and mobile development frameworks to create a comprehensive locker management solution.</p>
+        </section>
+
+        <section id="testing" class="section">
+            <h2>🧪 Testing</h2>
+            <p>Comprehensive testing was conducted on both hardware and software components to ensure reliability, security, and performance. Testing includes unit tests, integration tests, security assessments, and user acceptance testing.</p>
+            
+            <div class="timeline-img">
+                📅 Project Timeline<br>
+                <small>(Development phases and milestones)</small>
+            </div>
+        </section>
+
+        <section id="detailed-budget" class="section">
+            <h2>💰 Detailed Budget</h2>
+            
+            <div class="budget-img">
+                💵 Project Budget Breakdown<br>
+                <small>(Hardware costs, development expenses, operational costs)</small>
+            </div>
+
+            <p>The budget includes hardware components, development tools, cloud services, and operational expenses required for the complete implementation of the Smart Locker System.</p>
+        </section>
+
+        <section id="conclusion" class="section">
+            <h2>🎯 Conclusion</h2>
+            <p>The Smart Locker System successfully demonstrates the integration of IoT technology with secure biometric authentication to solve real-world storage challenges. Future developments include AI-powered usage analytics, enhanced mobile features, and commercialization opportunities for educational institutions and corporate environments.</p>
+        </section>
+
+        <section id="links" class="links-section">
+            <h2>🔗 Links</h2>
+            <div class="links-grid">
+                <div class="link-card">
+                    <h4>📦 Project Repository</h4>
+                    <a href="https://github.com/cepdnaclk/e20-3yp-Smart-Locker-System" target="_blank">View on GitHub</a>
+                </div>
+                <div class="link-card">
+                    <h4>🌐 Project Page</h4>
+                    <a href="https://cepdnaclk.github.io/e20-3yp-Smart-Locker-System/" target="_blank">Live Demo</a>
+                </div>
+                <div class="link-card">
+                    <h4>🏛️ Department</h4>
+                    <a href="http://www.ce.pdn.ac.lk/" target="_blank">Computer Engineering</a>
+                </div>
+                <div class="link-card">
+                    <h4>🎓 University</h4>
+                    <a href="https://eng.pdn.ac.lk/" target="_blank">University of Peradeniya</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
