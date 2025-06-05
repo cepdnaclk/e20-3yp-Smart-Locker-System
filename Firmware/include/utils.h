@@ -52,13 +52,15 @@ bool statusCheck = false; // Flag to check if the locker is assigned
 uint8_t checkLockerId;  // Locker ID
 
 
-uint8_t unlockLockerId ; // Locker ID to unlock
-bool unlockLocker = false; // Flag to unlock the locker
-uint8_t alreadyAssign;
+volatile uint8_t unlockLockerId ; // Locker ID to unlock
+volatile bool unlockLocker = false; // Flag to unlock the locker
+volatile int8_t alreadyAssign;
+
 
 // mobile unlock
 uint8_t mUnlockLockerId ; // Locker ID to unlock
 bool mUnlockLocker = false; // Flag to unlock the locker
+volatile int8_t mReleaseLocker = false; // Flag to release the locker
 
 // Release Locker;
 uint8_t releaseLockerId ; // Locker ID to unlock
@@ -189,6 +191,7 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
             checkLockerId = doc["lockerId"];
             statusCheck = true; // Set the flag to true
             Serial.println("Locker ID received: " + String(checkLockerId));
+            Serial.println("Status Check: " + checkLockerId);
         } else {
             Serial.println("No locker ID found in the message.");
         }
@@ -227,12 +230,15 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
             unlockLockerId = doc["lockerID"];
             if(doc["source"] == "0"){
                 unlockLocker = true; // Set the flag to true
-            } else{
+            } else if (doc["source"] == "1") {
                 mUnlockLocker = true;
+            }else if (doc["source"] == "2") {
+                mReleaseLocker = true;
             }
             alreadyAssign = doc["alreadyAssign"];
             Serial.println("Locker ID received: " + String(checkLockerId));
             Serial.println("unlockLocker" + String(unlockLocker));
+            Serial.println("Status Check: " + checkLockerId);
         } else {
             Serial.println("No locker ID found in the message.");
         }

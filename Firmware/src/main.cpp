@@ -75,7 +75,7 @@ bool isNearThreshold(float distance) {
 }
 
 void read_status() {
-    for (int i = 0; i < NUMLOCKERS; i++) {
+    for (int i = 0; i <1; i++) {
         // Clear the trigPin
         digitalWrite(sensors[i].trigPin, LOW);
         delayMicroseconds(2);
@@ -100,7 +100,7 @@ void read_status() {
 // 2 = safe - assigned and closed
 // 3 = abnormal - not assigned and open or something inside
 void updateStatus() {
-  //read_status(); // Read the ultrasonic sensor data
+  read_status(); // Read the ultrasonic sensor data
   
   for (int i = 0; i < NUMLOCKERS; i++) {
     lockers[i].doorStatus = digitalRead(DOORSENSOR[i]); // Read the door status
@@ -663,7 +663,7 @@ void codeForTask1( void * parameter )
           scrollText(0,"Assigning a locker...");
           I2C_LCD.setCursor(0, 3);
           I2C_LCD.print("Press 'B' to Cancel");
-          unlockLocker = false; // Reset the flag
+          //unlockLocker = false; // Reset the flag
           while (!unlockLocker) {
               client.loop(); // Keep the MQTT client running
               delay(100);
@@ -678,7 +678,7 @@ void codeForTask1( void * parameter )
                 break; // Break the password waiting loop
               }    // Small delay to avoid busy-waiting
           }
-          
+          unlockLocker = false;
           if (cancelled) {
               continue; // Continue the for(;;) loop, restarting from the top
           }
@@ -862,6 +862,12 @@ void codeForTask2( void * parameter )
     
     if(mUnlockLocker == true){
         unlock(unlockLockerId); // Unlock the locker
+        lockers[unlockLockerId-1].status = 1; // Set status to abnormal
+        mUnlockLocker = false; // Reset the flag
+    }
+
+    if(mReleaseLocker == true){
+        unlock(unlockLockerId); // Unlock the locker
         lockers[unlockLockerId-1].assignedId = -1; // Assign the locker ID
         lockers[unlockLockerId-1].status = 3; // Set status to abnormal
         mUnlockLocker = false; // Reset the flag
@@ -896,7 +902,7 @@ void setup(){
   Serial.println("PCF8574 initialized");
   for(int i = 0; i < NUMLOCKERS; i++){
     lockers[i].lockerId = i+1;
-    lockers[i].sensorDistance = 21.7;
+    lockers[i].sensorDistance = 21.2;
     lockers[i].lockerPin = LOCKERPINS[i];
     pcf8574.pinMode(lockers[i].lockerPin, OUTPUT);
     pcf8574.digitalWrite(lockers[i].lockerPin, HIGH); // Activate solenoid
@@ -915,7 +921,7 @@ void setup(){
   xTaskCreatePinnedToCore(
     codeForTask1,
     "led1Task",
-    6114,
+    8000,
     NULL,
     1,
     &Task1,
