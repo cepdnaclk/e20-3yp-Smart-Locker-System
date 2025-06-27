@@ -1,6 +1,8 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
-const API_URL = "http://localhost:9090/api/v1";
+const API_URL =
+  "https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net/api/v1"; //"https://ec2-3-88-237-151.compute-1.amazonaws.com:9090/api/v1";
+//"http://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net/api/v1";
 
 const api = axios.create({
   baseURL: API_URL,

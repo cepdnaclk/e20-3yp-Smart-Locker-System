@@ -428,16 +428,16 @@ uint8_t getFingerprintID()
     break;
   case FINGERPRINT_NOFINGER:
     Serial.println("No finger detected");
-    return p;
+    return -1;
   case FINGERPRINT_PACKETRECIEVEERR:
     Serial.println("Communication error");
-    return p;
+    return -1;
   case FINGERPRINT_IMAGEFAIL:
     Serial.println("Imaging error");
-    return p;
+    return -1;
   default:
     Serial.println("Unknown error");
-    return p;
+    return -1;
   }
   
   // OK success!
@@ -450,19 +450,19 @@ uint8_t getFingerprintID()
     break;
   case FINGERPRINT_IMAGEMESS:
     Serial.println("Image too messy");
-    return p;
+    return -1;
   case FINGERPRINT_PACKETRECIEVEERR:
     Serial.println("Communication error");
-    return p;
+    return -1;
   case FINGERPRINT_FEATUREFAIL:
     Serial.println("Could not find fingerprint features");
-    return p;
+    return -1;
   case FINGERPRINT_INVALIDIMAGE:
     Serial.println("Could not find fingerprint features");
-    return p;
+    return -1;
   default:
     Serial.println("Unknown error");
-    return p;
+    return -1;
   }
   
   // OK converted!
@@ -474,17 +474,17 @@ uint8_t getFingerprintID()
   else if (p == FINGERPRINT_PACKETRECIEVEERR)
   {
     Serial.println("Communication error");
-    return p;
+    return -1;
   }
   else if (p == FINGERPRINT_NOTFOUND)
   {
     Serial.println("Did not find a match");
-    return p;
+    return -1;
   }
   else
   {
     Serial.println("Unknown error");
-    return p;
+    return -1;
   }
   
   // found a match!
@@ -504,7 +504,7 @@ void unlock(uint8_t lockerid){
           pcf8574.digitalWrite(lockers[i].lockerPin, HIGH); // Lock agai
           Serial.print("Locker ");
           Serial.print(lockers[i].lockerId);
-          digitalWrite(LEDPINS[i], HIGH); // Turn off the LED
+          digitalWrite(LEDPINS[i], LOW); // Turn off the LED
         }
 }
 }
@@ -626,11 +626,14 @@ void codeForTask1( void * parameter )
 
             // Proceed with fingerprint registration
             I2C_LCD.clear();
-            while (!getFingerprintEnroll(idS));
-            publishRegID_FinID(user,idS);
-            delay(2000);
-            sendFingerprint(idS);
-            idS++;
+            if (getFingerprintEnroll(idS)==1) {
+              publishRegID_FinID(user, idS);
+              delay(2000);
+              sendFingerprint(idS);
+              idS++;
+            } else {
+                Serial.println("Enrollment failed. Not publishing or sending fingerprint.");
+            }
         } else {
             I2C_LCD.clear();
             I2C_LCD.setCursor(0, 0);
@@ -646,7 +649,12 @@ void codeForTask1( void * parameter )
         scrollText(0,"Place Finger on Sensor...");
         Serial.println("Place Finger on Sensor...");
 
-        uint8_t match = getFingerprintIDez();  // Try reading a fingerprint
+        while (finger.getImage() != FINGERPRINT_OK) {
+          Serial.println("Waiting for finger...");
+          delay(500);
+        }
+        Serial.println("Finger detected!");
+        uint8_t match = getFingerprintID();  // Try reading a fingerprint
 
         if (match > 0) { // Check if a valid fingerprint ID is returned
           Serial.println("Fingerprint Matched!");
@@ -788,7 +796,7 @@ void codeForTask1( void * parameter )
 
         if (match > 0) { // Check if a valid fingerprint ID is returned
           Serial.println("Fingerprint Matched!");
-          publishFingerprintID(match,clusterId,"release"); // Publish the fingerprint ID
+          publishFingerprintID(match,clusterId,"unassign"); // Publish the fingerprint ID
           I2C_LCD.clear();
           scrollText(0,"Realeasing the locker...");
           I2C_LCD.setCursor(0, 3);
@@ -832,7 +840,8 @@ void codeForTask1( void * parameter )
               lockers[unlockLockerId-1].assignedId = -1; // Assign the locker ID
               lockers[unlockLockerId-1].status = 3; // Set status to abnormal
           }
-    }   }
+    }  
+   startScreen();}
   }
 }
 
@@ -850,6 +859,7 @@ void codeForTask2( void * parameter )
     }
     client.loop();
     delay(100); // Small delay to avoid busy-waiting
+    
     if(mUnlockLocker == true){
         unlock(unlockLockerId); // Unlock the locker
         lockers[unlockLockerId-1].assignedId = -1; // Assign the locker ID
