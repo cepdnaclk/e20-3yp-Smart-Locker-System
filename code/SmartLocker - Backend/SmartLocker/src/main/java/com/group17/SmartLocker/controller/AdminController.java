@@ -2,16 +2,17 @@ package com.group17.SmartLocker.controller;
 
 import com.group17.SmartLocker.dto.LockerClusterDto;
 import com.group17.SmartLocker.dto.LockerDto;
+import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.model.Locker;
 import com.group17.SmartLocker.model.LockerCluster;
 import com.group17.SmartLocker.model.NewUser;
 import com.group17.SmartLocker.model.User;
-import com.group17.SmartLocker.repsponse.ApiResponse;
 import com.group17.SmartLocker.service.email.EmailService;
 import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.lockerCluster.LockerClusterService;
+import com.group17.SmartLocker.service.lockerLog.LockerLogService;
 import com.group17.SmartLocker.service.newUser.NewUserService;
 import com.group17.SmartLocker.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class AdminController {
     private final LockerService lockerService;
     private final LockerClusterService lockerClusterService;
     private final EmailService emailService;
+    private final LockerLogService lockerLogService;
 
     // api endpoints to manage new users
 
@@ -127,6 +129,16 @@ public class AdminController {
         }
     }
 
+    // lockerlog management endpoints
+    @GetMapping("/getAllLogs")
+    public ResponseEntity<List<LockerLogDto>> getAllLogs(){
+        try {
+            List<LockerLogDto> lockerLogs = lockerLogService.getAllLockerLogs();
+            return ResponseEntity.ok(lockerLogs);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     // Locker management endpoints
 

@@ -256,7 +256,7 @@ public class LockerService implements ILockerService{
 
             // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(60000); // 90000 milliseconds = 1.5 minutes
+                Thread.sleep(30000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // good practice
                 System.err.println("Thread was interrupted");
@@ -282,7 +282,7 @@ public class LockerService implements ILockerService{
                     "ERROR"
             );
 
-            sendMqttMessageToLockerUnlock(clusterId, locker.getLockerId(), "1", "0");
+//            sendMqttMessageToLockerUnlock(clusterId, locker.getLockerId(), "1", "0");
 
 //            return "You have already used a locker.";
         }
@@ -321,7 +321,7 @@ public class LockerService implements ILockerService{
 
             // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(60000); // 90000 milliseconds = 1.5 minutes
+                Thread.sleep(30000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 System.err.println("Thread was interrupted");
@@ -389,7 +389,7 @@ public class LockerService implements ILockerService{
 
              // Delay execution for 1.5 minutes
              try {
-                 Thread.sleep(60000); // 90000 milliseconds = 1.5 minutes
+                 Thread.sleep(30000); // 90000 milliseconds = 1.5 minutes
              } catch (InterruptedException e) {
                  Thread.currentThread().interrupt();
                  System.err.println("Thread was interrupted");
