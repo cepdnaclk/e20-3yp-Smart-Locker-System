@@ -185,7 +185,7 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
         }
 
         // Extract the locker ID
-        if (doc.containsKey("lockerID") && doc["clusterID"] == "1" ) {
+        if (doc.containsKey("lockerId") && doc["clusterId"] == "1" ) {
             checkLockerId = doc["lockerId"];
             statusCheck = true; // Set the flag to true
             Serial.println("Locker ID received: " + String(checkLockerId));
@@ -232,6 +232,7 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
             }
             alreadyAssign = doc["alreadyAssign"];
             Serial.println("Locker ID received: " + String(checkLockerId));
+            Serial.println("unlockLocker" + String(unlockLocker));
         } else {
             Serial.println("No locker ID found in the message.");
         }
@@ -525,8 +526,8 @@ void publishFingerprintID(uint8_t fingerprintID,uint8_t clusterId, String action
 
     // Create JSON payload
     StaticJsonDocument<200> doc;
-    doc["fingerprintID"] = fingerprintID;
-    doc["clusterID"] = clusterId;
+    doc["fingerprintId"] = fingerprintID;
+    doc["clusterId"] = clusterId;
     doc["action"] = action; // Add action field
     // This field can be "assign", "unlock", or "release" based on the action you want to perform
 

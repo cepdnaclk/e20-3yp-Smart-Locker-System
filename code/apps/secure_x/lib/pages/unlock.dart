@@ -67,7 +67,7 @@ class Unlock extends StatelessWidget {
                     fontWeight: FontWeight.bold),
                 ),*/
                 Text(
-                  'Locker No : 102',
+                  'Locker No : 2',
                   style: TextStyle(
                     fontSize: 20.sp, 
                     fontWeight: FontWeight.bold),
