@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure X - Smart Locker System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="securx">Secure X</div>
+        <div>
+            <ul class="navlist">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#intro">Intro</a></li>
+                <li><a href="#solarc">Sol. Architecture</a></li>
+                <li><a href="#hard">Hard. & Soft. Designs</a></li>
+                <li><a href="#test">Testing</a></li>
+                <li><a href="#budget">Budget</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#links">Links</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="home">
+        <div class="home-bg"></div>
+        <div class="home-content">
+            <div class="glass-box">
+                <div class="bname">Secure X</div>
+                <div class="htag">Smart Locker System</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="intro" class="intro">
+        <div class="iname">Introduction</div>
+        <div class="icont">
+            <p>
+                The SmartSecure Locker System is a versatile and scalable IoT-based
+                solution designed to provide secure and efficient storage in a variety
+                of shared environments such as universities, gyms, offices and
+                libraries. The system connects multiple locker locations, allowing
+                users to check real-time availability via a mobile or web application.
+                If lockers at a preferred location are fully occupied, the system
+                intelligently suggests the nearest alternative location, offering a
+                seamless and flexible user experience.
+            </p>
+            <p>
+                Access is secured through a figerprint sensor, ensuring safety and
+                convenience. Users can reserve lockers, receive notifications, and
+                navigate to alternative locations with ease. Administrators can manage
+                locker usage and monitor the system through a centralized dashboard.
+                This solution reduces theft risks, optimizes locker utilization, and
+                provides a modern, adaptable storage system suitable for various
+                community-driven environments.
+            </p>
+        </div>
+    </section>
+
+    <!-- Solution Architecture Section -->
+    <section id="solarc" class="solarc">
+        <div class="iname">Solution Architecture</div>
+        <div class="sim">
+            <img src="images/HighLevelArchitecture.jpg" alt="High Level Architecture" class="solarc-img">
+        </div>
+        <div class="architecture-desc">
+            <p>
+                This architecture integrates Web & Mobile Apps, a Cloud Database, and
+                Locker Hardware to ensure secure and efficient locker management.
+            </p>
+            <ul>
+                <li>
+                    <strong>Web App</strong> – Allows admins and users to manage
+                    lockers, track usage, and register users.
+                </li>
+                <li>
+                    <strong>Mobile App</strong> – Enables students to unlock lockers,
+                    check availability, and authenticate securely.
+                </li>
+                <li>
+                    <strong>Database (Cloud Storage)</strong> – Stores user data, locker
+                    status, and authentication credentials, ensuring real-time
+                    synchronization.
+                </li>
+                <li>
+                    <strong>Locker System (Hardware)</strong> – Equipped with
+                    microcontrollers and biometric scanners to authenticate users and
+                    unlock lockers.
+                </li>
+            </ul>
+
+            <div class="workflow">
+                <h3>Workflow</h3>
+                <ol>
+                    <li>Users register via the Web or Mobile App.</li>
+                    <li>
+                        The Locker System verifies users via biometrics and communicates
+                        with the Database.
+                    </li>
+                    <li>
+                        If authenticated, the locker unlocks, updating the status across
+                        all systems.
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hardware & Software Design Section -->
+    <section id="hard" class="hard">
+        <div class="iname">Hardware & Software Design</div>
+        <div class="sim">
+            <img src="images/TechStack.jpg" alt="Tech Stack" class="solarc-img">
+        </div>
+
+        <div class="project-structure">
+            <p>
+                This project integrates hardware and software components to create a
+                connected IoT system.
+            </p>
+
+            <h4>Hardware:</h4>
+            <ul>
+                <li>
+                    <strong>ESP32 Microcontroller</strong>: Collects data and controls
+                    devices via Wi-Fi; communicates with the backend using REST APIs.
+                </li>
+            </ul>
+
+            <h4>Software:</h4>
+            <ul>
+                <li>
+                    <strong>Mobile App (Flutter)</strong>: A cross-platform app for user
+                    interaction with the system.
+                </li>
+                <li>
+                    <strong>Web Interface (React.js)</strong>: A browser-based dashboard
+                    for monitoring and managing the system.
+                </li>
+                <li>
+                    <strong>Backend (Spring Boot)</strong>: Handles all API requests,
+                    processes data, and manages system logic.
+                </li>
+                <li>
+                    <strong>Database (MySQL)</strong>: Stores user data, device logs,
+                    and configuration details in a structured relational format.
+                </li>
+            </ul>
+
+            <p>
+                All components communicate via RESTful APIs, with the backend acting
+                as the central hub, ensuring secure and reliable data flow across the
+                system.
+            </p>
+        </div>
+    </section>
+
+    <!-- Testing Section -->
+    <section id="test" class="test">
+        <div class="iname">Testing</div>
+
+        <div class="gallery-container">
+            <div class="gallery-item">
+                <div class="gallery-image-wrapper" onclick="openModal('images/fronttest.png')">
+                    <img src="images/fronttest.png" alt="Frontend Testing" class="gallery-image">
+                </div>
+                <div class="gallery-text">
+                    <h2 class="gallery-title">Frontend Testing</h2>
+                    <p class="gallery-description">React testing library</p>
+                </div>
+            </div>
+
+            <div class="gallery-item reverse">
+                <div class="gallery-image-wrapper" onclick="openModal('images/back test.png')">
+                    <img src="images/back test.png" alt="Backend Testing" class="gallery-image">
+                </div>
+                <div class="gallery-text">
+                    <h2 class="gallery-title">Backend testing</h2>
+                    <p class="gallery-description">JUnit, Mokito - Unit testing</p>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-image-wrapper" onclick="openModal('images/hadtest.png')">
+                    <img src="images/hadtest.png" alt="Hardware Testing" class="gallery-image">
+                </div>
+                <div class="gallery-text">
+                    <h2 class="gallery-title">Backend testing</h2>
+                    <p class="gallery-description">Mqtt Explorer - Test mqtt messages</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div id="modal" class="modal-overlay" onclick="closeModal()">
+            <img id="modal-image" class="modal-image" onclick="event.stopPropagation()">
+            <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+        </div>
+    </section>
+
+    <!-- Budget Section -->
+    <section id="budget" class="budget">
+        <div class="iname">Estimated Budget</div>
+        <div class="description">
+            Below is a breakdown of the estimated costs for the hardware.
+        </div>
+
+        <div class="table-container">
+            <table class="components-table">
+                <thead class="table-header">
+                    <tr>
+                        <th class="header-cell component-col">Component</th>
+                        <th class="header-cell unit-price-col">Unit Price (LKR)</th>
+                        <th class="header-cell units-col">Units</th>
+                        <th class="header-cell price-col">Price (LKR)</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body" id="components-table-body">
+                    <!-- Table rows will be populated by JavaScript -->
+                </tbody>
+                <tfoot class="table-footer">
+                    <tr class="total-row">
+                        <td class="table-cell total-label" colspan="3">Total</td>
+                        <td class="table-cell grand-total" id="grand-total">
+                            <!-- Total will be calculated by JavaScript -->
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="summary-stats">
+            <p class="stat-item" id="total-components">Total Components: 12</p>
+            <p class="stat-item" id="total-units">Total Units: 24</p>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="team">
+        <div class="team-container">
+            <div class="team-header">
+                <div class="iname">Team</div>
+                <p class="team-subtitle">Meet Our Team Members</p>
+            </div>
+
+            <div class="team-grid">
+                <!-- Team Member 1 -->
+                <div class="team-card">
+                    <div class="team-image-container">
+                        <img src="images/E20036.jpg" alt="Bandara K.G.R.I." class="team-image">
+                        <div class="team-image-overlay"></div>
+                    </div>
+                    <div class="team-content">
+                        <h3 class="team-name">Bandara K.G.R.I.</h3>
+                        <p class="team-role">E/20/036</p>
+                        <p class="team-bio"></p>
+                        <div class="team-social-links">
+                            <a href="https://www.thecn.com/EB1155" target="_blank" class="social-link portfolio" title="Portfolio">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                            </a>
+							
+                            <a href="https://github.com/induwara23630" target="_blank" class="social-link github" title="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                </svg>
+                            </a>
+							<a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+    
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+  <rect x="2" y="9" width="4" height="12"></rect>
+  <circle cx="4" cy="4" r="2"></circle>
+</svg>
+</a>
+                            <a href="mailto:e20036@eng.pdn.ac.lk" class="social-link email" title="Email">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="team-card">
+                    <div class="team-image-container">
+                        <img src="images/E20212.jpg" alt="Kumarasinghe R.M.S.H." class="team-image">
+                        <div class="team-image-overlay"></div>
+                    </div>
+                    <div class="team-content">
+                        <h3 class="team-name">Kumarasinghe R.M.S.H.</h3>
+                        <p class="team-role">E/20/212</p>
+                        <p class="team-bio"></p>
+                        <div class="team-social-links">
+                            <a href="https://www.thecn.com/RK950" target="_blank" class="social-link portfolio" title="Portfolio">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                            </a>
+                            <a href="https://github.com/sameera-87" target="_blank" class="social-link github" title="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                </svg>
+                            </a>
+							</a>
+							<a href="https://www.linkedin.com/in/sameera-kumarasinghe1/" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+    
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+  <rect x="2" y="9" width="4" height="12"></rect>
+  <circle cx="4" cy="4" r="2"></circle>
+</svg>
+</a>
+                            <a href="mailto:e20212@eng.pdn.ac.lk" class="social-link email" title="Email">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="team-card">
+                    <div class="team-image-container">
+                        <img src="images/E20350.jpg" alt="Sandamali J.P.D.N." class="team-image">
+                        <div class="team-image-overlay"></div>
+                    </div>
+                    <div class="team-content">
+                        <h3 class="team-name">Sandamali J.P.D.N.</h3>
+                        <p class="team-role">E/20/350</p>
+                        <p class="team-bio"></p>
+                        <div class="team-social-links">
+                            <a href="https://kochi.dev" target="_blank" class="social-link portfolio" title="Portfolio">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                            </a>
+                            <a href="https://github.com/kochi" target="_blank" class="social-link github" title="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                </svg>
+                            </a>
+							<a href="https://www.linkedin.com/in/dharani-navodya-833641213/" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+    
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+  <rect x="2" y="9" width="4" height="12"></rect>
+  <circle cx="4" cy="4" r="2"></circle>
+</svg>
+</a>
+                            <a href="mailto:e20350@eng.pdn.ac.lk" class="social-link email" title="Email">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Member 4 -->
+                <div class="team-card">
+                    <div class="team-image-container">
+                        <img src="images/E20377.jpg" alt="Sidantha V.P.H." class="team-image">
+                        <div class="team-image-overlay"></div>
+                    </div>
+                    <div class="team-content">
+                        <h3 class="team-name">Sidantha V.P.H.</h3>
+                        <p class="team-role">E/20/377</p>
+                        <p class="team-bio"></p>
+                        <div class="team-social-links">
+                            <a href="https://thecn.com/VS755" target="_blank" class="social-link portfolio" title="Portfolio">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                            </a>
+                            <a href="https://github.com/sidantha0377" target="_blank" class="social-link github" title="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                </svg>
+                            </a>
+							<a href="https://www.linkedin.com/in/heshan-sidantha-5b9925296/" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+    
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+  <rect x="2" y="9" width="4" height="12"></rect>
+  <circle cx="4" cy="4" r="2"></circle>
+</svg>
+</a>
+                            <a href="mailto:e20377@eng.pdn.ac.lk" class="social-link email" title="Email">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supervisor -->
+                <div class="team-card">
+                    <div class="team-image-container">
+                        <img src="images/isuru-nawinne.png" alt="Dr. Isuru Nawinne" class="team-image">
+                        <div class="team-image-overlay"></div>
+                    </div>
+                    <div class="team-content">
+                        <h3 class="team-name">Dr. Isuru Nawinne</h3>
+                        <p class="team-role">Project Supervisor</p>
+                        <p class="team-bio"></p>
+                        <div class="team-social-links">
+                   
+							<a href="https://www.linkedin.com/in/isuru-nawinne-73302833/" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+    
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+  <rect x="2" y="9" width="4" height="12"></rect>
+  <circle cx="4" cy="4" r="2"></circle>
+</svg>
+</a>
+                            <a href="mailto:isurunawinne@eng.pdn.ac.lk" class="social-link email" title="Email">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Links Section -->
+    <section id="links" class="link">
+        <div class="iname">Useful Link</div>
+        <div class="buttonsec">
+            <a href="https://github.com/cepdnaclk/e20-3yp-Smart-Locker-System">
+                <button>Project Repository</button>
+            </a>
+            <a href="https://cepdnaclk.github.io/e20-3yp-Smart-Locker-System/">
+                <button>Project Page</button>
+            </a>
+            <a href="https://www.ce.pdn.ac.lk/">
+                <button>Department of Computer Engineering</button>
+            </a>
+            <a href="https://eng.pdn.ac.lk/">
+                <button>University of Peradeniya</button>
+            </a>
+        </div>
+    </section>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
