@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/controllers/locker_controller.dart';
+import 'package:secure_x/controllers/notification_controller.dart';
 import 'package:secure_x/data/api/dio_client.dart'; // Use DioClient
 import 'package:secure_x/data/repository/auth_repo.dart';
 import 'package:secure_x/data/repository/locker_repo.dart';
@@ -33,5 +34,7 @@ Future<void> init() async {
   // Initialize AuthController with AuthRepo
   Get.lazyPut(() => LockerController(lockerRepo: Get.find()));
 
+  //Initialkize Notification Controller
+  Get.lazyPut(()=> NotificationController(),fenix: true);
 
 }
