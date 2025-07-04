@@ -41,21 +41,6 @@ class AuthController extends GetxController {
 
         print('Login successful: ${response.message}'); // Debug print
         print('Token: $token'); // Debug print
-        //Get.snackbar('Success', response.message); // Show a success message
-        //CustomSnackBar(response.message, iserror: false, title: 'Login successful', duration: Duration(seconds: 4));
-        /*CustomSnackBar.show(
-          message: 'Login successful', 
-          title: 'Success', 
-          isError: false,
-          icon: Icons.check_circle_outline,
-          backgroundColor: Colors.green.shade600);*/
-
-        /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Login successful'),
-          backgroundColor: Colors.green.shade600,
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ));*/
 
         CustomSnackBar.show(
           context: context, 
@@ -68,8 +53,8 @@ class AuthController extends GetxController {
         
         // Fetch the signed-in user's details
         await getSignedInUser();
-        // Navigate to the LoginSuccess page
-        //Get.offAll(() => LoginSuccess());
+
+        
         Get.offAll(() => Navigation());
       } else {
         print('Login failed: ${response.message}'); // Debug print
