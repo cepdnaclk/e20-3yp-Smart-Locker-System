@@ -34,9 +34,13 @@ class LockerLogs extends StatelessWidget {
                   margin: EdgeInsets.all(8.h),
                   child: ListTile(
                     leading: const Icon(Icons.lock),
-                    title: Text('Status: ${log.status}'),
-                    subtitle: Text('Date: ${log.dateTime}\nCluster: ${log.clusterId}'),
+                    title: Text('Status: ${log.status ?? "N/A"}'),
+                    subtitle: Text(
+                      'Accessed: ${log.accessTime}\n'
+                      'Released: ${log.releasedTime}\n'
+                      'Locker: ${log.lockerId}'
                   ),
+                )
                 );
               },
             );
