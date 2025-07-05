@@ -8,10 +8,15 @@ class StompClientService {
   late StompClient _stompClient;
   bool _isConnected=false;
 
-  void connect(String userId){
+  void connect(String userId, String token){
+    print('Connecting to WebSocket as $userId');
     _stompClient=StompClient(
       config: StompConfig.sockJS(
-        url: 'https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net/ws-notifications',
+        url:'http://10.0.2.2:9090/ws',
+        //url:'https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net/ws',
+        stompConnectHeaders: {
+          'Authorization': 'Bearer $token',
+        },
         onConnect: (StompFrame frame){
           _isConnected=true;
           print('Connected to WebSocket as $userId');
@@ -41,6 +46,7 @@ class StompClientService {
         NotificationController.to.addNotification(data);
             },
 );
+          print('Subscribed to notifications for $userId');
         },
         onDisconnect: (_){
           _isConnected=false;

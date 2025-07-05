@@ -97,8 +97,7 @@ class AuthRepo {
         // Update the headers in DioClient with the new token
         dioClient.updateHeader(token);
 
-        
-        StompClientService().connect(username);
+        StompClientService().connect(username,token);
         
         // Return a success response
         return ResponseModel<String>(
@@ -366,9 +365,9 @@ class AuthRepo {
         print('[DEBUG] Active locker found!');
         print('[DEBUG] Active Locker Details:');
         print('[DEBUG] - ID: ${activeLocker.id}');
-        print('[DEBUG] - DateTime: ${activeLocker.dateTime}');
+        print('[DEBUG] - Accessed Time: ${activeLocker.accessTime}');
         print('[DEBUG] - Status: ${activeLocker.status}');
-        print('[DEBUG] - Cluster ID: ${activeLocker.clusterId}');
+        print('[DEBUG] - Locker ID: ${activeLocker.lockerId}');
 
       }catch(e){
         activeLocker=null;

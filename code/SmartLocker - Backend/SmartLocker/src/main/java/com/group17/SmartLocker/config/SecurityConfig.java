@@ -43,7 +43,8 @@ public class SecurityConfig {
                                 "/publish",
                                 "/subscribe",
                                 "/latest",
-                                "/debug-get" // Optional, if still needed
+                                "/debug-get" ,// Optional, if still needed
+                                "/ws/**" // WebSocket endpoint, if applicable
                         ).permitAll()
 
                         // ✅ Allow pre-flight CORS OPTIONS requests
@@ -53,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/user/**").hasRole("USER")
 
+                    
                         // ✅ Everything else requires authentication
                         .anyRequest().authenticated()
                 )

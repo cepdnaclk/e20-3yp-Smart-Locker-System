@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "another_flushbar",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/another_flushbar-1.12.30",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "args",
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.7.0",
       "packageUri": "lib/",
@@ -458,7 +464,7 @@
       "languageVersion": "3.4"
     }
   ],
-  "generated": "2025-07-04T10:13:38.650846Z",
+  "generated": "2025-07-05T21:30:41.078783Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///C:/Users/Dharani/flutter",
