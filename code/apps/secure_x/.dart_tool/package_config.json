@@ -2,6 +2,18 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "another_flushbar",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/another_flushbar-1.12.30",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "args",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "async",
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.12.0",
       "packageUri": "lib/",
@@ -50,6 +62,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "dbus",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/dbus-0.7.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "dio",
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/dio-5.8.0+1",
       "packageUri": "lib/",
@@ -90,6 +108,30 @@
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-4.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.1"
+    },
+    {
+      "name": "flutter_local_notifications",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications-19.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "flutter_local_notifications_linux",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_linux-6.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "flutter_local_notifications_platform_interface",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_platform_interface-9.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "flutter_local_notifications_windows",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_windows-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
     },
     {
       "name": "flutter_map",
@@ -177,7 +219,7 @@
     },
     {
       "name": "logger",
-      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/logger-2.5.0",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/logger-2.6.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -228,6 +270,12 @@
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_windows-2.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.2"
+    },
+    {
+      "name": "petitparser",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-6.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
     },
     {
       "name": "platform",
@@ -344,6 +392,12 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "timezone",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/timezone-0.10.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "typed_data",
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.4.0",
       "packageUri": "lib/",
@@ -398,13 +452,19 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "xml",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/xml-6.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "secure_x",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     }
   ],
-  "generated": "2025-06-27T03:20:32.362049Z",
+  "generated": "2025-07-05T21:30:41.078783Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///C:/Users/Dharani/flutter",

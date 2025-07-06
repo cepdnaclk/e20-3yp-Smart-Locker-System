@@ -1,30 +1,34 @@
 class LockerLogsModel {
   final int id;
-  final String dateTime;
-  final String status;
-  final int clusterId;
+  final String accessTime;
+  final String releasedTime;
+  final String? status;
+  final int lockerId;
 
   LockerLogsModel({
     required this.id,
-    required this.dateTime,
-    required this.status,
-    required this.clusterId,
+    required this.accessTime,
+    required this.releasedTime,
+    this.status,
+    required this.lockerId,
   });
   factory LockerLogsModel.fromJson(Map<String, dynamic> json) {
     return LockerLogsModel(
-      id: json['id'],
-      dateTime: json['date_time'],
+      id: json['logId'],
+      accessTime: json['accessTime'],
+      releasedTime: json['releasedTime'],
       status: json['status'],
-      clusterId: json['cluster_id'],
+      lockerId: json['lockerId'],
     );
   }
 
   Map<String, dynamic>toJson(){
     return {
-      'id': id,
-      'date_time': dateTime,
+      'logId': id,
+      'accessTime': accessTime,
+      'releasedTime': releasedTime,
       'status': status,
-      'cluster_id': clusterId,
+      'lockerId': lockerId,
     };
   }
 }

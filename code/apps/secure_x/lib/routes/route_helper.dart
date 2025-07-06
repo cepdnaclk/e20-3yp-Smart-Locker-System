@@ -4,6 +4,7 @@ import 'package:secure_x/pages/locker_logs.dart';
 import 'package:secure_x/pages/log_in.dart';
 import 'package:secure_x/pages/login_success.dart';
 import 'package:secure_x/pages/navigation.dart';
+import 'package:secure_x/pages/notifications.dart';
 import 'package:secure_x/pages/sign_in.dart';
 import 'package:secure_x/pages/splash_screen.dart';
 import 'package:secure_x/pages/unlock.dart';
@@ -24,6 +25,7 @@ class RouteHelper {
   static const String userDetails='/user-details';
   static const String lockerLogs='/locker-logs';
   static const String editProfile='/edit-profile';
+  static const String notifications='/notifications';
   
 
   //static String getInitial()=>'$initial';
@@ -38,6 +40,7 @@ class RouteHelper {
   static String getUserDetails()=>'$userDetails';
   static String getLockerLogs()=>'$lockerLogs';
   static String getEditProfile()=>'$EditProfile';
+  static String getNotifications()=>'$notifications';
 
   static List<GetPage> routes=[
     //GetPage(name:initial,page:()=>Navigation()),
@@ -51,6 +54,7 @@ class RouteHelper {
     GetPage(name: navigation, page: ()=>Navigation()),    
     GetPage(name: userDetails,page:()=> UserDetails(),),
     GetPage(name: lockerLogs,page: ()=> LockerLogs(),),
-    GetPage(name: editProfile,page: ()=>EditProfile(),)
+    GetPage(name: editProfile,page: ()=>EditProfile(),),
+    GetPage(name: notifications,page: ()=>Notifications(),)
   ];
 }
