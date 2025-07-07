@@ -77,9 +77,11 @@ class _EditProfileState extends State<EditProfile> {
                   _buildEditableField("Email",_emailController),
                   _buildEditableField("First Name", _firstNameController),
                   _buildEditableField("Last Name", _lastNameController),
-                  _buildEditableField("Registration No", _regNoController),
+                  _buildEditableField("Registration No", _regNoController,readOnly: true),
                   _buildEditableField("Phone Number", _phoneNoController),
-
+                  
+                  _buildEditableField("ID", TextEditingController(text: user?.id ?? ''), readOnly: true),
+                  
                   SizedBox(height: 24.h,),
                   
                   ElevatedButton(

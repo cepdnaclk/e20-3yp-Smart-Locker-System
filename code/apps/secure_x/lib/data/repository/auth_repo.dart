@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:secure_x/data/api/dio_client.dart'; // Use DioClient
+import 'package:secure_x/data/api/stomp_client_service.dart';
 import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/locker_logs_model.dart';
 import 'package:secure_x/models/response_model.dart';
 import 'package:secure_x/models/user_model.dart';
 import 'package:secure_x/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stomp_dart_client/stomp_dart_client.dart';
 
 class AuthRepo {
   final DioClient dioClient; // Use DioClient instead of ApiClient
@@ -95,12 +97,17 @@ class AuthRepo {
         // Update the headers in DioClient with the new token
         dioClient.updateHeader(token);
 
+        StompClientService().connect(username,token);
+        
         // Return a success response
         return ResponseModel<String>(
           isSuccess: true,
           message: 'Login successful',
           data: token, // Pass the token as data
         );
+
+        
+        
       } else if (response.statusCode == 404) {
         // User not found
         return ResponseModel<String>(
@@ -358,9 +365,9 @@ class AuthRepo {
         print('[DEBUG] Active locker found!');
         print('[DEBUG] Active Locker Details:');
         print('[DEBUG] - ID: ${activeLocker.id}');
-        print('[DEBUG] - DateTime: ${activeLocker.dateTime}');
+        print('[DEBUG] - Accessed Time: ${activeLocker.accessTime}');
         print('[DEBUG] - Status: ${activeLocker.status}');
-        print('[DEBUG] - Cluster ID: ${activeLocker.clusterId}');
+        print('[DEBUG] - Locker ID: ${activeLocker.lockerId}');
 
       }catch(e){
         activeLocker=null;
