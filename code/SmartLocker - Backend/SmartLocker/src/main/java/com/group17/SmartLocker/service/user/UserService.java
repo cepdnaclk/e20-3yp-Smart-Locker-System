@@ -341,9 +341,12 @@ SmartLocker Admin Team
 
         for(LockerLog log : logs){
             LockerLogDto logDto = new LockerLogDto();
+
             logDto.setLogId(log.getLogId());
             logDto.setAccessTime(log.getAccessTime());
             logDto.setReleasedTime(log.getReleasedTime());
+            logDto.setStatus(log.getStatus());
+            logDto.setLocation(log.getLocker().getLockerCluster().getClusterName());
             logDto.setLockerId(log.getLocker().getLockerId());
 
             lockerLogs.add(logDto);

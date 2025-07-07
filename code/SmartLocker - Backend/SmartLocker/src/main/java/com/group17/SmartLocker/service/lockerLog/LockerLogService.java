@@ -22,6 +22,11 @@ public class LockerLogService implements ILockerLogService{
     @Override
     public List<LockerLogDto> getAllLockerLogs(){
 
+        /*
+        This function is mainly used for admin functionality to
+        find all the locker logs
+        */
+
         List<LockerLogDto> lockerLogs = new ArrayList<>();
         List<LockerLog> lockerLogsAll = lockerLogRepository.findAll();
 
