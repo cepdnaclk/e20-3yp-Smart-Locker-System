@@ -33,6 +33,7 @@ public class LockerLogService implements ILockerLogService{
             lockerLogDto.setAccessTime(lockerLogsAll.get(i).getAccessTime());
             lockerLogDto.setReleasedTime(lockerLogsAll.get(i).getReleasedTime());
             lockerLogDto.setStatus(lockerLogsAll.get(i).getStatus());
+            lockerLogDto.setLocation(lockerLogsAll.get(i).getLocker().getLockerCluster().getClusterName());
             lockerLogDto.setLockerId(lockerLogsAll.get(i).getLocker().getLockerId());
 
             lockerLogs.add(lockerLogDto);
