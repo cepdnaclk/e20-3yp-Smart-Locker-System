@@ -30,7 +30,9 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
-/src/main/resources/serviceAccountKey.json
+.vscode//src/main/resources/serviceAccountKey.json
+
+# Spring Boot properties
+src/main/resources/application.properties
 
 
