@@ -60,8 +60,8 @@ class _LockerMapState extends State<LockerMap> {
             .where((cluster) => cluster.availableNumberOfLockers > 0)
             .map((cluster) => Marker(
               point: LatLng(cluster.latitude, cluster.longitude),
-              width: 150.w,
-              height: 90.h,
+              width: 160.w,
+              height: 120.h,
               alignment: Alignment.topCenter,
               child: Column(
                 children: [

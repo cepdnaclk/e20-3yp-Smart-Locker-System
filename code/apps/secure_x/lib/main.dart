@@ -9,6 +9,11 @@ import 'helper/dependencies.dart' as dep;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dep.init(); // Initialize dependencies
+  
+  // Clear token from SharedPreferences for development testing
+  //final authController = Get.find<AuthController>();
+  //await authController.authRepo.clearUserToken();
+
   await Resources.loadResources(); // Load resources
   runApp(const MyApp());
 }
