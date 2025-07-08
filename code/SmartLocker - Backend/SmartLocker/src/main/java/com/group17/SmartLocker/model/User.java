@@ -37,7 +37,7 @@ public class User {
     private String contactNumber;
 
     @Column
-    private String otp;
+    private String fingerPrintOtp;
 
     @Column(unique = true)
     private String fingerPrintId;
@@ -50,4 +50,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LockerLog> lockerLogs;
+
+
 }

@@ -146,7 +146,7 @@ public class UserService implements IUserService {
         User user = userRepository.findById(registrationId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        String otp = user.getOtp();
+        String otp = user.getFingerPrintOtp();
 
         try {
 //            System.out.println("message published");
@@ -283,7 +283,7 @@ public class UserService implements IUserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        user.setOtp(otpCode);
+        user.setFingerPrintOtp(otpCode);
         userRepository.save(user);
 
         return Integer.toString(randomNumber);
@@ -329,7 +329,7 @@ SmartLocker Admin Team
     public String getOtpCode(String username){
         return userRepository.findById(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"))
-                .getOtp();
+                .getFingerPrintOtp();
 
     }
 

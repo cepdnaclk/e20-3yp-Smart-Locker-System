@@ -37,6 +37,6 @@ build/
 /SmartLocker/target/
 
 # Application config
-/SmartLocker/src/main/resources/application.properties
+#/SmartLocker/src/main/resources/application.properties
 /SmartLocker/src/main/resources/serviceAccountKey.json
 
