@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +9,9 @@ import 'package:secure_x/models/create_user_model.dart';
 import 'package:secure_x/models/locker_logs_model.dart';
 import 'package:secure_x/models/response_model.dart';
 import 'package:secure_x/models/user_model.dart';
+import 'package:secure_x/pages/log_in.dart';
 import 'package:secure_x/pages/navigation.dart';
+import 'package:secure_x/pages/sign_in.dart';
 import 'package:secure_x/utils/app_constants.dart';
 import 'package:secure_x/data/api/dio_client.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
@@ -22,6 +26,7 @@ class AuthController extends GetxController {
   var userModel = UserModel().obs; // Observable for user data
   var userToken = ''.obs; // Observable to store the token
   var otpCode=''.obs;
+  var isUploadingImage = false.obs;
 
   // Method to handle user login
   Future<void> login(String username, String password, BuildContext context) async {
@@ -410,5 +415,63 @@ class AuthController extends GetxController {
     return await authRepo.checkApprovalStatus(email, password);
   }
 
+  //Method to upload profile image
+  Future<void> uploadProfileImage(File imageFile, BuildContext context) async {
+    isUploadingImage.value = true;
+    final user = userModel.value;
+    final token = await authRepo.getUserToken();
 
+    if (token == null) {
+      isUploadingImage.value = false;
+      Get.snackbar('Error', 'User not authenticated');
+      return;
+    }
+
+    bool success = false;
+
+    if(user.id!=null){
+      success = await authRepo.uploadProfileImage(
+      userId: user.id!,
+      token: token,
+      imageFile: imageFile,
+    );
+    }
+
+    if(success){
+      Get.snackbar('Success', 'Profile image updated!');
+    }else {
+      Get.snackbar('Error', 'Failed to upload image');
+    }
+    isUploadingImage.value = false;
+  }
+
+  // Method to log out the user
+  Future<void> logout(BuildContext context)async{
+    isLoading.value=true;
+    try{
+      await authRepo.logout();
+
+      userModel.value=UserModel();
+      userToken.value='';
+      
+      CustomSnackBar.show(
+        context: context, 
+        message: 'Logged out successfully',
+        title: 'Logout',
+        isError: false,
+      );
+
+      Get.offAll(() => SignIn());
+    }catch(e){
+      print('Error Logging out : $e');
+      CustomSnackBar.show(
+        context: context, 
+        message: 'Error during log out: $e',
+        title: 'Error',
+        isError: true,
+      );
+    }finally{
+      isLoading.value=false;
+    }
+  }
 }

@@ -12,7 +12,7 @@ class LoginSuccess extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      appBar:const CustomAppBar(),
+      appBar:CustomAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
