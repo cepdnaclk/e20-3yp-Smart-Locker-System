@@ -474,4 +474,47 @@ class AuthController extends GetxController {
       isLoading.value=false;
     }
   }
+
+  // Method to change user password
+  Future<void> changePassword(
+  String currentPassword,
+  String newPassword,
+  BuildContext context,
+) async {
+  isLoading.value = true;
+  try {
+    final response = await authRepo.changePassword(
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    );
+
+    if (response.isSuccess) {
+      CustomSnackBar.show(
+        context: context,
+        message: response.message,
+        title: 'Success',
+        isError: false,
+      );
+      // Optionally, log the user out after changing password for security
+      // await logout(context);
+    } else {
+      CustomSnackBar.show(
+        context: context,
+        message: response.message,
+        title: 'Error',
+        isError: true,
+      );
+    }
+  } catch (e) {
+    CustomSnackBar.show(
+      context: context,
+      message: 'An error occurred: $e',
+      title: 'Error',
+      isError: true,
+    );
+  } finally {
+    isLoading.value = false;
+  }
+}
+
 }

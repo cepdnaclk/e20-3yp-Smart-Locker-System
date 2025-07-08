@@ -392,6 +392,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "settings_ui",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/settings_ui-2.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "shared_preferences",
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences-2.5.3",
       "packageUri": "lib/",
@@ -554,7 +560,7 @@
       "languageVersion": "3.4"
     }
   ],
-  "generated": "2025-07-07T10:38:02.041857Z",
+  "generated": "2025-07-08T10:21:02.539366Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///C:/Users/Dharani/flutter",
