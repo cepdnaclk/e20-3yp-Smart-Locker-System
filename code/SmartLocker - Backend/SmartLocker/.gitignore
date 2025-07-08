@@ -1,6 +1,6 @@
-HELP.md
+# Ignore target folders
 target/
-!.mvn/wrapper/maven-wrapper.jar
+!/SmartLocker/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -14,7 +14,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -31,11 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/resources/serviceAccountKey.json
 
 # Maven build output
 /SmartLocker/target/
 
 # Application config
 /SmartLocker/src/main/resources/serviceAccountKey.json
-
