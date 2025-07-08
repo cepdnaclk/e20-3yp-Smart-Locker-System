@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/pages/locker_logs.dart';
 import 'package:secure_x/pages/notifications.dart';
 import 'package:secure_x/pages/sign_in.dart';
@@ -8,9 +9,11 @@ import 'package:secure_x/pages/user.dart';
 import 'package:secure_x/utils/appcolors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key});
+  CustomAppBar({super.key});
 
-  void _menuSelectionHandler(String value){
+  final AuthController authController = Get.find<AuthController>();
+
+  void _menuSelectionHandler(String value, BuildContext context){
     switch(value){
       case 'View Profile':
         Get.to(() => const User());
@@ -28,10 +31,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           textConfirm: 'Yes',
           textCancel: 'Cancel',
           confirmTextColor: AppColors.boxColor,
-          onConfirm: (){
+          onConfirm: () async{
+            //Get.back();
+            await authController.logout(context);
+          },
+          onCancel: () {
             Get.back();
-            Get.to(()=> const SignIn());
-          }
+          },
         );
         break;
     }
@@ -45,7 +51,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         leading: PopupMenuButton<String>(
           icon: const Icon(Icons.menu, color: AppColors.boxColor,),
           color: AppColors.boxColor,
-          onSelected: _menuSelectionHandler,
+          onSelected: (value) => _menuSelectionHandler(value, context),
           itemBuilder: (BuildContext context)=>[
             _buildMenuItem(Icons.person, 'View Profile'),
             const PopupMenuDivider(),

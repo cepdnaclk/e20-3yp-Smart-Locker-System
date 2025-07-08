@@ -41,6 +41,7 @@ dependencies:
   web_socket_channel: ^3.0.3
   flutter_local_notifications: ^19.3.0
   another_flushbar: ^1.12.30
+  image_picker: ^1.1.2
 
 
   # The following adds the Cupertino Icons font to your application.

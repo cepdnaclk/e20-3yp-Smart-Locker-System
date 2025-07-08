@@ -35,7 +35,7 @@ class _LogInState extends State<LogIn> {
         behavior: SnackBarBehavior.floating,
         margin: EdgeInsets.all(12),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
         ),)
         
       );
@@ -69,7 +69,7 @@ class _LogInState extends State<LogIn> {
                   child:ClipRect(
                     child: Align(
                       alignment: Alignment.center,
-                      heightFactor: 0.5,
+                      heightFactor: 0.8,
                       widthFactor: 1,
                       child: Image.asset('assets/img/logo.png',
                       fit: BoxFit.contain,             
@@ -80,7 +80,7 @@ class _LogInState extends State<LogIn> {
               ),
               SizedBox(height: 10.h,),
               Padding(
-                padding:EdgeInsets.symmetric(horizontal: 0.05.sh),
+                padding:EdgeInsets.symmetric(horizontal: 0.04.sw, vertical: 0.02.sh),
                 child: Container(
                   padding: EdgeInsets.all(0.05.sw),
                   decoration: BoxDecoration(
@@ -92,6 +92,10 @@ class _LogInState extends State<LogIn> {
                     children: [
                       TextFormField(
                         controller: _usernameController,
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          color: AppColors.textPrimary,
+                        ),
                         decoration: const InputDecoration(
                           hintText: 'User Name or Email',
                           filled: true,
@@ -104,6 +108,10 @@ class _LogInState extends State<LogIn> {
                       ),
                       SizedBox(height :15.h,),
                       TextFormField(
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          color: AppColors.textPrimary,
+                        ),
                         obscureText: true,
                         controller: _passwordController,
                         decoration:const InputDecoration(

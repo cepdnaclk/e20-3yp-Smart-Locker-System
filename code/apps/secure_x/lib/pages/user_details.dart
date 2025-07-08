@@ -17,7 +17,7 @@ class UserDetails extends StatelessWidget {
     final UserModel? user = _authController.userModel.value;
 
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(),
       body: Padding(
         padding: EdgeInsets.all(16.h),
         child: user == null
