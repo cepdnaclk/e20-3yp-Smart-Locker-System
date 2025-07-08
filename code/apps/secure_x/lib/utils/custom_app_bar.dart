@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/pages/locker_logs.dart';
 import 'package:secure_x/pages/notifications.dart';
+import 'package:secure_x/pages/settings.dart';
 import 'package:secure_x/pages/sign_in.dart';
 import 'package:secure_x/pages/user.dart';
 import 'package:secure_x/utils/appcolors.dart';
@@ -19,7 +20,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         Get.to(() => const User());
         break;
       case 'Settings':
-        Get.to(()=> const User());
+        Get.to(()=> Settings());
         break;  
       case 'History':
         Get.to(()=> LockerLogs());

@@ -586,4 +586,51 @@ Future<void> logout() async {
     print('Error during logout: $e');
   }
 }
+
+//change password method
+Future<ResponseModel> changePassword({
+  required String currentPassword,
+  required String newPassword,
+}) async {
+  try {
+    final String? token = sharedPreferences.getString(AppConstants.TOKEN);
+    if (token == null) {
+      return ResponseModel(
+        isSuccess: false,
+        message: 'User not authenticated',
+      );
+    }
+
+    dioClient.updateHeader(token);
+
+    final Map<String, dynamic> body = {
+      'currentPassword': currentPassword,
+      'newPassword': newPassword,
+    };
+
+    final response = await dioClient.postData(
+      AppConstants.CHANGE_PASSWORD_URI, 
+      body,
+    );
+
+    if (response.statusCode == 200) {
+      return ResponseModel(
+        isSuccess: true,
+        message: 'Password changed successfully',
+      );
+    } else {
+      return ResponseModel(
+        isSuccess: false,
+        message: 'Failed to change password: ${response.data}',
+      );
+    }
+  } catch (e) {
+    print('Error changing password: $e');
+    return ResponseModel(
+      isSuccess: false,
+      message: 'Error: $e',
+    );
+  }
+}
+
 }
