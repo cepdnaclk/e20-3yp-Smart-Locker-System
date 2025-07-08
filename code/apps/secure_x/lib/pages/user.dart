@@ -57,7 +57,7 @@ class _UserState extends State<User> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      appBar:const CustomAppBar(),
+      appBar:CustomAppBar(),
       body:Container(
         color: AppColors.mainColor,
         child: Column(

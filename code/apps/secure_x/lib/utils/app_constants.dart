@@ -22,4 +22,7 @@ class AppConstants {
   static const String GET_OTP_CODE_URI='/api/v1/user/getOtpCode';
   static const String GENERATE_NEW_OTP_CODE_URI='/api/v1/user/generateNewOtpCode';
   static const String LOCKER_AVAILABILITY_URI='/api/v1/user/lockerAvailability/{clusterId}';
+  static const String UPLOAD_PROFILE_IMAGE_URI='/api/v1/user/uploadProfileImage';
+  static const String NOTIFICATION_URI='/api/v1/user/notifications';
+  static const String CHANGE_PASSWORD_URI='/api/v1/user/changePassword';
 }
