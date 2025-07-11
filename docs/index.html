@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure X - Smart Locker System</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar">
@@ -59,6 +61,39 @@
                 community-driven environments.
             </p>
         </div>
+        <div class="summarys">
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/E2n29waAydc" title="Locker System Demo"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <div class="iname">Features</div>
+        <section class="features">
+            <div class="feature-box">
+                <div class="feature-title">Secure Locker Access</div>
+                <p>Your belongings are protected with a secure OTP or code. Only you can access your locker.</p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-title">24/7 Availability</div>
+                <p>Use your locker anytime—day or night. Perfect for your busy lifestyle and late-night needs.</p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-title">Real-Time Notifications</div>
+                <p>Get instant alerts when your locker is reserved, opened, or nearing expiry. Stay updated at all
+                    times.</p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-title">Full History</div>
+                <p>Track all your locker activity with access time, usage logs, and more. Total transparency and
+                    control.</p>
+            </div>
+        </section>
+
     </section>
 
     <!-- Solution Architecture Section -->
@@ -66,6 +101,7 @@
         <div class="iname">Solution Architecture</div>
         <div class="sim">
             <img src="images/HighLevelArchitecture.jpg" alt="High Level Architecture" class="solarc-img">
+            <img src="images/archi2.png" alt="High Level Architecture" class="solarc-img2">
         </div>
         <div class="architecture-desc">
             <p>
@@ -113,6 +149,118 @@
     <!-- Hardware & Software Design Section -->
     <section id="hard" class="hard">
         <div class="iname">Hardware & Software Design</div>
+        <div class="inamesub">Hardware Design</div>
+        <div>
+            <div class="sim2">
+                <div>
+                    <img src="images/pcb.png" alt="Tech Stack" class="solarc-img3">
+                    <h3>PCB Design</h3>
+                </div>
+                <div>
+                    <img src="images/locker.png" alt="Tech Stack" class="solarc-img3">
+                    <h3>3D Locker Design</h3>
+                </div>
+            </div>
+
+            <div class="sim2">
+                <div class="sim-cent">
+                    <img src="images/controlpanel.png" alt="Tech Stack" class="solarc-img4">
+                    <!-- <img src="images/Control.png" alt="Tech Stack" class="solarc-img2"> -->
+                    <h3>3D Control Panel Design</h3>
+                </div>
+
+                <div>
+                    <iframe src="https://www.youtube.com/embed/cksR0uCtsS8" title="Locker System Demo"
+                        class="demo-video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                    <h3>Control Panel Demo</h3>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="inamesub">Software Design</div>
+        <div class="sim2sid">
+            <div>
+                <div id="slideshow-container" class="slideshow">
+                    <img class="slide-image" src="images/webss/ss1.png" alt="Slide 1">
+                    <img class="slide-image" src="images/webss/ss2.png" alt="Slide 2">
+                    <img class="slide-image" src="images/webss/ss3.png" alt="Slide 3">
+                    <img class="slide-image" src="images/webss/ss4.png" alt="Slide 4">
+                    <img class="slide-image" src="images/webss/ss5.png" alt="Slide 5">
+                    <img class="slide-image" src="images/webss/ss6.png" alt="Slide 6">
+                    <img class="slide-image" src="images/webss/ss7.png" alt="Slide 7">
+                    <img class="slide-image" src="images/webss/ss8.png" alt="Slide 8">
+                </div>
+                <h3>Web application</h3>
+            </div>
+
+
+
+            <div>
+                <img src="images/Mapp/figma.png" alt="Tech Stack" class="solarc-img3">
+                <h3>Mobile application</h3>
+            </div>
+
+        </div>
+        <div class="inamesub">Tech Stack</div>
+
+        <div class="section">
+            <div class="title">
+                <span id="web-icon"></span> Web App
+            </div>
+            <div class="summary">
+                A <strong>React.js</strong> admin dashboard with <strong>Tailwind CSS</strong>, enabling real-time
+                locker and user management.
+                Integrates securely with the backend via <strong>Axios</strong>, using <strong>React Hooks</strong> for
+                state and lifecycle handling.
+                Deployed on <strong>Netlify</strong> for live CI/CD updates.
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="title">
+                <span id="mobile-icon"></span> Mobile App
+            </div>
+            <div class="summary">
+                A <strong>Flutter-based</strong> cross-platform user app with a responsive UI and <strong>real-time
+                    notifications</strong> via WebSocket.
+                Uses <strong>GetX</strong> for reactive state management and integrates with backend APIs for locker
+                access, profile handling,
+                and map-based locker location using <strong>OpenStreetMap</strong>.
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="title">
+                <span id="backend-icon"></span> Backend
+            </div>
+            <div class="summary">
+                A secure <strong>Spring Boot</strong> backend using <strong>MVC architecture</strong> and <strong>Spring
+                    Security</strong> for
+                <strong>Role-Based Access Control (RBAC)</strong>. Connects to a <strong>MySQL</strong> database via
+                <strong>Spring Data JPA</strong>,
+                and exposes RESTful APIs with <strong>CORS</strong> and <strong>JSON over HTTP</strong> for seamless
+                integration.
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="title">
+                <span class="icon" id="hardware-icon"></span> Hardware
+            </div>
+            <div class="summary">
+                ESP32 microcontroller using MQTT to connect securely with AWS IoT Core, integrating ultrasonic sensor,
+                fingerprint scanner, display, keypad, door sensor, and solenoid locker lock for a complete smart locker
+                hardware solution.
+            </div>
+        </div>
+
+
+        <div class="inamesub">Overview</div>
         <div class="sim">
             <img src="images/TechStack.jpg" alt="Tech Stack" class="solarc-img">
         </div>
@@ -157,6 +305,9 @@
                 system.
             </p>
         </div>
+        <div>
+
+        </div>
     </section>
 
     <!-- Testing Section -->
@@ -164,36 +315,86 @@
         <div class="iname">Testing</div>
 
         <div class="gallery-container">
+            <!-- Frontend Testing -->
             <div class="gallery-item">
                 <div class="gallery-image-wrapper" onclick="openModal('images/fronttest.png')">
-                    <img src="images/fronttest.png" alt="Frontend Testing" class="gallery-image">
+                    <img src="images/fronttest.png" alt="Frontend Testing" class="gallery-image" />
                 </div>
                 <div class="gallery-text">
                     <h2 class="gallery-title">Frontend Testing</h2>
-                    <p class="gallery-description">React testing library</p>
+                    <p class="gallery-description">React Testing Library</p>
                 </div>
             </div>
 
+            <!-- Backend Testing -->
             <div class="gallery-item reverse">
                 <div class="gallery-image-wrapper" onclick="openModal('images/back test.png')">
-                    <img src="images/back test.png" alt="Backend Testing" class="gallery-image">
+                    <img src="images/back test.png" alt="Backend Testing" class="gallery-image" />
                 </div>
                 <div class="gallery-text">
-                    <h2 class="gallery-title">Backend testing</h2>
-                    <p class="gallery-description">JUnit, Mokito - Unit testing</p>
+                    <h2 class="gallery-title">Backend Testing</h2>
+                    <p class="gallery-description">JUnit, Mockito – Unit testing</p>
                 </div>
             </div>
 
+            <!-- Hardware Testing -->
             <div class="gallery-item">
                 <div class="gallery-image-wrapper" onclick="openModal('images/hadtest.png')">
-                    <img src="images/hadtest.png" alt="Hardware Testing" class="gallery-image">
+                    <img src="images/hadtest.png" alt="Hardware Testing" class="gallery-image" />
                 </div>
                 <div class="gallery-text">
-                    <h2 class="gallery-title">Backend testing</h2>
-                    <p class="gallery-description">Mqtt Explorer - Test mqtt messages</p>
+                    <h2 class="gallery-title">Hardware Testing</h2>
+                    <p class="gallery-description">MQTT Explorer – Test MQTT messages</p>
                 </div>
             </div>
+
+            <!-- System Demo Video (No Modal) -->
+
         </div>
+
+        <!-- hard ware  -->
+        <div class="row">
+            <div class="video-card">
+                <h2>Web App Testing</h2>
+                <iframe src="https://www.youtube.com/embed/6ahK-92jU48" title="Web App Testing"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div class="video-card">
+                <h2>Mobile App Testing (Main)</h2>
+                <iframe src="https://www.youtube.com/embed/Ny06QRoptp8" title="Mobile App Testing"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Row 2: Hardware + Shorts -->
+        <div class="row">
+            <div class="video-card">
+                <h2>Hardware Testing</h2>
+                <iframe src="https://www.youtube.com/embed/aIEqjK5TSHU" title="Hardware Testing"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div class="video-card">
+                <h2>Mobile App Shorts</h2>
+                <iframe src="https://www.youtube.com/embed/LMJZTLddNck" title="Mobile App Short 1"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+                <br><br>
+                <iframe src="https://www.youtube.com/embed/JyWKqMvYDUw" title="Mobile App Short 2"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
 
         <!-- Modal -->
         <div id="modal" class="modal-overlay" onclick="closeModal()">
@@ -259,30 +460,47 @@
                         <p class="team-role">E/20/036</p>
                         <p class="team-bio"></p>
                         <div class="team-social-links">
-                            <a href="https://www.thecn.com/EB1155" target="_blank" class="social-link portfolio" title="Portfolio">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <a href="https://www.thecn.com/EB1155" target="_blank" class="social-link portfolio"
+                                title="Portfolio">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="2" y1="12" x2="22" y2="12"></line>
                                     <path d="m9 12 2 2 4-4"></path>
                                 </svg>
                             </a>
-							
-                            <a href="https://github.com/induwara23630" target="_blank" class="social-link github" title="GitHub">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+
+                            <a href="https://github.com/induwara23630" target="_blank" class="social-link github"
+                                title="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                    </path>
                                 </svg>
                             </a>
-							<a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
-    
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-  <rect x="2" y="9" width="4" height="12"></rect>
-  <circle cx="4" cy="4" r="2"></circle>
-</svg>
-</a>
+                            <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer"
+                                class="social-link linkedin" title="LinkedIn">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                                    </path>
+                                    <rect x="2" y="9" width="4" height="12"></rect>
+                                    <circle cx="4" cy="4" r="2"></circle>
+                                </svg>
+                            </a>
                             <a href="mailto:e20036@eng.pdn.ac.lk" class="social-link email" title="Email">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
                             </a>
@@ -301,30 +519,47 @@
                         <p class="team-role">E/20/212</p>
                         <p class="team-bio"></p>
                         <div class="team-social-links">
-                            <a href="https://www.thecn.com/RK950" target="_blank" class="social-link portfolio" title="Portfolio">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <a href="https://www.thecn.com/RK950" target="_blank" class="social-link portfolio"
+                                title="Portfolio">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="2" y1="12" x2="22" y2="12"></line>
                                     <path d="m9 12 2 2 4-4"></path>
                                 </svg>
                             </a>
-                            <a href="https://github.com/sameera-87" target="_blank" class="social-link github" title="GitHub">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                            <a href="https://github.com/sameera-87" target="_blank" class="social-link github"
+                                title="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                    </path>
                                 </svg>
                             </a>
-							</a>
-							<a href="https://www.linkedin.com/in/sameera-kumarasinghe1/" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
-    
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-  <rect x="2" y="9" width="4" height="12"></rect>
-  <circle cx="4" cy="4" r="2"></circle>
-</svg>
-</a>
+                            </a>
+                            <a href="https://www.linkedin.com/in/sameera-kumarasinghe1/" target="_blank"
+                                rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                                    </path>
+                                    <rect x="2" y="9" width="4" height="12"></rect>
+                                    <circle cx="4" cy="4" r="2"></circle>
+                                </svg>
+                            </a>
                             <a href="mailto:e20212@eng.pdn.ac.lk" class="social-link email" title="Email">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
                             </a>
@@ -344,28 +579,44 @@
                         <p class="team-bio"></p>
                         <div class="team-social-links">
                             <a href="https://kochi.dev" target="_blank" class="social-link portfolio" title="Portfolio">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="2" y1="12" x2="22" y2="12"></line>
                                     <path d="m9 12 2 2 4-4"></path>
                                 </svg>
                             </a>
-                            <a href="https://github.com/kochi" target="_blank" class="social-link github" title="GitHub">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                            <a href="https://github.com/kochi" target="_blank" class="social-link github"
+                                title="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                    </path>
                                 </svg>
                             </a>
-							<a href="https://www.linkedin.com/in/dharani-navodya-833641213/" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
-    
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-  <rect x="2" y="9" width="4" height="12"></rect>
-  <circle cx="4" cy="4" r="2"></circle>
-</svg>
-</a>
+                            <a href="https://www.linkedin.com/in/dharani-navodya-833641213/" target="_blank"
+                                rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                                    </path>
+                                    <rect x="2" y="9" width="4" height="12"></rect>
+                                    <circle cx="4" cy="4" r="2"></circle>
+                                </svg>
+                            </a>
                             <a href="mailto:e20350@eng.pdn.ac.lk" class="social-link email" title="Email">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
                             </a>
@@ -384,29 +635,46 @@
                         <p class="team-role">E/20/377</p>
                         <p class="team-bio"></p>
                         <div class="team-social-links">
-                            <a href="https://thecn.com/VS755" target="_blank" class="social-link portfolio" title="Portfolio">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <a href="https://thecn.com/VS755" target="_blank" class="social-link portfolio"
+                                title="Portfolio">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="2" y1="12" x2="22" y2="12"></line>
                                     <path d="m9 12 2 2 4-4"></path>
                                 </svg>
                             </a>
-                            <a href="https://github.com/sidantha0377" target="_blank" class="social-link github" title="GitHub">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                            <a href="https://github.com/sidantha0377" target="_blank" class="social-link github"
+                                title="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                    </path>
                                 </svg>
                             </a>
-							<a href="https://www.linkedin.com/in/heshan-sidantha-5b9925296/" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
-    
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-  <rect x="2" y="9" width="4" height="12"></rect>
-  <circle cx="4" cy="4" r="2"></circle>
-</svg>
-</a>
+                            <a href="https://www.linkedin.com/in/heshan-sidantha-5b9925296/" target="_blank"
+                                rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                                    </path>
+                                    <rect x="2" y="9" width="4" height="12"></rect>
+                                    <circle cx="4" cy="4" r="2"></circle>
+                                </svg>
+                            </a>
                             <a href="mailto:e20377@eng.pdn.ac.lk" class="social-link email" title="Email">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
                             </a>
@@ -425,18 +693,27 @@
                         <p class="team-role">Project Supervisor</p>
                         <p class="team-bio"></p>
                         <div class="team-social-links">
-                   
-							<a href="https://www.linkedin.com/in/isuru-nawinne-73302833/" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
-    
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-  <rect x="2" y="9" width="4" height="12"></rect>
-  <circle cx="4" cy="4" r="2"></circle>
-</svg>
-</a>
+
+                            <a href="https://www.linkedin.com/in/isuru-nawinne-73302833/" target="_blank"
+                                rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                                    </path>
+                                    <rect x="2" y="9" width="4" height="12"></rect>
+                                    <circle cx="4" cy="4" r="2"></circle>
+                                </svg>
+                            </a>
                             <a href="mailto:isurunawinne@eng.pdn.ac.lk" class="social-link email" title="Email">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
                             </a>
@@ -468,4 +745,5 @@
 
     <script src="js/app.js"></script>
 </body>
+
 </html>
