@@ -33,4 +33,9 @@ build/
 .vscode/
 /src/main/resources/serviceAccountKey.json
 
+# Maven build output
+/SmartLocker/target/
+
+# Application config
+/SmartLocker/src/main/resources/serviceAccountKey.json
 

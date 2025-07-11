@@ -128,7 +128,7 @@ public class UserService implements IUserService {
     // this method is to send the otp code via mqtt publish to the topic
     @Override
     public void sendOtpCode(String message){
-//        System.out.println("ok");
+//        System.out.println("ok inside otp code function");
         //get the user Id from the message
         String registrationId = "";
 
@@ -137,7 +137,7 @@ public class UserService implements IUserService {
             JsonNode root = mapper.readTree(message);
             registrationId = root.get("registrationID").asText();  // spelling preserved as is
             registrationId = "E" + registrationId;
-//            System.out.println(registrationId);20
+            System.out.println(registrationId);
 
         } catch (Exception e) {
             System.err.println("Failed to parse MQTT message: " + e.getMessage());
@@ -147,6 +147,7 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         String otp = user.getOtp();
+//        System.out.println("Otp :" + otp);
 
         try {
 //            System.out.println("message published");
@@ -341,9 +342,12 @@ SmartLocker Admin Team
 
         for(LockerLog log : logs){
             LockerLogDto logDto = new LockerLogDto();
+
             logDto.setLogId(log.getLogId());
             logDto.setAccessTime(log.getAccessTime());
             logDto.setReleasedTime(log.getReleasedTime());
+            logDto.setStatus(log.getStatus());
+            logDto.setLocation(log.getLocker().getLockerCluster().getClusterName());
             logDto.setLockerId(log.getLocker().getLockerId());
 
             lockerLogs.add(logDto);

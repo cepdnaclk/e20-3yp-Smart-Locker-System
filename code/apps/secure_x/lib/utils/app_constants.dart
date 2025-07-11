@@ -4,9 +4,9 @@ class AppConstants {
   //mobile phone
   //static const String BASE_URL='http://192.168.8.185:9090';
   //emulator
-  static const String BASE_URL='http://10.0.2.2:9090';
+  //static const String BASE_URL='http://10.0.2.2:9090';
   //deployed on azure
-  //static const String BASE_URL='https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net';
+  static const String BASE_URL='https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net';
 
 
   static const String TOKEN = "token";
@@ -22,4 +22,7 @@ class AppConstants {
   static const String GET_OTP_CODE_URI='/api/v1/user/getOtpCode';
   static const String GENERATE_NEW_OTP_CODE_URI='/api/v1/user/generateNewOtpCode';
   static const String LOCKER_AVAILABILITY_URI='/api/v1/user/lockerAvailability/{clusterId}';
+  static const String UPLOAD_PROFILE_IMAGE_URI='/api/v1/user/uploadProfileImage';
+  static const String NOTIFICATION_URI='/api/v1/user/getAllNotifications';
+  static const String CHANGE_PASSWORD_URI='/api/v1/user/changePassword';
 }

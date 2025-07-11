@@ -226,7 +226,7 @@ class _CreateUserState extends State<CreateUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(),
       body: GetBuilder<AuthController>(
         builder: (authController) {
           return authController.isLoading.value // Access the value of RxBool

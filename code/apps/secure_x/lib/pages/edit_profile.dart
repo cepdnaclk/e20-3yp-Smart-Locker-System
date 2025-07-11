@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/models/user_model.dart';
 import 'package:secure_x/utils/appcolors.dart';
@@ -23,6 +26,10 @@ class _EditProfileState extends State<EditProfile> {
   late TextEditingController _lastNameController;
   late TextEditingController _regNoController;
   late TextEditingController _phoneNoController;
+
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+  bool _isUploading = false;
 
   @override
   void initState(){
@@ -48,13 +55,22 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
+  Future<void> _pickImage() async {
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if(pickedFile != null){
+      setState(() {
+        _selectedImage=File(pickedFile.path);
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final user = _authController.userModel.value;
 
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(),
       body: Padding(
         padding: EdgeInsets.all(16.h),
         child: user == null
@@ -64,13 +80,55 @@ class _EditProfileState extends State<EditProfile> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  //User Image
-                  ClipOval(
-                    child: Image.asset('assets/img/userImage.png',
-                    width:150.w,
-                    height:150.h,
-                    fit:BoxFit.cover,),
+                  Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      ClipOval(
+                        child: _selectedImage!=null? Image.file(
+                          _selectedImage! ,
+                          width: 150.w,
+                          height: 150.h,
+                          fit: BoxFit.cover) : Image.asset('assets/img/userImage.png',
+                          width: 150.w,
+                          height: 150.h,
+                          fit: BoxFit.cover),
+                      ),
+                      Positioned(
+                        bottom: 8,
+                        right: 8,
+                        child: InkWell(
+                          onTap: _pickImage,
+                          child: CircleAvatar(
+                            backgroundColor: AppColors.buttonBackgroundColor2,
+                            child: Icon(Icons.camera_alt,color: Colors.white,),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
+                  if (_selectedImage !=null)
+                    Padding(
+                      padding:EdgeInsets.only(top: 12.h),
+                      child: ElevatedButton(
+                        onPressed: _authController.isUploadingImage.value ? null : () async {
+                          await _authController.uploadProfileImage(_selectedImage!, context);
+
+                          setState(() {
+                            _selectedImage =null;
+                          });
+                        }, 
+                        child: _authController.isUploadingImage.value ? CircularProgressIndicator(): Text('Upload Image')
+                        ),
+                        ),
+                  
+
+                  //User Image
+                  //ClipOval(
+                  //  child: Image.asset('assets/img/userImage.png',
+                  //  width:150.w,
+                  //  height:150.h,
+                  //  fit:BoxFit.cover,),
+                  //),
               
                   SizedBox(height: 24.h,),
 

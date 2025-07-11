@@ -12,5 +12,6 @@ public class LockerLogDto {
     private LocalDateTime accessTime;
     private LocalDateTime releasedTime;
     private LockerLogStatus status;
+    private String location;
     private Long lockerId;
 }

@@ -8,14 +8,17 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class NotificationService {
+public class NotificationService implements INotificationService{
 
     private final NotificationRepository notificationRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
+    @Override
     public void sendAndSave(String userId, String title, String message, String type) {
 
         /*
@@ -37,5 +40,10 @@ public class NotificationService {
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Notification> getAllNotifications(String userId) {
+        return notificationRepository.findByUserIdOrderByTimestampDesc(userId);
     }
 }

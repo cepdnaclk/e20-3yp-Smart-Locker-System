@@ -22,6 +22,11 @@ public class LockerLogService implements ILockerLogService{
     @Override
     public List<LockerLogDto> getAllLockerLogs(){
 
+        /*
+        This function is mainly used for admin functionality to
+        find all the locker logs
+        */
+
         List<LockerLogDto> lockerLogs = new ArrayList<>();
         List<LockerLog> lockerLogsAll = lockerLogRepository.findAll();
 
@@ -33,6 +38,7 @@ public class LockerLogService implements ILockerLogService{
             lockerLogDto.setAccessTime(lockerLogsAll.get(i).getAccessTime());
             lockerLogDto.setReleasedTime(lockerLogsAll.get(i).getReleasedTime());
             lockerLogDto.setStatus(lockerLogsAll.get(i).getStatus());
+            lockerLogDto.setLocation(lockerLogsAll.get(i).getLocker().getLockerCluster().getClusterName());
             lockerLogDto.setLockerId(lockerLogsAll.get(i).getLocker().getLockerId());
 
             lockerLogs.add(lockerLogDto);

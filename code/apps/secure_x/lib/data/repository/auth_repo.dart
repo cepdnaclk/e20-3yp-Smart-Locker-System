@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:secure_x/data/api/dio_client.dart'; // Use DioClient
 import 'package:secure_x/data/api/stomp_client_service.dart';
 import 'package:secure_x/models/create_user_model.dart';
@@ -552,4 +554,83 @@ class AuthRepo {
       return false;
 }
 }
+
+//method to upload profile image
+Future<bool> uploadProfileImage({
+  required String userId,
+  required String token,
+  required File imageFile,
+}) async{
+   var request= http.MultipartRequest(
+    'POST', 
+    Uri.parse(AppConstants.UPLOAD_PROFILE_IMAGE_URI));
+   request.files.add(await http.MultipartFile.fromPath('file',imageFile.path));
+   request.fields['userId']=userId;
+   request.headers['Authorization']='Bearer $token';
+
+   var response=await request.send();
+   return response.statusCode==200;
+}
+
+//logout method
+Future<void> logout() async {
+  try {
+    // Clear the token from SharedPreferences
+    await clearUserToken();
+
+    // Disconnect the Stomp client
+    //StompClientService().disconnect();
+
+    print('User logged out successfully');
+  } catch (e) {
+    print('Error during logout: $e');
+  }
+}
+
+//change password method
+Future<ResponseModel> changePassword({
+  required String currentPassword,
+  required String newPassword,
+}) async {
+  try {
+    final String? token = sharedPreferences.getString(AppConstants.TOKEN);
+    if (token == null) {
+      return ResponseModel(
+        isSuccess: false,
+        message: 'User not authenticated',
+      );
+    }
+
+    dioClient.updateHeader(token);
+
+    final Map<String, dynamic> body = {
+      'currentPassword': currentPassword,
+      'newPassword': newPassword,
+    };
+
+    final response = await dioClient.postData(
+      AppConstants.CHANGE_PASSWORD_URI, 
+      body,
+    );
+
+    if (response.statusCode == 200) {
+      return ResponseModel(
+        isSuccess: true,
+        message: 'Password changed successfully',
+      );
+    } else {
+      return ResponseModel(
+        isSuccess: false,
+        message: 'Failed to change password: ${response.data}',
+      );
+    }
+  } catch (e) {
+    print('Error changing password: $e');
+    return ResponseModel(
+      isSuccess: false,
+      message: 'Error: $e',
+    );
+  }
+}
+
 }

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/pages/locker_logs.dart';
+import 'package:secure_x/pages/settings.dart';
 import 'package:secure_x/pages/user_details.dart';
 import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
@@ -57,7 +58,7 @@ class _UserState extends State<User> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      appBar:const CustomAppBar(),
+      appBar:CustomAppBar(),
       body:Container(
         color: AppColors.mainColor,
         child: Column(
@@ -132,6 +133,7 @@ class _UserState extends State<User> {
                       SizedBox(height: 20.h,),
                       TextButton.icon(
                         onPressed: (){
+                          Get.to(() => Settings());
                       }, 
                       icon: const Icon(
                         Icons.settings,
