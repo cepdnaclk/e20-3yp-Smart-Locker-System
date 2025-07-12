@@ -13,7 +13,10 @@
   /* Form Box */
   .form-box {
     background: #111;
+    background-image:linear-gradient(to right, rgba(0, 0, 0, 0.9), #3d3d3d), url(../../img/loginPattern.png) ;
     color: #ffffff;
+    background-repeat: repeat;
+    background-size: 600px 600px;
     padding: 40px;
     border-radius: 10px;
     width: 500px;
@@ -35,7 +38,7 @@
   
   .input-group label {
     display: block;
-    font-size: 25px;
+    font-size: 30px;
     margin-bottom: 5px;
   }
   
@@ -71,12 +74,13 @@
     transition: background 0.3s;
   }
   
-  button:hover {
-    background: #484747;
+  .container_login button:hover {
+    background: #3289d1;
+    color: #ffffff;
   }
   
   /* Toggle Text */
-  .toggle-text {
+  /* .toggle-text {
     margin-top: 15px;
     font-size: 20px;
   }
@@ -93,5 +97,37 @@
   
   .toggle-btn:hover {
     color: #ccc;
-  }
-  
+  } */
+
+  .dont-have-account {
+  text-align: center;
+  margin-top: 1rem;
+  color: #8d8b8b;
+}
+
+.signup-link {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+  color: #3289d1;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-top: 0.5rem;
+}
+
+.forgot-link {
+  color: #9f9fa1;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+  color: #3289d1;
+}

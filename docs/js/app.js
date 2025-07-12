@@ -267,7 +267,7 @@ function loadGalleryData() {
         {
             id: 3,
             image: "images/hadtest.png",
-            title: "Backend testing",
+            title: "Hardware testing",
             description: "Mqtt Explorer - Test mqtt messages"
         }
     ];
@@ -519,3 +519,78 @@ window.SecureXApp = {
     formatNumber,
     smoothScrollTo
 };
+
+let slideIndex = 0;
+const slides = document.querySelectorAll(".slide-image");
+
+function showSlides() {
+  slides.forEach((slide, i) => {
+    slide.classList.remove("active");
+  });
+  slideIndex = (slideIndex + 1) % slides.length;
+  slides[slideIndex].classList.add("active");
+}
+
+slides[0].classList.add("active"); // Show the first image
+setInterval(showSlides, 3000); // Change image every 3 seconds
+
+// icons-plain.js
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Get icon container elements by ID
+  const icons = {
+    webIcon: document.getElementById("web-icon"),
+    mobileIcon: document.getElementById("mobile-icon"),
+    backendIcon: document.getElementById("backend-icon"),
+    hardwareIcon: document.getElementById("hardware-icon") // added hardware icon container
+  };
+
+  // SVG icon definitions
+  const svgs = {
+    monitor: `
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="24" height="24">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+        <line x1="12" y1="17" x2="12" y2="21"></line>
+      </svg>`,
+
+    smartphone: `
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="24" height="24">
+        <rect x="7" y="2" width="10" height="20" rx="2" ry="2"></rect>
+        <line x1="11" y1="18" x2="13" y2="18"></line>
+      </svg>`,
+
+    server: `
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="24" height="24">
+        <rect x="2" y="6" width="20" height="6" rx="2" ry="2"></rect>
+        <rect x="2" y="14" width="20" height="6" rx="2" ry="2"></rect>
+        <line x1="6" y1="10" x2="6" y2="10"></line>
+        <line x1="6" y1="18" x2="6" y2="18"></line>
+      </svg>`,
+
+    cpu: `
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="24" height="24">
+        <rect x="7" y="7" width="10" height="10" rx="2" ry="2"></rect>
+        <line x1="12" y1="2" x2="12" y2="7"></line>
+        <line x1="12" y1="17" x2="12" y2="22"></line>
+        <line x1="2" y1="12" x2="7" y2="12"></line>
+        <line x1="17" y1="12" x2="22" y2="12"></line>
+        <line x1="4.22" y1="4.22" x2="7.76" y2="7.76"></line>
+        <line x1="16.24" y1="16.24" x2="19.78" y2="19.78"></line>
+        <line x1="4.22" y1="19.78" x2="7.76" y2="16.24"></line>
+        <line x1="16.24" y1="7.76" x2="19.78" y2="4.22"></line>
+      </svg>`
+  };
+
+  // Helper function to set SVG content inside element if element exists
+  const setIcon = (element, svg) => {
+    if (element) element.innerHTML = svg;
+  };
+
+  // Set icons
+  setIcon(icons.webIcon, svgs.monitor);
+  setIcon(icons.mobileIcon, svgs.smartphone);
+  setIcon(icons.backendIcon, svgs.server);
+  setIcon(icons.hardwareIcon, svgs.cpu);
+});
+

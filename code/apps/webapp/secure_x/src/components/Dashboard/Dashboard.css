@@ -17,7 +17,7 @@
   .main-content {
     flex-grow: 2;
     padding: 2%;
-    background: #ffffff;
+    /* background: #ffffff; */
     color: #000;
   }
   
@@ -40,10 +40,229 @@
     
     
   }
-  .TablistH{
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    gap: 2%;
-    
+  /* Table Container */
+.TablistH {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin: 1rem 0;
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+}
+
+/* Table Base */
+.TablistH table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  min-width: 700px;
+  background: white;
+}
+
+/* Table Header */
+.TablistH thead {
+  background: linear-gradient(135deg, #14123b, #190c30);
+  position: relative;
+}
+
+.TablistH thead::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #14123b, #2a1353, #1a174d);
+}
+
+.TablistH th {
+  padding: 1rem 0.875rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: white;
+  border: none;
+  position: relative;
+}
+
+.TablistH th:first-child {
+  border-top-left-radius: 8px;
+  padding-left: 1.25rem;
+}
+
+.TablistH th:last-child {
+  border-top-right-radius: 8px;
+  padding-right: 1.25rem;
+}
+
+/* Table Body */
+.TablistH tbody tr {
+  transition: all 0.3s ease;
+  border-bottom: 1px solid #f1f5f9;
+  position: relative;
+}
+
+.TablistH tbody tr:hover {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.03), rgba(124, 58, 237, 0.03));
+  transform: translateX(3px);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.1);
+}
+
+.TablistH tbody tr:last-child {
+  border-bottom: none;
+}
+
+.TablistH tbody tr:nth-child(even) {
+  background-color: #fafbfc;
+}
+
+.TablistH tbody tr:nth-child(even):hover {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(124, 58, 237, 0.05));
+}
+
+/* Table Cells */
+.TablistH td {
+  padding: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+  vertical-align: middle;
+  border: none;
+}
+
+.TablistH td:first-child {
+  padding-left: 1.25rem;
+  font-weight: 600;
+  color: #222222;
+  font-family: 'Monaco', 'Consolas', monospace;
+}
+
+.TablistH td:last-child {
+  padding-right: 1.25rem;
+}
+
+/* Status Column Special Styling */
+.TablistH td:last-child {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  text-align: center;
+  position: relative;
+}
+
+/* Add status badges (you can customize based on your status values) */
+.TablistH td:last-child::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  background: #10b981; /* Default green for active/success */
+}
+
+/* Time columns styling */
+.TablistH td:nth-child(3),
+.TablistH td:nth-child(4) {
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .TablistH {
+    padding: 1rem;
+    margin: 0.5rem 0;
   }
+  
+  .TablistH table {
+    font-size: 0.875rem;
+    min-width: 600px;
+  }
+  
+  .TablistH th,
+  .TablistH td {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .TablistH th:first-child,
+  .TablistH td:first-child {
+    padding-left: 0.75rem;
+  }
+  
+  .TablistH th:last-child,
+  .TablistH td:last-child {
+    padding-right: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .TablistH {
+    padding: 0.75rem;
+  }
+  
+  .TablistH table {
+    font-size: 0.8rem;
+    min-width: 550px;
+  }
+  
+  .TablistH th,
+  .TablistH td {
+    padding: 0.625rem 0.4rem;
+  }
+  
+  .TablistH th {
+    font-size: 0.75rem;
+  }
+}
+
+/* Loading State */
+.TablistH table tbody:empty::after {
+  content: "Loading recent activity...";
+  display: block;
+  text-align: center;
+  padding: 3rem;
+  color: #9ca3af;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+/* Empty State */
+.TablistH:has(tbody:empty)::after {
+  content: "No recent activity to display";
+  display: block;
+  text-align: center;
+  padding: 3rem;
+  color: #9ca3af;
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+/* Custom Scrollbar */
+.TablistH::-webkit-scrollbar {
+  height: 8px;
+}
+
+.TablistH::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 4px;
+}
+
+.TablistH::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+
+.TablistH::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* Firefox scrollbar */
+.TablistH {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 #f8fafc;
+}
