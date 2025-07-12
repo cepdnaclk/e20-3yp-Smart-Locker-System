@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Signup.css";
 import { signup } from "../Services/api.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Signup = () => {
   const [regNo, setRegNo] = useState("");
@@ -20,7 +20,14 @@ const Signup = () => {
       return;
     }
     try {
-      const response = await signup(regNo, firstName, lastName, contactNumber, email, password);
+      const response = await signup(
+        regNo,
+        firstName,
+        lastName,
+        contactNumber,
+        email,
+        password
+      );
       alert("Signup Successful!");
       navigate("/success"); // Change the route as needed
     } catch (error) {
@@ -31,7 +38,7 @@ const Signup = () => {
 
   return (
     <div className="container_signup">
-      <div className="form-box">
+      <div className="form-box-s">
         <h2>SIGN UP</h2>
         <form onSubmit={handleSignup}>
           <div className="input-group">
@@ -108,6 +115,13 @@ const Signup = () => {
           </div>
 
           <button type="submit">Sign Up</button>
+
+          <div className="dont-have-account">
+            <span>Do you have an account? </span>
+            <Link to="/login" className="signup-link">
+              Sign in
+            </Link>
+          </div>
         </form>
       </div>
     </div>

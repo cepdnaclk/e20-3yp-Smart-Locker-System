@@ -113,7 +113,7 @@ export default function Map_page() {
             />
 
             {/* User dynamic location marker */}
-            <LocationMarker />
+            {/* <LocationMarker /> */}
 
             {/* Cluster markers */}
             {clusters.map((cluster) => (

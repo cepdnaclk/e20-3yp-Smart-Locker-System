@@ -6,7 +6,7 @@
   height: 100vh;
 }
 .logo {
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bold;
   padding: 20px;
 }
@@ -14,6 +14,9 @@
     width: 100%; /* Fixed sidebar width */
     height: 8%; /* Full viewport height */
     background-color: #333;
+    background-image: linear-gradient(to bottom, rgba(37, 37, 37, 0.9), #4d4c4c),url(../../img/backpatten-wb.png);
+    background-repeat: repeat;
+  background-size: 592px 333px;
     color: white;
     display: flex;
     flex-direction: row;

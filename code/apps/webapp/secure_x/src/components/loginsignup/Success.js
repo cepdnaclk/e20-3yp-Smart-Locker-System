@@ -15,7 +15,7 @@ const Success = () => {
   return (
     <div className="sucses">
       <div className="s_box">
-        <h1>Signup Successful!</h1>
+        <h1>Sign up Successful !</h1>
         <p>
           Wait for admin approval of your request. Then you can log into the
           admin system.
