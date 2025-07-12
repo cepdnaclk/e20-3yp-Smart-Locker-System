@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/v1/login",
                                 "/api/v1/newUsers/**", // <-- allows all sub-paths like /debug-get, /register
+                                "/api/v1/forgotPassword/**", // allow forgot password in for all users
                                 "/publish",
                                 "/subscribe",
                                 "/latest",
