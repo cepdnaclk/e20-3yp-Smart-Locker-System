@@ -267,7 +267,7 @@ function loadGalleryData() {
         {
             id: 3,
             image: "images/hadtest.png",
-            title: "Backend testing",
+            title: "Hardware testing",
             description: "Mqtt Explorer - Test mqtt messages"
         }
     ];
