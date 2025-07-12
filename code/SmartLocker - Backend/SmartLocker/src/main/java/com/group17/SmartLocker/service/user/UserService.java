@@ -13,6 +13,7 @@ import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.mqtt.MqttPublisher;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -28,6 +29,7 @@ public class UserService implements IUserService {
     private final LockerService lockerService;
     private final MqttPublisher mqttPublisher;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDetailsDto> getAllUsers(){
@@ -355,4 +357,32 @@ SmartLocker Admin Team
     }
 
 
+    public void updatePasswordByUsernameOrEmail(String identifier, String newPassword) {
+
+        /*
+        * Password is updated using username or the email
+        * Password is encoded by Password encoder and saved to the database
+        * identifier : This can be username or the email
+        * identifier is identified whether it is an email or an username
+        */
+        User user = null;
+
+        if (!identifier.isEmpty()) {
+            if (identifier.contains("@")) {
+                // Update using the email
+                user = userRepository.findByEmail(identifier);
+            } else {
+                // Update using username
+                user = userRepository.findByUsername(identifier);
+            }
+        }
+
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found with given email or username.");
+        }
+
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+    }
 }

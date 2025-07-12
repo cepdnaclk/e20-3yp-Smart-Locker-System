@@ -22,7 +22,7 @@ public class UserOtpService implements IUserOtpService {
     private final EmailService emailService;
 
     @Override
-    public Integer generateOtp(String username, OtpType type) {
+    public Integer generateOtp(String identifier, OtpType type) {
 
         /*
         * This method generates the otp code
@@ -30,7 +30,22 @@ public class UserOtpService implements IUserOtpService {
         * username and the type(purpose) of the otp code is required
         * returns the otp code
         */
-        User user = userRepository.findByUsername(username);
+
+        User user = null;
+
+        if (!identifier.isEmpty()) {
+            if (identifier.contains("@")) {
+                // Update using the email
+                user = userRepository.findByEmail(identifier);
+            } else {
+                // Update using username
+                user = userRepository.findByUsername(identifier);
+            }
+        }
+
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found with given email or username.");
+        }
 
         // Generate a 4-digit OTP
         int otp = ThreadLocalRandom.current().nextInt(1000, 10000);
@@ -73,7 +88,7 @@ SmartLocker Admin Team
     }
 
     @Override
-    public boolean validateOtp(String username, Integer otp, OtpType type) {
+    public boolean validateOtp(String identifier, Integer otp, OtpType type) {
 
         /*
          * This method validates the otp code.
@@ -83,7 +98,22 @@ SmartLocker Admin Team
          * Only check the otp code related to the username
          */
 
-        User user = userRepository.findByUsername(username);
+        User user = null;
+
+        if (!identifier.isEmpty()) {
+            if (identifier.contains("@")) {
+                // Update using the email
+                user = userRepository.findByEmail(identifier);
+            } else {
+                // Update using username
+                user = userRepository.findByUsername(identifier);
+            }
+        }
+
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found with given email or username.");
+        }
+
         UserOtp userOtp = otpRepository.findFirstByUserAndOtpTypeAndUsedFalseOrderByCreatedAtDesc(user, type)
                 .orElseThrow(() -> new ResourceNotFoundException("OTP not found or already used."));
 
