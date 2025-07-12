@@ -12,29 +12,32 @@ class SignIn extends StatelessWidget {
     
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      //appBar:const CustomAppBar(),
-      body:Container(
-        color: AppColors.mainColor,
-        child: Column(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+            'assets/img/back.png',
+            fit: BoxFit.cover,
+          ),
+        Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Center(
-                child: Container(
-                  width: 1.sw,
-                  height:0.5.sh,
-                  alignment: Alignment.center,
-                  child:ClipRect(
-                    child: Align(
-                      alignment: Alignment.center,
-                      heightFactor: 0.5,
-                      widthFactor: 1,
-                      child: Image.asset('assets/img/logo.png',
-                      fit: BoxFit.contain,             
-                    ),
-                    ),
-                  ),            
+           Center(
+            child: Container(
+              width: 0.9.sw,
+              height: 0.5.sh,
+              alignment: Alignment.center,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30.r),
+                child: Image.asset(
+                  'assets/img/banner.png',
+                  fit: BoxFit.cover, 
+                  width: 2.sw,
+                  height: 0.15.sh,
                 ),
               ),
+            ),
+          ),
             SizedBox(height: 5.h,),
             Padding(
                 padding:EdgeInsets.symmetric(horizontal: 20.w),
@@ -42,7 +45,14 @@ class SignIn extends StatelessWidget {
                   padding: EdgeInsets.all(50.w),
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(10.r),
+                    borderRadius: BorderRadius.circular(30.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.appBarColor,
+                        blurRadius: 8.r,
+                        offset: Offset(0,4),
+                      )
+                    ]
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -58,8 +68,12 @@ class SignIn extends StatelessWidget {
                           backgroundColor: AppColors.buttonBackgroundColor2,
                           foregroundColor: AppColors.buttonBackgroundColor1,
                           padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.h),
+                          shadowColor: AppColors.appBarColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.r),
+                          )
                         ), 
-                        child: Text('SIGN IN',style: TextStyle(
+                        child: Text('LOG IN',style: TextStyle(
                           fontSize: 22.sp,
                           fontWeight: FontWeight.bold,
                           ),
@@ -75,7 +89,18 @@ class SignIn extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => const CreateUser(),));
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: AppColors.textSecondary,
+                        foregroundColor: AppColors.textPrimary,
+                        /*backgroundColor: AppColors.textDisabled,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 12.h,
+                          horizontal: 24.w),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                            side: BorderSide(
+                              color: AppColors.textDisabled,
+                              width: 2,
+                            )
+                          )*/
                       ),
                       child: Text('CREATE ACCOUNT',style: TextStyle(
                         fontSize: 19.sp,
@@ -89,7 +114,7 @@ class SignIn extends StatelessWidget {
             SizedBox(height: 20.h,)   
           ],
         ),
-        
+        ],  
       ),
     );    
   }

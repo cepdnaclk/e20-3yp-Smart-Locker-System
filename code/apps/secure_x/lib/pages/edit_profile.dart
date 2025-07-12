@@ -71,7 +71,13 @@ class _EditProfileState extends State<EditProfile> {
 
     return Scaffold(
       appBar: CustomAppBar(),
-      body: Padding(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset('assets/img/backpattern.jpg',
+          fit: BoxFit.cover,
+      ), 
+      Padding(
         padding: EdgeInsets.all(16.h),
         child: user == null
             ? const Center(child: Text('No user data available'))
@@ -145,10 +151,14 @@ class _EditProfileState extends State<EditProfile> {
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         elevation: 6.h,
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.h, 
+                            horizontal: 24.h
+                          ),
                         backgroundColor: AppColors.buttonBackgroundColor2,
                         foregroundColor: AppColors.buttonBackgroundColor1,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(20.r),
                         )
                       ),
                       onPressed: () async{
@@ -175,7 +185,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
       ),
       ),
-    );
+    ]));
   }
 
   Widget _buildEditableField(String title,TextEditingController controller,{bool readOnly=false}) {
