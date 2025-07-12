@@ -17,7 +17,7 @@
   .main-content {
     flex-grow: 2;
     padding: 2%;
-    background: #ffffff;
+    /* background: #ffffff; */
     color: #000;
   }
   
@@ -73,7 +73,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, #232324, #434246, #5f5e70);
+  background: linear-gradient(90deg, #14123b, #2a1353, #1a174d);
 }
 
 .TablistH th {

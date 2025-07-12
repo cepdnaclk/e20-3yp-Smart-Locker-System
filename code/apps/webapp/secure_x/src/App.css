@@ -1,13 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600;700&display=swap');
+
 * {
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  
+  font-family: 'Fira Sans', Arial, sans-serif;
 }
 
-body {
+/* body {
   background-color: #fdfdfd;
   color: #000000;
   height: 100%;
+} */
+body {
+  /* background-color: #fdfdfd; */
+  color: #000000;
+  height: 100%;
+    background-image: url('../src/img/backpattern.jpg');
+    background-repeat: repeat;
+    background-position: top left;
+    background-attachment: fixed; /* keeps pattern fixed while scrolling */
+    background-size: 592px 333px; /* adjust size as needed */
 }
 
 
