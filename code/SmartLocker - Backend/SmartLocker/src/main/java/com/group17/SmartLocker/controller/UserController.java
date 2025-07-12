@@ -3,6 +3,7 @@ package com.group17.SmartLocker.controller;
 import com.group17.SmartLocker.dto.LockerClusterDto;
 import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
+import com.group17.SmartLocker.enums.OtpType;
 import com.group17.SmartLocker.model.LockerCluster;
 import com.group17.SmartLocker.model.Notification;
 import com.group17.SmartLocker.model.User;
@@ -10,6 +11,7 @@ import com.group17.SmartLocker.service.jwt.JwtService;
 import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.lockerCluster.LockerClusterService;
 import com.group17.SmartLocker.service.notification.NotificationService;
+import com.group17.SmartLocker.service.userOtp.UserOtpService;
 import com.group17.SmartLocker.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import static com.group17.SmartLocker.enums.OtpType.PASSWORD_RESET;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RequiredArgsConstructor
@@ -229,5 +232,6 @@ public class UserController {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
 }
