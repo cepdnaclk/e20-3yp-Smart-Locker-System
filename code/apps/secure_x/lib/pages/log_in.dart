@@ -26,8 +26,6 @@ class _LogInState extends State<LogIn> {
 
     if (username.isEmpty || password.isEmpty) {
       print('Username or password is empty'); // Debug print
-      //CustomSnackBar('Username and password are required', iserror: true);
-      //CustomSnackBar.show(message: 'Username and password are required');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Username and password are required'),
         backgroundColor: Colors.red.shade700,
@@ -51,8 +49,16 @@ class _LogInState extends State<LogIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      //appBar: CustomAppBar(),
-      body: GetBuilder<AuthController>(
+      body: Stack(
+        fit: StackFit.expand,
+  children: [
+    Positioned.fill(
+      child: Image.asset(
+        'assets/img/backpattern.jpg', 
+        fit: BoxFit.cover,
+      ),
+    ),
+      GetBuilder<AuthController>(
         builder: (authController) {
           return authController.isLoading.value
               ? Center(child: CircularProgressIndicator())
@@ -80,33 +86,87 @@ class _LogInState extends State<LogIn> {
               ),
               SizedBox(height: 10.h,),
               Padding(
-                padding:EdgeInsets.symmetric(horizontal: 0.04.sw, vertical: 0.02.sh),
-                child: Container(
-                  padding: EdgeInsets.all(0.05.sw),
+                  padding: EdgeInsets.symmetric(horizontal: 0.04.sw, vertical: 0.02.sh),
+              child: Container(
+                height: 0.45.sh,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.r),
+                ),
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.r),
+                        image:const DecorationImage(
+                          image: AssetImage('assets/img/loginPattern.png'),
+                          fit: BoxFit.cover,
+                          
+                          
+                        ),
+                      ),
+                    ),
+                Container(
                   decoration: BoxDecoration(
-                    color: AppColors.boxColor,
                     borderRadius: BorderRadius.circular(30.r),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withAlpha((0.7 * 255).round()), // Top color
+                        Colors.black.withAlpha((0.3 * 255).round()), 
+                        //Colors.transparent,             // Middle (transparent)
+                        Colors.black.withAlpha((0.7 * 255).round()), // Bottom color
+                      ],
+                      stops: [0.0, 0.5, 1.0],
+                    ),
                   ),
+                ),
+                Padding(padding: EdgeInsets.all(0.05.sw),
                   child: Column(
-                    mainAxisAlignment:MainAxisAlignment.center,
+                    crossAxisAlignment:CrossAxisAlignment.stretch,
                     children: [
+                      Text('Username',style: TextStyle(
+                        color: AppColors.mainColor,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold
+                      ),),
+                      SizedBox(height: 6.h,),
                       TextFormField(
                         controller: _usernameController,
                         style: TextStyle(
                           fontSize: 18.sp,
-                          color: AppColors.textPrimary,
+                          color: AppColors.appBarColor,
                         ),
-                        decoration: const InputDecoration(
-                          hintText: 'User Name or Email',
+                        decoration: InputDecoration(
+                          hintText: 'Enter your username',
+                          hintStyle: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 15.sp,
+                          ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: AppColors.textTertiary), // No border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.black), // Or any color you prefer
+                          ),
                         ),
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.text,
                       ),
                       SizedBox(height :15.h,),
+                      Text('Password',style: TextStyle(
+                        color: AppColors.mainColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.sp,
+                      ),),
+                      SizedBox(height: 6.h,),
                       TextFormField(
                         style: TextStyle(
                           fontSize: 18.sp,
@@ -114,64 +174,102 @@ class _LogInState extends State<LogIn> {
                         ),
                         obscureText: true,
                         controller: _passwordController,
-                        decoration:const InputDecoration(
-                          hintText: 'Password',
+                        decoration: InputDecoration(
+                          hintText: 'Enter your Password',
+                          hintStyle: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 15.sp,
+                          ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.black), // Or any color you prefer
+                          ),),
                         keyboardType: TextInputType.text,
                       ),
-                      SizedBox(height: 15.h,),
+                      SizedBox(height: 3.h,),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: (){
+
+                          }, 
+                          child: Text('Forgot Password?',
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 16.sp,
+                          ),
+                          )),
+                      ),
+                      SizedBox(height: 3.h,),
                       ElevatedButton(
                         onPressed:(){
                           _login();
-                          //Get.to(() => Unlock());
-                          //Get.to(()=>Navigation());
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.buttonBackgroundColor2,
-                          foregroundColor: AppColors.textInverse,
+                          backgroundColor: AppColors.textPrimary,
+                          foregroundColor: AppColors.buttonBackgroundColor1,
                           padding: EdgeInsets.symmetric(
                             vertical: 12.h, 
-                            horizontal: 24.h),
+                            horizontal: 24.h
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
                         ), 
-                        child: //_isLoading? const CircularProgressIndicator():
-                        Text('LOG IN',style: TextStyle(
+                        child: 
+                        Text('SIGN IN',style: TextStyle(
                           fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                       SizedBox(height: 10.h,),
-                     
-                      Text('or', style: TextStyle(
-                        fontSize: 18.sp,
-                        )
-                        ,),
-                      TextButton(onPressed: (){
-                        Get.to(() => CreateUser());        
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppColors.textPrimary,
-                        ),
-                        child: Text('CREATE ACCOUNT',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                        ),)
-                      ),
+                      Center(
+                        child: RichText(text: TextSpan(
+                          text: "Don't have an account? ",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14.sp,
+                          ),
+                          children: [
+                            WidgetSpan(
+                              child: GestureDetector(
+                                onTap: (){
+                                  Get.to(()=> CreateUser());
+                                },
+                                child: Text('Sign Up',
+                                style: TextStyle(
+                                  color: AppColors.textPrimary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.sp,
+                                ),),
+                              ))
+                          ]
+
+                        )),
+                     )
+                      
                     ],
                   ),
                 ),
-              )
-            ]
+                ]
+              ),
+          ))]
           ),
         );
         },
       ),
-    );
+  ]
+    ));
   }
 }

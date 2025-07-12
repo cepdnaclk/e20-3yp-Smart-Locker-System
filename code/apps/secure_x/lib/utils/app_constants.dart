@@ -4,9 +4,9 @@ class AppConstants {
   //mobile phone
   //static const String BASE_URL='http://192.168.8.185:9090';
   //emulator
-  //static const String BASE_URL='http://10.0.2.2:9090';
+  static const String BASE_URL='http://10.0.2.2:9191';
   //deployed on azure
-  static const String BASE_URL='https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net';
+  //static const String BASE_URL='https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net';
 
 
   static const String TOKEN = "token";
