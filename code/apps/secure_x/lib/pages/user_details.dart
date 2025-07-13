@@ -46,9 +46,9 @@ class UserDetails extends StatelessWidget {
                   _buildDetailItem("Email", user.email ?? 'Not provided'),
                   _buildDetailItem("First Name", user.firstName ?? 'Not provided'),
                   _buildDetailItem("Last Name", user.lastName ?? 'Not provided'),
-                  _buildDetailItem("ID", user.id?? 'Not provided'),
-                  _buildDetailItem("Registration No", user.regNo ?? 'Not provided'),
-                  _buildDetailItem("Phone Number", user.phoneNo ?? 'Not provided'),
+                  _buildDetailItem("User ID", user.id?? 'Not provided'),
+                  _buildDetailItem("Registration Number", user.regNo ?? 'Not provided'),
+                  _buildDetailItem("Contact Number", user.phoneNo ?? 'Not provided'),
 
                   SizedBox(height: 24.h,),
                   
@@ -88,13 +88,14 @@ class UserDetails extends StatelessWidget {
         enabled: false,
         style:TextStyle(
           color: AppColors.appBarColor,
-          fontSize: 16.sp,
+          fontSize: 18.sp,
         ),
         decoration: InputDecoration(
           labelText: title,
-          labelStyle: const TextStyle(
+          labelStyle: TextStyle(
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
+            fontSize: 20.sp,
             ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.r),

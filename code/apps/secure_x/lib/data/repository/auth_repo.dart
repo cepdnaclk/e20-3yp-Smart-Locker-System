@@ -304,7 +304,7 @@ class AuthRepo {
   }
 
   //Method to update user profile
-  Future<ResponseModel> UpdateUserProfile(UserModel updatedUser) async{
+  Future<ResponseModel> updateUserProfile(Map<String, dynamic> updates) async{
     try{
       // Retrieve the token from SharedPreferences
       final String? token = sharedPreferences.getString(AppConstants.TOKEN);
@@ -320,12 +320,12 @@ class AuthRepo {
       dioClient.updateHeader(token);
 
       // Debug: Print the updated user data
-      print('Updating user profile with data: ${updatedUser.toJson()}');
+      print('Updating user profile with data: $updates');
 
       // Send the PUT request to update user profile
-      final response = await dioClient.putData(
+      final response = await dioClient.patchData(
         AppConstants.EDIT_PROFILE_URI,
-        updatedUser.toJson(),
+        updates,
       );
 
       if (response.statusCode == 200) {

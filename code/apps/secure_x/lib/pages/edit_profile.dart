@@ -144,7 +144,7 @@ class _EditProfileState extends State<EditProfile> {
                   _buildEditableField("Registration No", _regNoController,readOnly: true),
                   _buildEditableField("Phone Number", _phoneNoController),
                   
-                  _buildEditableField("ID", TextEditingController(text: user?.id ?? ''), readOnly: true),
+                  _buildEditableField("ID", TextEditingController(text: user.id ?? ''), readOnly: true),
                   
                   SizedBox(height: 24.h,),
                   
@@ -163,15 +163,15 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                       onPressed: () async{
                         if(_formKey.currentState!.validate()){
-                          await _authController.updateProfile(UserModel(
-                            id: user.id,
+                          await _authController.updateProfile(
+                            //id: user.id,
                             email: _emailController.text,
                             firstName: _firstNameController.text,
                             lastName: _lastNameController.text,
-                            regNo: _regNoController.text,
+                            //regNo: user.regNo,
                             phoneNo: _phoneNoController.text,
-                            role: user.role,
-                          )
+                            //role: user.role,
+                            context: context,
                         );
                         }
                       }, 

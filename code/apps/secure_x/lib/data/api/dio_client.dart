@@ -69,4 +69,22 @@ class DioClient {
       rethrow;
     }
   }
+
+  //Method to handle PUT requests
+  Future<Response> patchData(String uri,dynamic body) async{
+    try{
+      print('Sending PATCH request to: $uri'); 
+      print('Request headers: ${_dio.options.headers}'); 
+      print('Request body: $body'); 
+
+      final response = await _dio.patch(uri, data: body);
+
+      print('Received response: ${response.statusCode} - ${response.data}'); // Debug print
+
+      return response;
+    } catch (e) {
+      print('Error during PATCH request: $e'); 
+      rethrow;
+    }
+  }
 }
