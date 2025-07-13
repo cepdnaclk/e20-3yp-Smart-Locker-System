@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
-import 'package:secure_x/pages/sign_in.dart';
-import 'package:secure_x/pages/splash_screen.dart';
 import 'package:secure_x/routes/route_helper.dart';
 import 'package:secure_x/utils/resources.dart';
 import 'helper/dependencies.dart' as dep;

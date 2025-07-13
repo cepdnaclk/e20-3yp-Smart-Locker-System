@@ -1,10 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/controllers/locker_controller.dart';
 import 'package:secure_x/controllers/notification_controller.dart';
+import 'package:secure_x/controllers/passwordReset_controller.dart';
 import 'package:secure_x/data/api/dio_client.dart'; // Use DioClient
 import 'package:secure_x/data/repository/auth_repo.dart';
 import 'package:secure_x/data/repository/locker_repo.dart';
+import 'package:secure_x/data/repository/passwordResetRepo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> init() async {
@@ -13,6 +16,8 @@ Future<void> init() async {
 
   // Register SharedPreferences
   Get.lazyPut(() => sharedPreferences);
+
+  //Get.lazyPut(() => Dio());
 
   // Initialize DioClient
   Get.lazyPut(() => DioClient());
@@ -37,4 +42,9 @@ Future<void> init() async {
   //Initialkize Notification Controller
   Get.lazyPut(()=> NotificationController(),fenix: true);
 
+  //Initialize passwordResetRepo with dioclient
+  Get.lazyPut(()=>PasswordResetRepo(dio:Get.find<DioClient>().dio));
+
+  //Initialize passwordResetController with passwordResetRepo
+  Get.lazyPut(()=> PasswordresetController(passwordResetRepo: Get.find()));
 }
