@@ -128,12 +128,14 @@ public class UserService implements IUserService {
                 }
             });
 
+            return userRepository.save(user);
+
         }
         else{
             throw new UnauthorizedActionException("You are not permitted to this Action");
         }
 
-        return userRepository.save(user);
+
     }
 
     @Override
