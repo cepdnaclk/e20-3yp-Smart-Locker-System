@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query("SELECT u.otp FROM User u WHERE u.otp IS NOT NULL")
     List<String> findAllOtps();
+
+    User findByEmail(String email);
 }

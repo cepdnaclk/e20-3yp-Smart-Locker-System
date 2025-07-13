@@ -227,190 +227,376 @@ class _CreateUserState extends State<CreateUser> {
     return Scaffold(
       backgroundColor: AppColors.mainColor,
       appBar: CustomAppBar(),
-      body: GetBuilder<AuthController>(
+      body: Stack(
+        fit: StackFit.expand,
+  children: [
+    Positioned.fill(
+      child: Image.asset(
+        'assets/img/backpattern.jpg', 
+        fit: BoxFit.cover,
+      ),
+    ),
+      GetBuilder<AuthController>(
         builder: (authController) {
-          return authController.isLoading.value // Access the value of RxBool
-              ? const Center(child: CircularProgressIndicator())
+          return authController.isLoading.value
+              ? Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [         
-              Center(
-                child: Container(
-                  width: 1.sw,
-                  height:200.h,
-                  alignment: Alignment.center,
-                  child:ClipRect(
-                    child: Align(
-                      alignment: Alignment.center,
-                      heightFactor: 0.5,
-                      //widthFactor: 1,
-                      child: Image.asset('assets/img/logo.png',
-                      fit: BoxFit.cover,             
-                    ),
-                    ),
-                  )             
-                ),
-              ),
               Padding(
-                padding:EdgeInsets.symmetric(horizontal: 5.h),
-                child: Container(
-                  padding: EdgeInsets.all(20.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.boxColor,
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                    child: Column(
+                  padding: EdgeInsets.symmetric(horizontal: 0.04.sw, vertical: 0.02.sh),
+                  child: Container(
+                    height: 0.83.sh,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30.r),
+                    ),
+                    child: Stack(
                       children: [
-                        TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(
-                          hintText: 'Email',
-                          filled: true,
-                          fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      SizedBox(height: 10.h,),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.r),
+                            image:const DecorationImage(
+                              image: AssetImage('assets/img/loginPattern.png'),
+                              fit: BoxFit.cover,                              
+                            ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.r),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withAlpha((0.7 * 255).round()), // Top color
+                        Colors.black.withAlpha((0.4 * 255).round()), 
+                        //Colors.transparent,             // Middle (transparent)
+                        Colors.black.withAlpha((0.7 * 255).round()), // Bottom color
+                      ],
+                      stops: [0.0, 0.5, 1.0],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.all(0.05.sw),
+                  child: Column(
+                    crossAxisAlignment:CrossAxisAlignment.stretch,
+                    children: [
+                      Text('Name',style: TextStyle(
+                        color: AppColors.mainColor,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold
+                      ),),
+                      SizedBox(height: 6.h,),
                       TextFormField(
                         controller: _firstNameController,
-                        decoration:const InputDecoration(
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.appBarColor,
+                        ),
+                        decoration: InputDecoration(
                           hintText: 'First Name',
+                          hintStyle: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 16.sp,
+                          ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: AppColors.textTertiary), // No border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.black), // Or any color you prefer
+                          ),
                         ),
                         keyboardType: TextInputType.text,
                       ),
-                      SizedBox(height: 10.h,),
+                      SizedBox(height :6.h,),
                       TextFormField(
                         controller: _lastNameController,
-                        decoration:const InputDecoration(
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.appBarColor,
+                        ),
+                        decoration: InputDecoration(
                           hintText: 'Last Name',
+                          hintStyle: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 16.sp,
+                          ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: AppColors.textTertiary), // No border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.black), // Or any color you prefer
+                          ),
                         ),
                         keyboardType: TextInputType.text,
                       ),
-                      SizedBox(height: 10.h,),
+                      SizedBox(height: 6.h,),
+                      Text('Registration Number',style: TextStyle(
+                        color: AppColors.mainColor,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold
+                      ),),
+                      SizedBox(height: 6.h,),
                       TextFormField(
                         controller: _regNoController,
-                        decoration:const InputDecoration(
-                          hintText: 'Registration Number',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.appBarColor,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Enter Reg. No (e.g., EXXYYY)',
+                          hintStyle: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 16.sp,
+                          ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: AppColors.textTertiary), // No border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.black), // Or any color you prefer
+                          ),
                         ),
                         keyboardType: TextInputType.text,
                       ),
-                      SizedBox(height: 10.h,),
+                      SizedBox(height: 6.h,),
+                      Text('Contact Number',style: TextStyle(
+                        color: AppColors.mainColor,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold
+                      ),),
+                      SizedBox(height: 6.h,),
                       TextFormField(
-                        controller: _mobileNoController,
-                        decoration:const InputDecoration(
-                          hintText: 'Phone Number',
+                        controller: _regNoController,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.appBarColor,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Enter your phone number',
+                          hintStyle: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 16.sp,
+                          ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: AppColors.textTertiary), // No border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.black), // Or any color you prefer
+                          ),
                         ),
                         keyboardType: TextInputType.phone,
                       ),
-                      SizedBox(height: 10.h,),
+                      SizedBox(height: 6.h,),
+                      Text('Email',style: TextStyle(
+                        color: AppColors.mainColor,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold
+                      ),),
+                      SizedBox(height: 6.h,),
                       TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration:const InputDecoration(
-                          hintText: 'Password',
+                        controller: _regNoController,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.appBarColor,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Enter your email',
+                          hintStyle: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 16.sp,
+                          ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: AppColors.textTertiary), // No border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.black), // Or any color you prefer
+                          ),
                         ),
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      SizedBox(height: 6.h,),
+                      Text('Password',style: TextStyle(
+                        color: AppColors.mainColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.sp,
+                      ),),
+                      SizedBox(height: 6.h,),
+                      TextFormField(
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.textPrimary,
+                        ),
+                        obscureText: true,
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          hintText: 'Enter your Password',
+                          hintStyle: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 16.sp,
+                          ),
+                          filled: true,
+                          fillColor: AppColors.formFieldColor,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.black), // Or any color you prefer
+                          ),),
                         keyboardType: TextInputType.text,
                       ),
-                      SizedBox(height: 10.h,),
+                      SizedBox(height: 3.h,),
+                      Text('Confirm Password',style: TextStyle(
+                        color: AppColors.mainColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.sp,
+                      ),),
+                      SizedBox(height: 6.h,),
                       TextFormField(
-                        controller: _reEnterPasswordController,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.textPrimary,
+                        ),
                         obscureText: true,
-                        decoration:const InputDecoration(
-                          hintText: 'Re enter Password',
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          hintText: 'Re-enter Password',
+                          hintStyle: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 16.sp,
+                          ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.transparent), // No border
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.black), // Or any color you prefer
+                          ),),
                         keyboardType: TextInputType.text,
-                        validator: (value){
+                        validator: (value) {
                           if(value!=_passwordController.text){
-                            return'Passwords do not match';
+                            return 'Passwords do not match';
                           }
                           return null;
                         },
                       ),
-                        SizedBox(height: 24.h),
-                        ElevatedButton(
-                          onPressed: (){
-                            _registration();
-                           /* Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LogIn(),));*/
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.buttonBackgroundColor2,
-                            foregroundColor: AppColors.textInverse,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 12.h, 
-                              horizontal: 24.w),
-                          ), 
-                          child: Text('Create Account',
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold),),
-                        ),
-                      SizedBox(height: 10.h,),
+                      SizedBox(height: 12.h,),
                       ElevatedButton(
-                          onPressed: (){
-                          //  _registration();
-                          Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LogIn(),));
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.buttonBackgroundColor2,
-                            foregroundColor: AppColors.textInverse,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 12.h, 
-                              horizontal: 24.w),
-                          ), 
-                          child: Text('Log In',
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold),),
+                        onPressed:(){
+                          _registration();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.textPrimary,
+                          foregroundColor: AppColors.buttonBackgroundColor1,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 12.h, 
+                            horizontal: 24.h
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
+                        ), 
+                        child: 
+                        Text('SIGN UP',style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 10.h,),
+                      Center(
+                        child: RichText(text: TextSpan(
+                          text: "Do you have an account? ",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14.sp,
+                          ),
+                          children: [
+                            WidgetSpan(
+                              child: GestureDetector(
+                                onTap: (){
+                                  Get.to(()=> LogIn());
+                                },
+                                child: Text('Sign in',
+                                style: TextStyle(
+                                  color: AppColors.textPrimary,
+                                  fontWeight: FontWeight.bold,
+                                  //decoration: TextDecoration.underline,
+                                  fontSize: 15.sp,
+                                ),),
+                              ))
+                          ]
+
+                        )),
+                     )
+                      
+                    ],
                   ),
                 ),
-              ]
-            ),
-          );
+                ]
+              ),
+            
+              //SizedBox(height: 0.1.sh),
+          ))]
+          ),
+        );
         },
       ),
-    );
+  ]
+    ));
   }
 }

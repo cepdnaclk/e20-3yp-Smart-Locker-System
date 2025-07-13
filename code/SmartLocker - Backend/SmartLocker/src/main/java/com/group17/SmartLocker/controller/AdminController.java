@@ -5,6 +5,7 @@ import com.group17.SmartLocker.dto.LockerDto;
 import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
+import com.group17.SmartLocker.exception.UnauthorizedActionException;
 import com.group17.SmartLocker.model.Locker;
 import com.group17.SmartLocker.model.LockerCluster;
 import com.group17.SmartLocker.model.NewUser;
@@ -97,11 +98,13 @@ public class AdminController {
 
     // update a user details by id
     @PutMapping("/updateUser/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User userDetails){
+    public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody User userDetails){
         try {
             User user = userService.updateUser(id, userDetails);
             System.out.printf(userDetails.toString());
-            return ResponseEntity.ok(user);
+            return ResponseEntity.status(OK).build();
+        } catch (UnauthorizedActionException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
@@ -109,10 +112,12 @@ public class AdminController {
 
     // edit user details
     @PatchMapping("/editUser/{id}")
-    public ResponseEntity<User> patchUser(@PathVariable String id, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<String> patchUser(@PathVariable String id, @RequestBody Map<String, Object> updates) {
         try {
-            User user = userService.editUserDetails(id, updates);
-            return ResponseEntity.ok(user);
+            userService.editUserDetails(id, updates);
+            return ResponseEntity.status(OK).build();
+        } catch (UnauthorizedActionException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
@@ -120,10 +125,12 @@ public class AdminController {
 
     // delete users
     @DeleteMapping("/deleteUser/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String id){
+    public ResponseEntity<String> deleteUser(@PathVariable String id){
         try {
             userService.deleteUser(id);
             return ResponseEntity.status(OK).build();
+        } catch (UnauthorizedActionException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }

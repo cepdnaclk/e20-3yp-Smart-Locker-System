@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
+import com.group17.SmartLocker.enums.Role;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
+import com.group17.SmartLocker.exception.UnauthorizedActionException;
 import com.group17.SmartLocker.model.LockerLog;
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.repository.UserRepository;
@@ -13,6 +15,7 @@ import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.mqtt.MqttPublisher;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -28,6 +31,7 @@ public class UserService implements IUserService {
     private final LockerService lockerService;
     private final MqttPublisher mqttPublisher;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDetailsDto> getAllUsers(){
@@ -60,6 +64,7 @@ public class UserService implements IUserService {
 
     @Override
     public UserDetailsDto getUserById(String id){
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
 
@@ -80,16 +85,26 @@ public class UserService implements IUserService {
 
     @Override
     public User updateUser(String id, User userDetails){
+
         User updateUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
 
-        updateUser.setUsername(userDetails.getUsername());
-        updateUser.setFirstName(userDetails.getFirstName());
-        updateUser.setLastName(userDetails.getLastName());
-        updateUser.setContactNumber(userDetails.getContactNumber());
-        updateUser.setEmail(userDetails.getEmail());
 
-        return userRepository.save(updateUser);
+        if(updateUser.getRole().equals(Role.USER)){
+
+            // Admins can only update the regular users details , not other Admins
+            updateUser.setUsername(userDetails.getUsername());
+            updateUser.setFirstName(userDetails.getFirstName());
+            updateUser.setLastName(userDetails.getLastName());
+            updateUser.setContactNumber(userDetails.getContactNumber());
+            updateUser.setEmail(userDetails.getEmail());
+
+            return userRepository.save(updateUser);
+        }
+        else{
+            throw new UnauthorizedActionException("You are not permitted to this Action");
+        }
+
     }
 
     @Override
@@ -97,17 +112,26 @@ public class UserService implements IUserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
-        Set<String> allowedFields = Set.of("firstName", "lastName", "email", "contactNumber");
+        if(user.getRole().equals(Role.USER)){
 
-        updates.forEach((key, value) -> {
-            if (allowedFields.contains(key)){
-                Field field = ReflectionUtils.findField(User.class, key);
-                if (field != null) {
-                    field.setAccessible(true);
-                    ReflectionUtils.setField(field, user, value);
+            // Admins can only edit the details of the regular users, not other Admins
+
+            Set<String> allowedFields = Set.of("firstName", "lastName", "email", "contactNumber");
+
+            updates.forEach((key, value) -> {
+                if (allowedFields.contains(key)){
+                    Field field = ReflectionUtils.findField(User.class, key);
+                    if (field != null) {
+                        field.setAccessible(true);
+                        ReflectionUtils.setField(field, user, value);
+                    }
                 }
-            }
-        });
+            });
+
+        }
+        else{
+            throw new UnauthorizedActionException("You are not permitted to this Action");
+        }
 
         return userRepository.save(user);
     }
@@ -116,7 +140,15 @@ public class UserService implements IUserService {
     public void deleteUser(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
-        userRepository.delete(user);
+
+        if(user.getRole().equals(Role.USER)){
+
+            // Admins can only delete the regular users, not other Admins
+            userRepository.delete(user);
+        }
+        else{
+            throw new UnauthorizedActionException("You are not permitted to this Action");
+        }
     }
 
     @Override
@@ -356,4 +388,32 @@ SmartLocker Admin Team
     }
 
 
+    public void updatePasswordByUsernameOrEmail(String identifier, String newPassword) {
+
+        /*
+        * Password is updated using username or the email
+        * Password is encoded by Password encoder and saved to the database
+        * identifier : This can be username or the email
+        * identifier is identified whether it is an email or an username
+        */
+        User user = null;
+
+        if (!identifier.isEmpty()) {
+            if (identifier.contains("@")) {
+                // Update using the email
+                user = userRepository.findByEmail(identifier);
+            } else {
+                // Update using username
+                user = userRepository.findByUsername(identifier);
+            }
+        }
+
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found with given email or username.");
+        }
+
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+    }
 }

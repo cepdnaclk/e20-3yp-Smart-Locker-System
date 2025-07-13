@@ -3,23 +3,38 @@ package com.group17.SmartLocker.controller;
 import com.group17.SmartLocker.dto.LockerClusterDto;
 import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
+import com.group17.SmartLocker.enums.OtpType;
+import com.group17.SmartLocker.exception.ResourceNotFoundException;
+import com.group17.SmartLocker.model.Image;
 import com.group17.SmartLocker.model.LockerCluster;
 import com.group17.SmartLocker.model.Notification;
 import com.group17.SmartLocker.model.User;
+import com.group17.SmartLocker.repsponse.ApiResponse;
+import com.group17.SmartLocker.service.image.ImageService;
 import com.group17.SmartLocker.service.jwt.JwtService;
 import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.lockerCluster.LockerClusterService;
 import com.group17.SmartLocker.service.notification.NotificationService;
+import com.group17.SmartLocker.service.userOtp.UserOtpService;
 import com.group17.SmartLocker.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import static com.group17.SmartLocker.enums.OtpType.PASSWORD_RESET;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static software.amazon.awssdk.http.HttpStatusCode.NOT_FOUND;
 
 @RequiredArgsConstructor
 @CrossOrigin("*")
@@ -32,6 +47,7 @@ public class UserController {
     private final LockerService lockerService;
     private final LockerClusterService lockerClusterService;
     private final NotificationService notificationService;
+    private final ImageService imageService;
 
 //    //todo: Implement the api end point to unlock the locker
 //    // send cluster id and the token to the service layer
@@ -58,7 +74,7 @@ public class UserController {
 
     // access the assigned locker
     @GetMapping("/accessLocker")
-    public ResponseEntity<String> accessLocker(HttpServletRequest request){
+    public ResponseEntity<String> accessLocker(HttpServletRequest request) {
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
         // There should be a token to access this endpoint ?
@@ -78,7 +94,7 @@ public class UserController {
 
     // unassign the assigned locker
     @GetMapping("/unassign")
-    public ResponseEntity<String> unassignLocker(HttpServletRequest request){
+    public ResponseEntity<String> unassignLocker(HttpServletRequest request) {
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
         // There should be a token to access this endpoint ?
@@ -97,7 +113,7 @@ public class UserController {
 
     // to view users their user details
     @GetMapping("/profile")
-    public ResponseEntity<UserDetailsDto> getUserById(HttpServletRequest request){
+    public ResponseEntity<UserDetailsDto> getUserById(HttpServletRequest request) {
 
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
@@ -138,7 +154,7 @@ public class UserController {
     }
 
     @GetMapping("/logs")
-    public ResponseEntity<List<LockerLogDto>> getUserLogs(HttpServletRequest request){
+    public ResponseEntity<List<LockerLogDto>> getUserLogs(HttpServletRequest request) {
 
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
@@ -156,7 +172,7 @@ public class UserController {
     }
 
     @GetMapping("/lockerAvailability/{clusterId}")
-    public ResponseEntity<LockerClusterDto> getLockerClusterDetails(@PathVariable Long clusterId){
+    public ResponseEntity<LockerClusterDto> getLockerClusterDetails(@PathVariable Long clusterId) {
         try {
             LockerCluster lockerCluster = lockerClusterService.getLockerClusterById(clusterId);
 
@@ -177,7 +193,7 @@ public class UserController {
     }
 
     @GetMapping("/getOtpCode")
-    public ResponseEntity<String> getOtpCode(HttpServletRequest request){
+    public ResponseEntity<String> getOtpCode(HttpServletRequest request) {
         // find the username to get the otp code
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
@@ -195,7 +211,7 @@ public class UserController {
     }
 
     @GetMapping("/generateNewOtpCode")
-    public ResponseEntity<String> generateNewOtpCode(HttpServletRequest request){
+    public ResponseEntity<String> generateNewOtpCode(HttpServletRequest request) {
         // find the username to get the otp code
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
@@ -213,7 +229,7 @@ public class UserController {
     }
 
     @GetMapping("/getAllNotifications")
-    public ResponseEntity<List<Notification>> getAllNotifications(HttpServletRequest request){
+    public ResponseEntity<List<Notification>> getAllNotifications(HttpServletRequest request) {
         // find the username to get the otp code
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
@@ -229,5 +245,66 @@ public class UserController {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    /*
+     * Upload profile picture
+     */
+
+    @PostMapping("/image/upload/{username}")
+    public ResponseEntity<String> upload(@PathVariable String username, @RequestParam("file") MultipartFile file) {
+        try {
+            Image image = imageService.uploadImage(username, file);
+            return ResponseEntity.ok("Image uploaded with ID: " + image.getId());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Upload failed: " + e.getMessage());
+        }
+    }
+
+
+    /*
+     * Download profile picture
+     */
+    @GetMapping("/image/download/{username}")
+    public ResponseEntity<Resource> downloadProfilePicture(@PathVariable String username) {
+
+        Image image = imageService.getUserImages(username);
+
+        if (image == null || image.getImage() == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+
+        try {
+            ByteArrayResource resource = new ByteArrayResource(
+                    image.getImage().getBytes(1, (int) image.getImage().length())
+            );
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(image.getFileType()))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + image.getFileName() + "\"")
+                    .body(resource);
+
+        } catch (SQLException e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /*
+     * Delete profile picture
+     */
+    @DeleteMapping("/image/delete/{username}")
+    public ResponseEntity<ApiResponse> deleteProfilePicture(@PathVariable String username) {
+        try {
+            imageService.deleteUserImages(username);
+            return ResponseEntity.ok(new ApiResponse("Image deleted", null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete failed", e.getMessage()));
+        }
+    }
+
 
 }

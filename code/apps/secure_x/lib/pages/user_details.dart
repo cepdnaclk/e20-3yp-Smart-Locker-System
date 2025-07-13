@@ -18,7 +18,13 @@ class UserDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(),
-      body: Padding(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset('assets/img/backpattern.jpg',
+          fit: BoxFit.cover,
+      ),     
+      Padding(
         padding: EdgeInsets.all(16.h),
         child: user == null
             ? const Center(child: Text('No user data available'))
@@ -49,10 +55,14 @@ class UserDetails extends StatelessWidget {
                   //Edit Profile                 
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.h, 
+                            horizontal: 24.h
+                          ),
                         backgroundColor: AppColors.buttonBackgroundColor2,
                         foregroundColor: AppColors.buttonBackgroundColor1,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(30.r),
                         )
                       ),
                       onPressed: (){
@@ -67,7 +77,7 @@ class UserDetails extends StatelessWidget {
               ),
           ),
         )
-    );
+    ]));
   }
 
   Widget _buildDetailItem(String title, String value) {

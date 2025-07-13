@@ -13,76 +13,93 @@ class LoginSuccess extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.mainColor,
       appBar:CustomAppBar(),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
         children: [
-          SizedBox(height: 20.h,), 
-          Center(
-            child: Text('Welcome!', style: TextStyle(
-              fontSize: 30.sp,
-              fontWeight: FontWeight.bold,
+          Positioned(
+            child: Image.asset('assets/img/backpattern.jpg',
+            fit: BoxFit.cover,)),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 20.h,), 
+            Center(
+              child: Text('Welcome!', style: TextStyle(
+                color: AppColors.textHighlight,
+                fontSize: 30.sp,
+                fontWeight: FontWeight.bold,
+              ),
+              ),
+            ),        
+            Center(
+              child: Container(
+                width: 800.w,
+                height:350.h,
+                alignment: Alignment.center,
+                child:ClipRect(
+                  child: Align(
+                    alignment: Alignment.center,
+                    heightFactor: 0.5,
+                    child: Image.asset('assets/img/logo.png',
+                    fit: BoxFit.cover,             
+                  ),
+                  ),
+                )             
+              ),
             ),
-            ),
-          ),        
-          Center(
-            child: Container(
-              width: 800.w,
-              height:350.h,
-              alignment: Alignment.center,
-              child:ClipRect(
-                child: Align(
-                  alignment: Alignment.center,
-                  heightFactor: 0.5,
-                  child: Image.asset('assets/img/logo.png',
-                  fit: BoxFit.cover,             
+            SizedBox(height: 10.h,),
+            Center(
+              child: ElevatedButton(onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  Unlock(),));
+                    //builder: (context) => const Navigation(selectedIndex: 3),
+                  //));
+              },
+              style: ElevatedButton.styleFrom(
+                elevation: 6.h,
+                foregroundColor: AppColors.buttonBackgroundColor1,
+                backgroundColor: AppColors.buttonForegroundColor1,
+                padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.r)
                 ),
+                shadowColor: AppColors.appBarColor,
+              ),
+              child: Text('Unlock my Locker' ,style: TextStyle(
+                fontSize: 25.sp,
+                fontWeight: FontWeight.bold,
+              ),)
+              ),
+            ),
+            SizedBox(height: 50.h),
+            Center(
+              child: ElevatedButton(onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Find(),));
+              },
+              style: ElevatedButton.styleFrom(
+                elevation: 6.h,
+                foregroundColor: AppColors.buttonBackgroundColor2,
+                backgroundColor: AppColors.textMuted,
+                padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.r)
                 ),
-              )             
+                shadowColor: AppColors.iconColor,
+              ),
+              child: Text('Search a Locker' ,style: TextStyle(
+                fontSize: 25.sp,
+                fontWeight: FontWeight.bold,
+              ),)
+              ),
             ),
-          ),
-          SizedBox(height: 10.h,),
-          Center(
-            child: ElevatedButton(onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  Unlock(),));
-                  //builder: (context) => const Navigation(selectedIndex: 3),
-                //));
-            },
-            style: ElevatedButton.styleFrom(
-              elevation: 6.h,
-              foregroundColor: AppColors.textHighlight,
-              backgroundColor: AppColors.textMuted
-            ),
-            child: Text('Unlock my Locker' ,style: TextStyle(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.bold,
-            ),)
-            ),
-          ),
-          SizedBox(height: 10.h),
-          Center(
-            child: ElevatedButton(onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Find(),));
-            },
-            style: ElevatedButton.styleFrom(
-              elevation: 6.h,
-              foregroundColor: AppColors.textHighlight,
-              backgroundColor: AppColors.textMuted,
-            ),
-            child: Text('Search a Locker' ,style: TextStyle(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.bold,
-            ),)
-            ),
-          ),
-          SizedBox(height: 10.h),
-        ],
-      ),
+            SizedBox(height: 10.h),
+          ],
+        ),
+      ],),
     );
   }
 }
