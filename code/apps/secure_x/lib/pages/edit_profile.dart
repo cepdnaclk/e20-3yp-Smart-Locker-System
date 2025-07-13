@@ -162,7 +162,9 @@ class _EditProfileState extends State<EditProfile> {
                         )
                       ),
                       onPressed: () async{
+                        print('Submit button pressed');
                         if(_formKey.currentState!.validate()){
+                          print('Form validated successfully');
                           await _authController.updateProfile(
                             //id: user.id,
                             email: _emailController.text,
@@ -173,6 +175,9 @@ class _EditProfileState extends State<EditProfile> {
                             //role: user.role,
                             context: context,
                         );
+                        print('updateProfile method call completed');
+                        }else{
+                          print('Form validation failed');
                         }
                       }, 
                       child: Text(

@@ -4,6 +4,8 @@ import 'package:secure_x/utils/app_constants.dart';
 class DioClient {
   final Dio _dio = Dio();
 
+  Dio get dio=> _dio;
+
   DioClient() {
     // Set base URL and default headers
     _dio.options.baseUrl = AppConstants.BASE_URL;
@@ -11,6 +13,12 @@ class DioClient {
       'Content-Type': 'application/json; charset=UTF-8',
     };
   }
+
+  void printHeaders() {
+  _dio.options.headers.forEach((key, value) {
+    print('$key: $value');
+  });
+}
 
   // Method to update headers with the new token
   void updateHeader(String token) {
@@ -70,7 +78,7 @@ class DioClient {
     }
   }
 
-  //Method to handle PUT requests
+  //Method to handle PATCH requests
   Future<Response> patchData(String uri,dynamic body) async{
     try{
       print('Sending PATCH request to: $uri'); 

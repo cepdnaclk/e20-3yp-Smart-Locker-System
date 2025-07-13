@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/pages/create_user.dart';
+import 'package:secure_x/pages/reset_password.dart';
 import 'package:secure_x/utils/appcolors.dart';
 
 class LogIn extends StatefulWidget {
@@ -201,7 +202,7 @@ class _LogInState extends State<LogIn> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: (){
-
+                            Get.to(()=>ResetPassword());
                           }, 
                           child: Text('Forgot Password?',
                           style: TextStyle(

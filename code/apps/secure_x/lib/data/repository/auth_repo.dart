@@ -319,6 +319,8 @@ class AuthRepo {
       // Update the headers in DioClient with the current token
       dioClient.updateHeader(token);
 
+      print('AuthRepo: Headers before request: ');
+      dioClient.printHeaders;
       // Debug: Print the updated user data
       print('Updating user profile with data: $updates');
 

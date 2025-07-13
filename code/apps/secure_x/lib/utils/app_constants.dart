@@ -25,4 +25,7 @@ class AppConstants {
   static const String UPLOAD_PROFILE_IMAGE_URI='/api/v1/user/uploadProfileImage';
   static const String NOTIFICATION_URI='/api/v1/user/getAllNotifications';
   static const String CHANGE_PASSWORD_URI='/api/v1/user/changePassword';
+  static const String GENERATE_OTP_TO_RESET_PASSWORD='/api/v1/forgotPassword/generateOtpCode';
+  static const String VALIDATE_OTP_TO_RESET_PASSWORD='/api/v1/forgotPassword/validateOtpCode';
+  static const String UPDATE_PASSWORD='/api/v1/forgotPassword/updatePassword';
 }

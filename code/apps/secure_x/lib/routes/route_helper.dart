@@ -6,6 +6,7 @@ import 'package:secure_x/pages/log_in.dart';
 import 'package:secure_x/pages/login_success.dart';
 import 'package:secure_x/pages/navigation.dart';
 import 'package:secure_x/pages/notifications.dart';
+import 'package:secure_x/pages/reset_password.dart';
 import 'package:secure_x/pages/settings.dart';
 import 'package:secure_x/pages/sign_in.dart';
 import 'package:secure_x/pages/splash_screen.dart';
@@ -30,6 +31,7 @@ class RouteHelper {
   static const String notifications='/notifications';
   static const String settings='/settings';
   static const String changePassword='/change-password';
+  static const String resetPassword='/reset-password';
 
   //static String getInitial()=>'$initial';
   static String getSplashScreen()=>'$splashScreen';
@@ -46,6 +48,7 @@ class RouteHelper {
   static String getNotifications()=>'$notifications';
   static String getSettings()=>'$settings';
   static String getChangePassword()=>'$ChangePassword';
+  static String getResetPassword()=>'$resetPassword';
 
   static List<GetPage> routes=[
     //GetPage(name:initial,page:()=>Navigation()),
@@ -63,5 +66,6 @@ class RouteHelper {
     GetPage(name: notifications,page: ()=>Notifications(),),
     GetPage(name: settings,page: ()=>Settings(),),
     GetPage(name: changePassword,page: ()=>ChangePassword(),),
+    GetPage(name: resetPassword,page: ()=>ResetPassword()),
   ];
 }
