@@ -2,7 +2,7 @@ package com.group17.SmartLocker.controller;
 
 import com.group17.SmartLocker.dto.PasswordResetOtpValidationDto;
 import com.group17.SmartLocker.dto.UpdatePasswordDto;
-import com.group17.SmartLocker.exception.InvalidOtp;
+import com.group17.SmartLocker.exception.InvalidOtpException;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.service.user.UserService;
 import com.group17.SmartLocker.service.userOtp.UserOtpService;
@@ -55,7 +55,7 @@ public class UserPasswordResetController {
         try {
             return ResponseEntity.ok(userOtpService.validateOtp(otpValidationDto.getUsername(), otpValidationDto.getOtp(), PASSWORD_RESET));
         } catch (Exception e) {
-            throw new InvalidOtp("Invalid Otp");
+            throw new InvalidOtpException("Invalid Otp");
         }
     }
 
@@ -84,7 +84,7 @@ public class UserPasswordResetController {
                 return ResponseEntity.ok("Password updated successfully.");
             }
             else{
-                throw new InvalidOtp("Invalid OTP code");
+                throw new InvalidOtpException("Invalid OTP code");
             }
 
         } catch (ResourceNotFoundException e) {
