@@ -12,8 +12,8 @@ class StompClientService {
     print('Connecting to WebSocket as $userId');
     _stompClient=StompClient(
       config: StompConfig.sockJS(
-        url:'http://10.0.2.2:9090/ws',
-        //url:'https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net/ws',
+        //url:'http://10.0.2.2:9090/ws',
+        url:'https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net/ws',
         stompConnectHeaders: {
           'Authorization': 'Bearer $token',
         },

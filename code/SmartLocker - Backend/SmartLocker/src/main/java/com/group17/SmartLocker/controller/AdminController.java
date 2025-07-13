@@ -6,27 +6,35 @@ import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.exception.UnauthorizedActionException;
-import com.group17.SmartLocker.model.Locker;
-import com.group17.SmartLocker.model.LockerCluster;
-import com.group17.SmartLocker.model.NewUser;
-import com.group17.SmartLocker.model.User;
+import com.group17.SmartLocker.model.*;
+import com.group17.SmartLocker.repsponse.ApiResponse;
 import com.group17.SmartLocker.service.email.EmailService;
+import com.group17.SmartLocker.service.image.ImageService;
+import com.group17.SmartLocker.service.jwt.JwtService;
 import com.group17.SmartLocker.service.locker.LockerService;
 import com.group17.SmartLocker.service.lockerCluster.LockerClusterService;
 import com.group17.SmartLocker.service.lockerLog.LockerLogService;
 import com.group17.SmartLocker.service.newUser.NewUserService;
 import com.group17.SmartLocker.service.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
+import static software.amazon.awssdk.http.HttpStatusCode.NOT_FOUND;
 
 @RequiredArgsConstructor
 @CrossOrigin("*")
@@ -40,6 +48,111 @@ public class AdminController {
     private final LockerClusterService lockerClusterService;
     private final EmailService emailService;
     private final LockerLogService lockerLogService;
+    private final JwtService jwtService;
+    private final ImageService imageService;
+
+    // CRUD operations for Admin
+
+    // to view admins their details
+    @GetMapping("/profile")
+    public ResponseEntity<UserDetailsDto> getUserById(HttpServletRequest request) {
+
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        }
+
+        try {
+            UserDetailsDto user = userService.getUserById(jwtService.extractUsername(jwtToken));
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // to edit own details of the admin
+    @PatchMapping("/editProfile")
+    public ResponseEntity<User> patchUser(HttpServletRequest request, @RequestBody Map<String, Object> updates) {
+
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        }
+
+        try {
+            String id = userService.getUserIdByUsername(jwtService.extractUsername(jwtToken));
+            User user = userService.editUserDetails(id, updates);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /*
+     * Upload profile picture
+     */
+
+    @PostMapping("/image/upload/{username}")
+    public ResponseEntity<String> upload(@PathVariable String username, @RequestParam("file") MultipartFile file) {
+        try {
+            Image image = imageService.uploadImage(username, file);
+            return ResponseEntity.ok("Image uploaded with ID: " + image.getId());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Upload failed: " + e.getMessage());
+        }
+    }
+
+
+    /*
+     * Download profile picture
+     */
+    @GetMapping("/image/download/{username}")
+    public ResponseEntity<Resource> downloadProfilePicture(@PathVariable String username) {
+
+        Image image = imageService.getUserImages(username);
+
+        if (image == null || image.getImage() == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+
+        try {
+            ByteArrayResource resource = new ByteArrayResource(
+                    image.getImage().getBytes(1, (int) image.getImage().length())
+            );
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(image.getFileType()))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + image.getFileName() + "\"")
+                    .body(resource);
+
+        } catch (SQLException e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /*
+     * Delete profile picture
+     */
+    @DeleteMapping("/image/delete/{username}")
+    public ResponseEntity<ApiResponse> deleteProfilePicture(@PathVariable String username) {
+        try {
+            imageService.deleteUserImages(username);
+            return ResponseEntity.ok(new ApiResponse("Image deleted", null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete failed", e.getMessage()));
+        }
+    }
 
     // api endpoints to manage new users
 

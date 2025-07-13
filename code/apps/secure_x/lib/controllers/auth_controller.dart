@@ -262,20 +262,51 @@ class AuthController extends GetxController {
   }
 
   //Method to update user profile
-  Future<void> updateProfile(UserModel updatedUser) async{
+  Future<void> updateProfile({
+    required String email,
+    required String firstName,
+    required String lastName,
+    required String phoneNo,
+    required dynamic context,
+    
+  }) async {
     isLoading.value=true;
 
+    final updates={
+      'email':email,
+      'firstName':firstName,
+      'lastName':lastName,
+      'contactNumber':phoneNo,
+    };
+
     try{
-      final response = await authRepo.UpdateUserProfile(updatedUser);
+      final response = await authRepo.updateUserProfile(updates);
       if (response.isSuccess){
-        userModel.value=updatedUser;
-        Get.snackbar("Success", response.message);
+        CustomSnackBar.show(
+          context: context, 
+          message: response.message,
+          title: 'Success',
+          isError:false,
+        );
+        //Get.snackbar("Success", response.message);
       }else{
-        Get.snackbar("Error", response.message);
+        CustomSnackBar.show(
+          context: context, 
+          message: response.message,
+          title: 'Error',
+          isError:true,
+        );
+        //Get.snackbar("Error", response.message);
       }
     }catch(e){
       print('Error updating profile: $e');
-      Get.snackbar("Error", 'Failed to update profile: $e');
+      CustomSnackBar.show(
+          context: context, 
+          message: 'Failed to update profile: $e',
+          title: 'Error',
+          isError:true,
+        );
+      //Get.snackbar("Error", 'Failed to update profile: $e');
     }finally{
       isLoading.value=false;
     }
