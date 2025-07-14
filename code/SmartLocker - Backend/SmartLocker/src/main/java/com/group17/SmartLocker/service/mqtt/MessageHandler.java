@@ -20,7 +20,6 @@ public class MessageHandler {
         // get the otp code from the database
         if (topic.equals("esp32/getPassword")) {
             userService.sendOtpCode(message);
-
         }
 
         // save fingerprint id to the database
