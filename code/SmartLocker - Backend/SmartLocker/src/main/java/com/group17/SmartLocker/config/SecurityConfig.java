@@ -52,8 +52,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/api/v1/**").permitAll()
 
                         // Role-based access
-                        .requestMatchers("/api/v1/superAdmin/**", "/api/v1/admin/**").hasRole("SUPER_ADMIN")
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/superAdmin/**").hasRole("SUPER_ADMIN")
+                        .requestMatchers("/api/v1/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/api/v1/user/**").hasRole("USER")
 
                     
