@@ -1,9 +1,6 @@
 package com.group17.SmartLocker.controller;
 
-import com.group17.SmartLocker.dto.LockerClusterDto;
-import com.group17.SmartLocker.dto.LockerDto;
-import com.group17.SmartLocker.dto.LockerLogDto;
-import com.group17.SmartLocker.dto.UserDetailsDto;
+import com.group17.SmartLocker.dto.*;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.exception.UnauthorizedActionException;
 import com.group17.SmartLocker.model.*;
@@ -411,10 +408,7 @@ public class AdminController {
 
     // force unlock locker by the admin
     @PostMapping("/adminLockerUnlock")
-    public ResponseEntity<String> adminLockerUnlock(
-            HttpServletRequest request,
-            @RequestParam Long clusterId ,
-            @RequestParam Long lockerId){
+    public ResponseEntity<String> adminLockerUnlock(HttpServletRequest request, @RequestBody AdminLockerUnlockDto dto){
 
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
@@ -424,13 +418,14 @@ public class AdminController {
             jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
         }
 
-
-
         try {
             String username = jwtService.extractUsername(jwtToken);
 
-            lockerService.unlockByAdmin(clusterId, lockerId, username);
+            lockerService.unlockByAdmin(dto.getLockerClusterId(), dto.getLockerId(), username, dto.getPassword());
             return ResponseEntity.status(OK).build();
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid admin credentials");
 
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
