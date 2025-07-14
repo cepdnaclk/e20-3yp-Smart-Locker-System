@@ -218,11 +218,23 @@ public class LockerService implements ILockerService{
             * There should not have any active logs when user come to assign a locker
             */
 
+            // get the cluster name to send in notifications
+            LockerCluster cluster = lockerClusterRepository.findById(clusterId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Locker cluster not found"));
+            String clusterName = cluster.getClusterName();
+
             System.out.println("⚡ assignLocker() invoked"); // This is a debugging line
 
             if(availableLockers.isEmpty()){
                 System.out.println("Sorry, No lockers are available");
 //                return "Sorry, No available lockers!";
+
+                notificationService.sendAndSave(
+                        userId,
+                        "No Available Lockers",
+                        "Sorry, No available lockers in : " + clusterName,
+                        "INFO"
+                );
             }
 
             Locker locker = availableLockers.get(0); // find an available locker
@@ -663,6 +675,71 @@ public class LockerService implements ILockerService{
             else{
                 System.out.println("Unidentified locker status");
             }
+        }
+
+    }
+
+    @Override
+    public void reserveLocker(String username, Long clusterId) {
+        /*
+         * User can reserve lockers for 5 minutes
+         * After 5 minutes, the reserved locker log is not valid
+         */
+
+        // get the cluster name to send in notifications
+        LockerCluster cluster = lockerClusterRepository.findById(clusterId)
+                .orElseThrow(() -> new ResourceNotFoundException("Locker cluster not found"));
+        String clusterName = cluster.getClusterName();
+
+        System.out.println("reserve locker");
+
+        String userId = username;
+        User user = userRepository.findByUsername(username);
+
+        // Find the available locker in the given cluster
+        List<Locker> availableLockers = lockerRepository.findByLockerClusterIdAndLockerStatus(clusterId, LockerStatus.AVAILABLE);
+
+        // Check the user is already has assigned to a locker. That locker can be an active locker or and unsafe locker
+        LockerLog activeOrUnsafeLog = lockerLogService.findActiveOrUnsafeLog(userId);
+
+        if (activeOrUnsafeLog == null) {
+
+            if (availableLockers.isEmpty()) {
+                System.out.println("Sorry, No lockers are available");
+
+                notificationService.sendAndSave(
+                        userId,
+                        "No Available Lockers",
+                        "Sorry, No available lockers in : " + clusterName,
+                        "INFO"
+                );
+
+            }
+
+            Locker locker = availableLockers.get(0); // find an available locker
+            Long lockerId = locker.getLockerId();
+            LockerLog lockerLog = new LockerLog(); // create a locker log
+
+            // Todo: make this to send as notifications
+            System.out.println(user.getFirstName() + ", Locker reserved for 5 minutes for you : " + locker.getDisplayNumber());
+
+            // Send the notification to the user about the locker unlocking
+            notificationService.sendAndSave(
+                    userId,
+                    "Locker Reserved",
+                    "Reserved the Locker with Locker Number: " + locker.getDisplayNumber() + ". For 5 minutes",
+                    "INFO"
+            );
+
+            // change locker log status
+            lockerLog.setAccessTime(LocalDateTime.now());
+            lockerLog.setStatus(LockerLogStatus.RESERVED);
+            lockerLog.setLocker(locker);
+
+            locker.setLockerStatus(LockerStatus.OCCUPIED);
+            lockerRepository.save(locker);
+            lockerLog.setUser(userRepository.findByUsername(userId));
+            lockerLogRepository.save(lockerLog);
         }
 
     }

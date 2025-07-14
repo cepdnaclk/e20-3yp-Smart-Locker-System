@@ -30,4 +30,5 @@ public interface ILockerService {
 
     void deleterLocker(Long lockerId);
 
+    void reserveLocker(String username, Long clusterId);
 }
