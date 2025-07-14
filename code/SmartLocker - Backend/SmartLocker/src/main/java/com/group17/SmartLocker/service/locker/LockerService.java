@@ -40,7 +40,7 @@ public class LockerService implements ILockerService{
     private final NotificationService notificationService;
 
     @Override
-    public void unlockByAdmin(Long clusterId, Long lockerId){
+    public void unlockByAdmin(Long clusterId, Long lockerId, String adminId){
         /*
         * This function forcefully unlock the locker by admin
         */
@@ -60,6 +60,7 @@ public class LockerService implements ILockerService{
 
         lockerLog.setReleasedTime(LocalDateTime.now());
         lockerLog.setStatus(LockerLogStatus.OLD);
+        lockerLog.setRemarks("Admin unlocked by: " + adminId);
 
         lockerRepository.save(locker);
         lockerLogRepository.save(lockerLog);
