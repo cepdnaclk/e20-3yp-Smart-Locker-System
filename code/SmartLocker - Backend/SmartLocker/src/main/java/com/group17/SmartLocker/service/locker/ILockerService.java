@@ -6,9 +6,9 @@ import com.group17.SmartLocker.model.Locker;
 import java.util.List;
 
 public interface ILockerService {
-//    String unlockLocker(String username, Long clusterId);
+//   String unlockLocker(String username, Long clusterId);
 
-    void unlockByAdmin(Long clusterId, Long lockerId);
+    void unlockByAdmin(Long clusterId, Long lockerId, String adminId);
 
     void assignLocker(String username, Long clusterId);
 

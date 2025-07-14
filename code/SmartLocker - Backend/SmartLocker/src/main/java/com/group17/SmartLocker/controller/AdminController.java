@@ -409,6 +409,34 @@ public class AdminController {
         }
     }
 
+    // force unlock locker by the admin
+    @PostMapping("/adminLockerUnlock")
+    public ResponseEntity<String> adminLockerUnlock(
+            HttpServletRequest request,
+            @RequestParam Long clusterId ,
+            @RequestParam Long lockerId){
+
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        }
+
+
+
+        try {
+            String username = jwtService.extractUsername(jwtToken);
+
+            lockerService.unlockByAdmin(clusterId, lockerId, username);
+            return ResponseEntity.status(OK).build();
+
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 //    // send and email for a test
 //    @PostMapping("/sendEmail")
