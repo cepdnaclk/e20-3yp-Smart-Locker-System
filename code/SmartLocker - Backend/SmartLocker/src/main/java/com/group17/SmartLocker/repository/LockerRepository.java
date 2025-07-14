@@ -16,4 +16,6 @@ public interface LockerRepository extends JpaRepository<Locker, Long> {
 
     int countByLockerClusterId(Long clusterId);
 
+    List<Locker> findByLockerStatus(LockerStatus status);
+
 }

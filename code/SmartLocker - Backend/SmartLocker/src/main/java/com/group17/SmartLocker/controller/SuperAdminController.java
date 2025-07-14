@@ -1,6 +1,5 @@
 package com.group17.SmartLocker.controller;
 
-
 import com.group17.SmartLocker.model.User;
 import com.group17.SmartLocker.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
-
 @RequiredArgsConstructor
 @CrossOrigin("*")
 @RestController
