@@ -74,7 +74,7 @@ public class AdminController {
 
     // to edit own details of the admin
     @PatchMapping("/editProfile")
-    public ResponseEntity<User> patchUser(HttpServletRequest request, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<String> patchUser(HttpServletRequest request, @RequestBody Map<String, Object> updates) {
 
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
@@ -87,7 +87,7 @@ public class AdminController {
         try {
             String id = userService.getUserIdByUsername(jwtService.extractUsername(jwtToken));
             User user = userService.editUserDetails(id, updates);
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok("Details updated successfully!");
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
