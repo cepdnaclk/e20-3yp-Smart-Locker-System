@@ -33,13 +33,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults()) // ✅ Enables CORS
+                .cors(Customizer.withDefaults()) // Enables CORS
                 .authorizeHttpRequests(auth -> auth
 
-                        // ✅ Public (unauthenticated) endpoints
+                        // Public (unauthenticated) endpoints
                         .requestMatchers(
                                 "/api/v1/login",
                                 "/api/v1/newUsers/**", // <-- allows all sub-paths like /debug-get, /register
+                                "/api/v1/forgotPassword/**", // allow forgot password in for all users
                                 "/publish",
                                 "/subscribe",
                                 "/latest",
@@ -47,15 +48,16 @@ public class SecurityConfig {
                                 "/ws/**" // WebSocket endpoint, if applicable
                         ).permitAll()
 
-                        // ✅ Allow pre-flight CORS OPTIONS requests
+                        // Allow pre-flight CORS OPTIONS requests
                         .requestMatchers(HttpMethod.OPTIONS, "/api/v1/**").permitAll()
 
-                        // ✅ Role-based access
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        // Role-based access
+                        .requestMatchers("/api/v1/superAdmin/**").hasRole("SUPER_ADMIN")
+                        .requestMatchers("/api/v1/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .requestMatchers("/api/v1/user/**").hasRole("USER")
 
                     
-                        // ✅ Everything else requires authentication
+                        // Everything else requires authentication
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService)

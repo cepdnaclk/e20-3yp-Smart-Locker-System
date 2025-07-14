@@ -21,6 +21,7 @@ import com.group17.SmartLocker.service.lockerLog.LockerLogService;
 import com.group17.SmartLocker.service.mqtt.MqttPublisher;
 import com.group17.SmartLocker.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,12 +39,19 @@ public class LockerService implements ILockerService{
     private final LockerClusterRepository lockerClusterRepository;
     private final MqttPublisher mqttPublisher;
     private final NotificationService notificationService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void unlockByAdmin(Long clusterId, Long lockerId){
+    public void unlockByAdmin(Long clusterId, Long lockerId, String adminId, String password){
         /*
         * This function forcefully unlock the locker by admin
         */
+
+        // Fetch admin user
+        User admin = userRepository.findByUsername(adminId);
+        if (admin == null || !passwordEncoder.matches(password, admin.getPassword())) {
+            throw new IllegalArgumentException("Invalid admin credentials");
+        }
 
         Locker locker = lockerRepository.findById(lockerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Locker not found"));
@@ -60,6 +68,7 @@ public class LockerService implements ILockerService{
 
         lockerLog.setReleasedTime(LocalDateTime.now());
         lockerLog.setStatus(LockerLogStatus.OLD);
+        lockerLog.setRemarks("Admin unlocked by: " + adminId);
 
         lockerRepository.save(locker);
         lockerLogRepository.save(lockerLog);

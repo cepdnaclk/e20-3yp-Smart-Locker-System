@@ -18,7 +18,13 @@ class UserDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(),
-      body: Padding(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset('assets/img/backpattern.jpg',
+          fit: BoxFit.cover,
+      ),     
+      Padding(
         padding: EdgeInsets.all(16.h),
         child: user == null
             ? const Center(child: Text('No user data available'))
@@ -40,19 +46,23 @@ class UserDetails extends StatelessWidget {
                   _buildDetailItem("Email", user.email ?? 'Not provided'),
                   _buildDetailItem("First Name", user.firstName ?? 'Not provided'),
                   _buildDetailItem("Last Name", user.lastName ?? 'Not provided'),
-                  _buildDetailItem("ID", user.id?? 'Not provided'),
-                  _buildDetailItem("Registration No", user.regNo ?? 'Not provided'),
-                  _buildDetailItem("Phone Number", user.phoneNo ?? 'Not provided'),
+                  _buildDetailItem("User ID", user.id?? 'Not provided'),
+                  _buildDetailItem("Registration Number", user.regNo ?? 'Not provided'),
+                  _buildDetailItem("Contact Number", user.phoneNo ?? 'Not provided'),
 
                   SizedBox(height: 24.h,),
                   
                   //Edit Profile                 
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.h, 
+                            horizontal: 24.h
+                          ),
                         backgroundColor: AppColors.buttonBackgroundColor2,
                         foregroundColor: AppColors.buttonBackgroundColor1,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(30.r),
                         )
                       ),
                       onPressed: (){
@@ -67,7 +77,7 @@ class UserDetails extends StatelessWidget {
               ),
           ),
         )
-    );
+    ]));
   }
 
   Widget _buildDetailItem(String title, String value) {
@@ -78,13 +88,14 @@ class UserDetails extends StatelessWidget {
         enabled: false,
         style:TextStyle(
           color: AppColors.appBarColor,
-          fontSize: 16.sp,
+          fontSize: 18.sp,
         ),
         decoration: InputDecoration(
           labelText: title,
-          labelStyle: const TextStyle(
+          labelStyle: TextStyle(
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
+            fontSize: 20.sp,
             ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.r),

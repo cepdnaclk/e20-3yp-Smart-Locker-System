@@ -2,6 +2,7 @@
 .WindowPU{
    display: flex;
     height: 20%;
+    width: 100%;
     color: #000000;
     padding-top: 10px;
 }

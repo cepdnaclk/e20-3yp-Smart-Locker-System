@@ -1,0 +1,30 @@
+.UCP{
+    flex-grow: 1;
+    padding-left: 20%;
+    padding-top: 2%;
+    /* background: hsl(0, 0%, 100%); */
+    color: #000;
+    min-height: 100vh; /* Ensures full-page height */
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;
+}
+
+.user-details {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+}
+
+.user-details p {
+  margin: 10px 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.user-details strong {
+  color: #555;
+}

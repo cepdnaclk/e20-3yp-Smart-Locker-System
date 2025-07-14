@@ -304,7 +304,7 @@ class AuthRepo {
   }
 
   //Method to update user profile
-  Future<ResponseModel> UpdateUserProfile(UserModel updatedUser) async{
+  Future<ResponseModel> updateUserProfile(Map<String, dynamic> updates) async{
     try{
       // Retrieve the token from SharedPreferences
       final String? token = sharedPreferences.getString(AppConstants.TOKEN);
@@ -319,13 +319,15 @@ class AuthRepo {
       // Update the headers in DioClient with the current token
       dioClient.updateHeader(token);
 
+      print('AuthRepo: Headers before request: ');
+      dioClient.printHeaders;
       // Debug: Print the updated user data
-      print('Updating user profile with data: ${updatedUser.toJson()}');
+      print('Updating user profile with data: $updates');
 
       // Send the PUT request to update user profile
-      final response = await dioClient.putData(
+      final response = await dioClient.patchData(
         AppConstants.EDIT_PROFILE_URI,
-        updatedUser.toJson(),
+        updates,
       );
 
       if (response.statusCode == 200) {
@@ -586,4 +588,51 @@ Future<void> logout() async {
     print('Error during logout: $e');
   }
 }
+
+//change password method
+Future<ResponseModel> changePassword({
+  required String currentPassword,
+  required String newPassword,
+}) async {
+  try {
+    final String? token = sharedPreferences.getString(AppConstants.TOKEN);
+    if (token == null) {
+      return ResponseModel(
+        isSuccess: false,
+        message: 'User not authenticated',
+      );
+    }
+
+    dioClient.updateHeader(token);
+
+    final Map<String, dynamic> body = {
+      'currentPassword': currentPassword,
+      'newPassword': newPassword,
+    };
+
+    final response = await dioClient.postData(
+      AppConstants.CHANGE_PASSWORD_URI, 
+      body,
+    );
+
+    if (response.statusCode == 200) {
+      return ResponseModel(
+        isSuccess: true,
+        message: 'Password changed successfully',
+      );
+    } else {
+      return ResponseModel(
+        isSuccess: false,
+        message: 'Failed to change password: ${response.data}',
+      );
+    }
+  } catch (e) {
+    print('Error changing password: $e');
+    return ResponseModel(
+      isSuccess: false,
+      message: 'Error: $e',
+    );
+  }
+}
+
 }

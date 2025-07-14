@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Login.css";
-import { login } from "../Services/api.js"; 
-import { useNavigate } from "react-router-dom";
+import { login } from "../Services/api.js";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -14,10 +14,10 @@ const Login = () => {
       const response = await login(username, password);
       const token = response.data.token?.trim(); // Access the token field and trim spaces
       if (token) {
-         localStorage.setItem("token", token);
-         alert(`Login success: Token ${token}`);
+        localStorage.setItem("token", token);
+        alert(`Login success: Token ${token}`);
       } else {
-         alert("Login failed: Token not found");
+        alert("Login failed: Token not found");
       }
       navigate("/dashboard");
       localStorage.setItem("hasVisited", 0);
@@ -33,8 +33,6 @@ const Login = () => {
       <div className="form-box">
         <h2>SIGN IN</h2>
         <form onSubmit={handleLogin}>
-          
-
           <div className="input-group">
             <label>Username</label>
             <input
@@ -56,9 +54,20 @@ const Login = () => {
               required
             />
           </div>
-          
+
+          <div className="forgot-password">
+            <Link to="/fogotpass" className="forgot-link">
+              Forgot password?
+            </Link>
+          </div>
 
           <button type="submit">Sign In</button>
+          <div className="dont-have-account">
+            <span>Don’t have an account? </span>
+            <Link to="/signup" className="signup-link">
+              Sign up
+            </Link>
+          </div>
         </form>
       </div>
     </div>

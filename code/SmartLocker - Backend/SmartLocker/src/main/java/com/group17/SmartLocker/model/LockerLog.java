@@ -20,7 +20,10 @@ public class LockerLog {
     private Long logId;
     @Column(nullable = false)
     private LocalDateTime accessTime;
+
     private LocalDateTime releasedTime;
+
+    private String remarks;
 
     @Enumerated(EnumType.STRING)
     private LockerLogStatus status;

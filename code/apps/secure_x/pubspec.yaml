@@ -79,6 +79,13 @@ flutter:
     - assets/img/userImage.png
     - assets/img/map.png
     - assets/img/logo2.png
+    - assets/img/back.png
+    - assets/img/backpatten-wb.png
+    - assets/img/backpattern.jpg
+    - assets/img/backpattern1.jpg
+    - assets/img/banner.png
+    - assets/img/loginPattern.png
+    - assets/img/signuppatton.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

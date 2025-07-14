@@ -133,250 +133,256 @@ const Lcluster = () => {
 
   // manin return part
   return (
-    <div>
-      <h2>Locker Clusters</h2>
-      <div className="ActionB">
-        <Tooltip
-          title="Add Cluster"
-          arrow
-          componentsProps={{
-            tooltip: {
-              sx: { fontSize: "12px", backgroundcolor: "black", color: "#fff" },
-            },
-          }}
-        >
-          <button className="ADDB" onClick={() => handleAddClick()}>
-            <Grid2x2Plus size={20} />
-          </button>
-        </Tooltip>
-      </div>
+    <div className="WindowPU">
+      <div className="WindowPU_t">
+        <h2>Locker Clusters</h2>
+        <div className="ActionB">
+          <Tooltip
+            title="Add Cluster"
+            arrow
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  fontSize: "12px",
+                  backgroundcolor: "black",
+                  color: "#fff",
+                },
+              },
+            }}
+          >
+            <button className="ADDB" onClick={() => handleAddClick()}>
+              <Grid2x2Plus size={20} />
+            </button>
+          </Tooltip>
+        </div>
 
-      <table className="Ctable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Total locker count</th>
-            <th>Avalable locker count</th>
-            <th>Name</th>
-            <th>Info.</th>
-            <th>Location</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clusters.map((cluster) => (
-            <tr key={cluster.id}>
-              <td>{cluster.id}</td>
-              <td>{cluster.totalNumberOfLockers}</td>
-              <td>{cluster.availableNumberOfLockers}</td>
-              <td>{cluster.clusterName}</td>
-              <td>{cluster.lockerClusterDescription}</td>
-              <td>
-                {cluster.latitude},{cluster.longitude}
-              </td>
-              <td className="ActionF" arrow>
-                <Tooltip
-                  title="Edit"
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: "12px",
-                        backgroundcolor: "black",
-                        color: "#fff",
-                      },
-                    },
-                  }}
-                >
-                  <button
-                    className="EDITB"
-                    onClick={() => handleEditClick(cluster)}
-                  >
-                    {" "}
-                    <SquarePen size={16} />
-                  </button>
-                </Tooltip>
-                <Tooltip
-                  title="Delet"
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: "12px",
-                        backgroundcolor: "black",
-                        color: "#fff",
-                      },
-                    },
-                  }}
-                >
-                  <button
-                    onClick={() => handaleDeletClick(cluster)}
-                    className="DELETB"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </Tooltip>
-              </td>
+        <table className="Ctable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Total locker count</th>
+              <th>Avalable locker count</th>
+              <th>Name</th>
+              <th>Info.</th>
+              <th>Location</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        {/* ADD new cluster dialog */}
-        <Dialog
-          className="AddDialog"
-          open={openAdd}
-          onClose={() => setOpenAdd(false)}
-        >
-          <DialogTitle className="DTital">Add Locker Cluster </DialogTitle>
-          <div className="trance"></div>
-          <DialogContent className="dialog-content">
-            <p>
-              <b>
-                <i>Cluster id will auto genarate </i>
-              </b>
-            </p>
-            <TextField
-              label="Total Locker Count"
-              name="totalNumberOfLockers"
-              variant="outlined"
-              className="no-border"
-              onChange={handleAddChange}
-            />
-            <TextField
-              label="Name"
-              name="clusterName"
-              variant="outlined"
-              className="no-border"
-              onChange={handleAddChange}
-            />
-            <TextField
-              label="Description"
-              name="lockerClusterDescription"
-              variant="outlined"
-              className="no-border"
-              onChange={handleAddChange}
-            />
-            <Locationpick onChange={handleLocationChange} />
-          </DialogContent>
-          <DialogActions className="dialog-actions">
-            <button className="DELETEB" onClick={() => setOpenAdd(false)}>
-              Cancel
-            </button>
-            <button
-              className="CANCELB"
-              onClick={() => handleAddLockerCluster()}
-              variant="contained"
-            >
-              Add Clusster
-            </button>
-          </DialogActions>
-        </Dialog>
-      </div>
-      <div>
-        {/* EDIT DIALOG */}
-        <Dialog
-          className="dialogbox"
-          open={openEdit}
-          onClose={() => setOpenEdit(false)}
-        >
-          <DialogTitle className="DTital">Edit User </DialogTitle>
-          <div className="trance"></div>
-          <DialogContent className="dialog-content">
-            <TextField
-              label="Clusster id"
-              name="id"
-              variant="outlined"
-              className="no-border"
-              value={selectedCluster?.id + "     can't change"}
-              disabled
-              InputProps={{
-                style: { fontStyle: "italic" },
-              }}
-            />
-            <TextField
-              label="Total number of locker"
-              name="totalNumberOfLockers"
-              variant="outlined"
-              className="no-border"
-              value={
-                selectedCluster?.totalNumberOfLockers + "     can't change"
-              }
-              disabled
-              InputProps={{
-                style: { fontStyle: "italic" },
-              }}
-            />
-            <TextField
-              label="Cluster name"
-              name="clusterName"
-              variant="outlined"
-              className="no-border"
-              value={selectedCluster?.clusterName || ""}
-              onChange={handleEditChange}
-            />
-            <TextField
-              label="Discription"
-              name="lockerClusterDescription"
-              variant="outlined"
-              className="no-border"
-              value={selectedCluster?.lockerClusterDescription || ""}
-              onChange={handleEditChange}
-            />
-            <Locationpickwithcurrentval
-              value={{
-                lat: selectedCluster?.latitude,
-                lng: selectedCluster?.longitude,
-              }}
-              onChange={handleEditLocationChange}
-            />
-          </DialogContent>
+          </thead>
+          <tbody>
+            {clusters.map((cluster) => (
+              <tr key={cluster.id}>
+                <td>{cluster.id}</td>
+                <td>{cluster.totalNumberOfLockers}</td>
+                <td>{cluster.availableNumberOfLockers}</td>
+                <td>{cluster.clusterName}</td>
+                <td>{cluster.lockerClusterDescription}</td>
+                <td>
+                  {cluster.latitude},{cluster.longitude}
+                </td>
+                <td className="ActionF" arrow>
+                  <Tooltip
+                    title="Edit"
+                    arrow
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          fontSize: "12px",
+                          backgroundcolor: "black",
+                          color: "#fff",
+                        },
+                      },
+                    }}
+                  >
+                    <button
+                      className="EDITB"
+                      onClick={() => handleEditClick(cluster)}
+                    >
+                      {" "}
+                      <SquarePen size={16} />
+                    </button>
+                  </Tooltip>
+                  <Tooltip
+                    title="Delet"
+                    arrow
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          fontSize: "12px",
+                          backgroundcolor: "black",
+                          color: "#fff",
+                        },
+                      },
+                    }}
+                  >
+                    <button
+                      onClick={() => handaleDeletClick(cluster)}
+                      className="DELETB"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </Tooltip>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div>
+          {/* ADD new cluster dialog */}
+          <Dialog
+            className="AddDialog"
+            open={openAdd}
+            onClose={() => setOpenAdd(false)}
+          >
+            <DialogTitle className="DTital">Add Locker Cluster </DialogTitle>
+            <div className="trance"></div>
+            <DialogContent className="dialog-content">
+              <p>
+                <b>
+                  <i>Cluster id will auto genarate </i>
+                </b>
+              </p>
+              <TextField
+                label="Total Locker Count"
+                name="totalNumberOfLockers"
+                variant="outlined"
+                className="no-border"
+                onChange={handleAddChange}
+              />
+              <TextField
+                label="Name"
+                name="clusterName"
+                variant="outlined"
+                className="no-border"
+                onChange={handleAddChange}
+              />
+              <TextField
+                label="Description"
+                name="lockerClusterDescription"
+                variant="outlined"
+                className="no-border"
+                onChange={handleAddChange}
+              />
+              <Locationpick onChange={handleLocationChange} />
+            </DialogContent>
+            <DialogActions className="dialog-actions">
+              <button className="DELETEB" onClick={() => setOpenAdd(false)}>
+                Cancel
+              </button>
+              <button
+                className="CANCELB"
+                onClick={() => handleAddLockerCluster()}
+                variant="contained"
+              >
+                Add Clusster
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
+        <div>
+          {/* EDIT DIALOG */}
+          <Dialog
+            className="dialogbox"
+            open={openEdit}
+            onClose={() => setOpenEdit(false)}
+          >
+            <DialogTitle className="DTital">Edit User </DialogTitle>
+            <div className="trance"></div>
+            <DialogContent className="dialog-content">
+              <TextField
+                label="Clusster id"
+                name="id"
+                variant="outlined"
+                className="no-border"
+                value={selectedCluster?.id + "     can't change"}
+                disabled
+                InputProps={{
+                  style: { fontStyle: "italic" },
+                }}
+              />
+              <TextField
+                label="Total number of locker"
+                name="totalNumberOfLockers"
+                variant="outlined"
+                className="no-border"
+                value={
+                  selectedCluster?.totalNumberOfLockers + "     can't change"
+                }
+                disabled
+                InputProps={{
+                  style: { fontStyle: "italic" },
+                }}
+              />
+              <TextField
+                label="Cluster name"
+                name="clusterName"
+                variant="outlined"
+                className="no-border"
+                value={selectedCluster?.clusterName || ""}
+                onChange={handleEditChange}
+              />
+              <TextField
+                label="Discription"
+                name="lockerClusterDescription"
+                variant="outlined"
+                className="no-border"
+                value={selectedCluster?.lockerClusterDescription || ""}
+                onChange={handleEditChange}
+              />
+              <Locationpickwithcurrentval
+                value={{
+                  lat: selectedCluster?.latitude,
+                  lng: selectedCluster?.longitude,
+                }}
+                onChange={handleEditLocationChange}
+              />
+            </DialogContent>
 
-          <DialogActions className="dialog-actions">
-            <button className="DELETB" onClick={() => setOpenEdit(false)}>
-              <X size={20} />
-            </button>
-            <button
-              className="UNLOCKB"
-              onClick={handleEditSave}
-              variant="contained"
-            >
-              <Save size={20} />
-            </button>
-          </DialogActions>
-        </Dialog>
-      </div>
-      <div>
-        {/* DELET DIALOG */}
-        <Dialog
-          className="DileteDialog"
-          open={openDelet}
-          onClose={() => setOpenDelet(false)}
-        >
-          <DialogTitle className="DTital">Delet Locker Cluster! </DialogTitle>
-          <DialogContent>
-            <p> Are you sure delet this locker cluster?</p>
-            <div>
+            <DialogActions className="dialog-actions">
+              <button className="DELETB" onClick={() => setOpenEdit(false)}>
+                <X size={20} />
+              </button>
+              <button
+                className="UNLOCKB"
+                onClick={handleEditSave}
+                variant="contained"
+              >
+                <Save size={20} />
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
+        <div>
+          {/* DELET DIALOG */}
+          <Dialog
+            className="DileteDialog"
+            open={openDelet}
+            onClose={() => setOpenDelet(false)}
+          >
+            <DialogTitle className="DTital">Delet Locker Cluster! </DialogTitle>
+            <DialogContent>
+              <p> Are you sure delet this locker cluster?</p>
               <div>
-                Cluster ID - <b>{selectedCluster?.id}</b>
+                <div>
+                  Cluster ID - <b>{selectedCluster?.id}</b>
+                </div>
+                <div>Name - {selectedCluster?.clusterName}</div>
+                <div>Info - {selectedCluster?.lockerClusterDescription}</div>
               </div>
-              <div>Name - {selectedCluster?.clusterName}</div>
-              <div>Info - {selectedCluster?.lockerClusterDescription}</div>
-            </div>
-          </DialogContent>
-          <DialogActions className="dialog-actions">
-            <button className="CANCELB" onClick={() => setOpenDelet(false)}>
-              Cancel
-            </button>
-            <button
-              className="DELETEB"
-              onClick={() => handleDeletCluster(selectedCluster.id)}
-              variant="contained"
-            >
-              Delete Cluster
-            </button>
-          </DialogActions>
-        </Dialog>
+            </DialogContent>
+            <DialogActions className="dialog-actions">
+              <button className="CANCELB" onClick={() => setOpenDelet(false)}>
+                Cancel
+              </button>
+              <button
+                className="DELETEB"
+                onClick={() => handleDeletCluster(selectedCluster.id)}
+                variant="contained"
+              >
+                Delete Cluster
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
       </div>
     </div>
   );

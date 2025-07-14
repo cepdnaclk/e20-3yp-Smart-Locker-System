@@ -71,7 +71,13 @@ class _EditProfileState extends State<EditProfile> {
 
     return Scaffold(
       appBar: CustomAppBar(),
-      body: Padding(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset('assets/img/backpattern.jpg',
+          fit: BoxFit.cover,
+      ), 
+      Padding(
         padding: EdgeInsets.all(16.h),
         child: user == null
             ? const Center(child: Text('No user data available'))
@@ -138,31 +144,40 @@ class _EditProfileState extends State<EditProfile> {
                   _buildEditableField("Registration No", _regNoController,readOnly: true),
                   _buildEditableField("Phone Number", _phoneNoController),
                   
-                  _buildEditableField("ID", TextEditingController(text: user?.id ?? ''), readOnly: true),
+                  _buildEditableField("ID", TextEditingController(text: user.id ?? ''), readOnly: true),
                   
                   SizedBox(height: 24.h,),
                   
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         elevation: 6.h,
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.h, 
+                            horizontal: 24.h
+                          ),
                         backgroundColor: AppColors.buttonBackgroundColor2,
                         foregroundColor: AppColors.buttonBackgroundColor1,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(20.r),
                         )
                       ),
                       onPressed: () async{
+                        print('Submit button pressed');
                         if(_formKey.currentState!.validate()){
-                          await _authController.updateProfile(UserModel(
-                            id: user.id,
+                          print('Form validated successfully');
+                          await _authController.updateProfile(
+                            //id: user.id,
                             email: _emailController.text,
                             firstName: _firstNameController.text,
                             lastName: _lastNameController.text,
-                            regNo: _regNoController.text,
+                            //regNo: user.regNo,
                             phoneNo: _phoneNoController.text,
-                            role: user.role,
-                          )
+                            //role: user.role,
+                            context: context,
                         );
+                        print('updateProfile method call completed');
+                        }else{
+                          print('Form validation failed');
                         }
                       }, 
                       child: Text(
@@ -175,7 +190,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
       ),
       ),
-    );
+    ]));
   }
 
   Widget _buildEditableField(String title,TextEditingController controller,{bool readOnly=false}) {

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/pages/locker_logs.dart';
 import 'package:secure_x/pages/notifications.dart';
+import 'package:secure_x/pages/settings.dart';
 import 'package:secure_x/pages/sign_in.dart';
 import 'package:secure_x/pages/user.dart';
 import 'package:secure_x/utils/appcolors.dart';
@@ -19,7 +20,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         Get.to(() => const User());
         break;
       case 'Settings':
-        Get.to(()=> const User());
+        Get.to(()=> Settings());
         break;  
       case 'History':
         Get.to(()=> LockerLogs());
@@ -46,10 +47,30 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.buttonBackgroundColor2,
+      flexibleSpace: Stack(
+    fit: StackFit.expand,
+    children: [
+      Image.asset(
+        'assets/img/backpatten-wb.png', // Your background image
+        fit: BoxFit.cover,
+      ),
+      Container(
+        color: Colors.black.withOpacity(0.6), // Black overlay, 50% opacity
+        // You can adjust the color and opacity as needed
+      ),
+    ],
+  ),
+      backgroundColor : AppColors.appBarColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            //bottomLeft: Radius.circular(20.h),
+            //bottomRight: Radius.circular(20.h),
+          ),
+        ),
+        toolbarHeight: 60.h,
       elevation: 6.h,
         leading: PopupMenuButton<String>(
-          icon: const Icon(Icons.menu, color: AppColors.boxColor,),
+          icon: const Icon(Icons.menu, color: AppColors.mainColor,),
           color: AppColors.boxColor,
           onSelected: (value) => _menuSelectionHandler(value, context),
           itemBuilder: (BuildContext context)=>[
@@ -63,12 +84,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         ), 
         title: Text(
-          'SecureX',
+          'Secure X',
           style: TextStyle(
-            fontSize: 20.sp,
+            fontSize: 30.sp,
             fontWeight: FontWeight.bold,
-            letterSpacing: 1.2.w,
-            color: AppColors.boxColor,
+            letterSpacing: 1.5.w,
+            color: AppColors.mainColor,
           ),
         ),
         centerTitle: true,
@@ -89,13 +110,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Icon(
             icon, 
-            color:AppColors.iconColor,),
+            color:AppColors.mainColor,),
             SizedBox(width: 10.h,),
             Text(
               text,
               style: TextStyle(
                 fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.bold,
               ),
             )
         ],

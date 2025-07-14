@@ -195,337 +195,343 @@ const Locker = () => {
     }
   };
   return (
-    <div>
-      <h2>Lockers</h2>
+    <div className="WindowPU">
+      <div className="WindowPU_t">
+        <h2>Lockers</h2>
 
-      <div className="ActionB">
-        <Tooltip
-          title="Add locker"
-          arrow
-          onClick={() => handleAddClick()}
-          componentsProps={{
-            tooltip: {
-              sx: { fontSize: "12px", backgroundcolor: "black", color: "#fff" },
-            },
-          }}
-        >
-          <button className="ADDB">
-            <SquarePlus size={20} />
-          </button>
-        </Tooltip>
-        <div className="LFilter">
-          <Funnel /> Filter :
-          <div class="filter-occupency">
-            <label for="occ-1">
-              <input
-                id="occ-1"
-                type="radio"
-                name="radio-occ"
-                value="ALL"
-                defaultChecked
-                onChange={handleStatusChange}
-                //onChange={}
-                //onClick={setStype(0)}
-              />
-              <span class="name">ALL</span>
-            </label>
-            <label for="occ-2">
-              <input
-                id="occ-2"
-                type="radio"
-                name="radio-occ"
-                value="AVAILABLE"
-                onChange={handleStatusChange}
-                // onClick={setStype(1)}
-              />
-              <span class="name">AVAILABLE</span>
-            </label>
-            <label for="occ-3">
-              <input
-                id="occ-3"
-                type="radio"
-                name="radio-occ"
-                value="OCCUPIED"
-                onChange={handleStatusChange}
-                //onClick={setStype(2)}
-              />
-              <span class="name">OCCUPIED</span>
-            </label>
-          </div>
-          <div className="select-container">
-            <select
-              // value={selectedCluster}
-              onChange={handleChange}
-              disabled={loading}
-            >
-              <option value="null">
-                {loading ? "Loading..." : "All Cluster"}
-              </option>
-              {LCluster.map((cluster) => (
-                <option key={cluster.id} value={cluster.id}>
-                  {cluster.id} - {cluster.clusterName}
+        <div className="ActionB">
+          <Tooltip
+            title="Add locker"
+            arrow
+            onClick={() => handleAddClick()}
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  fontSize: "12px",
+                  backgroundcolor: "black",
+                  color: "#fff",
+                },
+              },
+            }}
+          >
+            <button className="ADDB">
+              <SquarePlus size={20} />
+            </button>
+          </Tooltip>
+          <div className="LFilter">
+            <Funnel /> Filter :
+            <div class="filter-occupency">
+              <label for="occ-1">
+                <input
+                  id="occ-1"
+                  type="radio"
+                  name="radio-occ"
+                  value="ALL"
+                  defaultChecked
+                  onChange={handleStatusChange}
+                  //onChange={}
+                  //onClick={setStype(0)}
+                />
+                <span class="name">ALL</span>
+              </label>
+              <label for="occ-2">
+                <input
+                  id="occ-2"
+                  type="radio"
+                  name="radio-occ"
+                  value="AVAILABLE"
+                  onChange={handleStatusChange}
+                  // onClick={setStype(1)}
+                />
+                <span class="name">AVAILABLE</span>
+              </label>
+              <label for="occ-3">
+                <input
+                  id="occ-3"
+                  type="radio"
+                  name="radio-occ"
+                  value="OCCUPIED"
+                  onChange={handleStatusChange}
+                  //onClick={setStype(2)}
+                />
+                <span class="name">OCCUPIED</span>
+              </label>
+            </div>
+            <div className="select-container">
+              <select
+                // value={selectedCluster}
+                onChange={handleChange}
+                disabled={loading}
+              >
+                <option value="null">
+                  {loading ? "Loading..." : "All Cluster"}
                 </option>
-              ))}
-            </select>
+                {LCluster.map((cluster) => (
+                  <option key={cluster.id} value={cluster.id}>
+                    {cluster.id} - {cluster.clusterName}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
-      </div>
-      {/* Locker detail section */}
-      <table className="Ctable">
-        <thead>
-          <tr>
-            <th>LockerID</th>
-            <th>Disply Number</th>
-            <th>Status</th>
-            <th>Locker Log</th>
-            <th>Locker Cluster</th>
+        {/* Locker detail section */}
+        <table className="Ctable">
+          <thead>
+            <tr>
+              <th>LockerID</th>
+              <th>Disply Number</th>
+              <th>Status</th>
+              <th>Locker Log</th>
+              <th>Locker Cluster</th>
 
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {locker.map((lockers) => (
-            <tr key={lockers.lockerId}>
-              <td>{lockers.lockerId}</td>
-              <td>{lockers.displayNumber}</td>
-              <td>{lockers.lockerStatus}</td>
-              <td>{lockers.lockerLogs}</td>
-              <td>{lockers.lockerClusterId}</td>
-              <td className="ActionF">
-                <Tooltip
-                  title="Edit"
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: "12px",
-                        backgroundcolor: "black",
-                        color: "#fff",
-                      },
-                    },
-                  }}
-                >
-                  <button
-                    className="EDITB"
-                    onClick={() => handleEditClick(lockers)}
-                  >
-                    <SquarePen size={16} />
-                  </button>
-                </Tooltip>
-
-                <Tooltip
-                  title="Unlock"
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: "12px",
-                        backgroundcolor: "black",
-                        color: "#fff",
-                      },
-                    },
-                  }}
-                >
-                  <button
-                    className="UNLOCKB"
-                    onClick={() => handleUnlockClick(lockers)}
-                  >
-                    <KeyRound size={16} />
-                  </button>
-                </Tooltip>
-
-                <Tooltip
-                  title="Delet"
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: "12px",
-                        backgroundcolor: "black",
-                        color: "#fff",
-                      },
-                    },
-                  }}
-                >
-                  <button
-                    className="DELETB"
-                    onClick={() => handleDeleteClick(lockers)}
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </Tooltip>
-              </td>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        {/* ADD new locker dialog */}
-        <Dialog
-          className="AddDialog"
-          open={openAdd}
-          onClose={() => setOpenAdd(false)}
-        >
-          <DialogTitle className="DTital">
-            Add Locker To Locker Cluster{" "}
-          </DialogTitle>
-          <div className="trance"></div>
-          <DialogContent className="dialog-content">
-            <TextField
-              label="Cluster ID"
-              name="id"
-              variant="outlined"
-              className="no-border"
-              //value={newlocker.id || ""}
-              onChange={handleAddChange}
-            />
-          </DialogContent>
-          <DialogActions className="dialog-actions">
-            <button className="DELETEB" onClick={() => setOpenAdd(false)}>
-              Cancel
-            </button>
-            <button
-              className="CANCELB"
-              onClick={() => handleAddLocker()}
-              variant="contained"
-            >
-              Add Locker
-            </button>
-          </DialogActions>
-        </Dialog>
-      </div>
-      <div>
-        {/* DELET DIALOG */}
-        <Dialog
-          className="DileteDialog"
-          open={openDelet}
-          onClose={() => setOpenDelet(false)}
-        >
-          <DialogTitle className="DTital">Delet Locker! </DialogTitle>
-          <DialogContent>
-            <p> Are you sure delet this locker?</p>
-            <p>
-              ID - <i> {selecteLocker?.lockerId}</i>
-            </p>
-            <p>
-              cluster id - <i> {selecteLocker?.lockerClusterId}</i>
-            </p>
-          </DialogContent>
-          <DialogActions className="dialog-actions">
-            <button className="CANCELB" onClick={() => setOpenDelet(false)}>
-              Cancel
-            </button>
-            <button
-              className="DELETEB"
-              onClick={() => deleteLockerByID(selecteLocker?.lockerId)}
-              variant="contained"
-            >
-              Delete Locker
-            </button>
-          </DialogActions>
-        </Dialog>
-      </div>
-      <div>
-        {/* Unlock DIALOG */}
-        <Dialog
-          className="DileteDialog"
-          open={openUnlock}
-          onClose={() => setOpenUnlock(false)}
-        >
-          <DialogTitle className="DTital">Unlock Locker! </DialogTitle>
-          <DialogContent>
-            <p> Are you sure Unlock this locker?</p>
-            <p>
-              ID - <i> {selecteLocker?.lockerId}</i>
-            </p>
-            <p>
-              cluster id - <i> {selecteLocker?.lockerClusterId}</i>
-            </p>
-          </DialogContent>
-          <DialogActions className="dialog-actions">
-            <button className="CANCELB" onClick={() => setOpenUnlock(false)}>
-              Cancel
-            </button>
-            <button
-              className="UNLOCKB2"
-              onClick={() => unlockLockerByID(selecteLocker?.lockerId)}
-              variant="contained"
-            >
-              Unlock Locker
-            </button>
-          </DialogActions>
-        </Dialog>
-      </div>
-      <div>
-        {/* EDIT DIALOG */}
-        <Dialog
-          className="dialogbox"
-          open={openEdit}
-          onClose={() => setOpenEdit(false)}
-        >
-          <DialogTitle className="DTital">Edit Locker </DialogTitle>
-          <div className="trance"></div>
-          <DialogContent className="dialog-content">
-            <TextField
-              label="Locker id"
-              name="lockerId"
-              variant="outlined"
-              className="no-border"
-              value={selecteLocker?.lockerId + "     can't change"}
-              disabled
-              InputProps={{
-                style: { fontStyle: "italic" },
-              }}
-            />
-            <TextField
-              label="Cluster id"
-              name="lockerClusterId"
-              variant="outlined"
-              className="no-border"
-              value={selecteLocker?.lockerClusterId || ""}
-              onChange={handleEditChange}
-              disabled
-              InputProps={{
-                style: { fontStyle: "italic" },
-              }}
-            />
-            <TextField
-              label="Display Number"
-              name="displayNumber"
-              variant="outlined"
-              className="no-border"
-              value={selecteLocker?.displayNumber || ""}
-              onChange={handleEditChange}
-            />
+          </thead>
+          <tbody>
+            {locker.map((lockers) => (
+              <tr key={lockers.lockerId}>
+                <td>{lockers.lockerId}</td>
+                <td>{lockers.displayNumber}</td>
+                <td>{lockers.lockerStatus}</td>
+                <td>{lockers.lockerLogs}</td>
+                <td>{lockers.lockerClusterId}</td>
+                <td className="ActionF">
+                  <Tooltip
+                    title="Edit"
+                    arrow
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          fontSize: "12px",
+                          backgroundcolor: "black",
+                          color: "#fff",
+                        },
+                      },
+                    }}
+                  >
+                    <button
+                      className="EDITB"
+                      onClick={() => handleEditClick(lockers)}
+                    >
+                      <SquarePen size={16} />
+                    </button>
+                  </Tooltip>
 
-            <FormControl>
-              <InputLabel>Role</InputLabel>
-              <Select
-                name="lockerStatus"
-                value={selecteLocker?.lockerStatus || ""}
-                onChange={handleEditChange}
-                label="Role"
+                  <Tooltip
+                    title="Unlock"
+                    arrow
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          fontSize: "12px",
+                          backgroundcolor: "black",
+                          color: "#fff",
+                        },
+                      },
+                    }}
+                  >
+                    <button
+                      className="UNLOCKB"
+                      onClick={() => handleUnlockClick(lockers)}
+                    >
+                      <KeyRound size={16} />
+                    </button>
+                  </Tooltip>
+
+                  <Tooltip
+                    title="Delet"
+                    arrow
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          fontSize: "12px",
+                          backgroundcolor: "black",
+                          color: "#fff",
+                        },
+                      },
+                    }}
+                  >
+                    <button
+                      className="DELETB"
+                      onClick={() => handleDeleteClick(lockers)}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </Tooltip>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div>
+          {/* ADD new locker dialog */}
+          <Dialog
+            className="AddDialog"
+            open={openAdd}
+            onClose={() => setOpenAdd(false)}
+          >
+            <DialogTitle className="DTital">
+              Add Locker To Locker Cluster{" "}
+            </DialogTitle>
+            <div className="trance"></div>
+            <DialogContent className="dialog-content">
+              <TextField
+                label="Cluster ID"
+                name="id"
+                variant="outlined"
+                className="no-border"
+                //value={newlocker.id || ""}
+                onChange={handleAddChange}
+              />
+            </DialogContent>
+            <DialogActions className="dialog-actions">
+              <button className="DELETEB" onClick={() => setOpenAdd(false)}>
+                Cancel
+              </button>
+              <button
+                className="CANCELB"
+                onClick={() => handleAddLocker()}
+                variant="contained"
               >
-                <MenuItem value="AVAILABLE">AVAILABLE</MenuItem>
-                <MenuItem value="OCCUPIED">OCCUPIED</MenuItem>
-                <MenuItem value="BLOCKED">BLOCKED</MenuItem>
-              </Select>
-            </FormControl>
-          </DialogContent>
+                Add Locker
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
+        <div>
+          {/* DELET DIALOG */}
+          <Dialog
+            className="DileteDialog"
+            open={openDelet}
+            onClose={() => setOpenDelet(false)}
+          >
+            <DialogTitle className="DTital">Delet Locker! </DialogTitle>
+            <DialogContent>
+              <p> Are you sure delet this locker?</p>
+              <p>
+                ID - <i> {selecteLocker?.lockerId}</i>
+              </p>
+              <p>
+                cluster id - <i> {selecteLocker?.lockerClusterId}</i>
+              </p>
+            </DialogContent>
+            <DialogActions className="dialog-actions">
+              <button className="CANCELB" onClick={() => setOpenDelet(false)}>
+                Cancel
+              </button>
+              <button
+                className="DELETEB"
+                onClick={() => deleteLockerByID(selecteLocker?.lockerId)}
+                variant="contained"
+              >
+                Delete Locker
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
+        <div>
+          {/* Unlock DIALOG */}
+          <Dialog
+            className="DileteDialog"
+            open={openUnlock}
+            onClose={() => setOpenUnlock(false)}
+          >
+            <DialogTitle className="DTital">Unlock Locker! </DialogTitle>
+            <DialogContent>
+              <p> Are you sure Unlock this locker?</p>
+              <p>
+                ID - <i> {selecteLocker?.lockerId}</i>
+              </p>
+              <p>
+                cluster id - <i> {selecteLocker?.lockerClusterId}</i>
+              </p>
+            </DialogContent>
+            <DialogActions className="dialog-actions">
+              <button className="CANCELB" onClick={() => setOpenUnlock(false)}>
+                Cancel
+              </button>
+              <button
+                className="UNLOCKB2"
+                onClick={() => unlockLockerByID(selecteLocker?.lockerId)}
+                variant="contained"
+              >
+                Unlock Locker
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
+        <div>
+          {/* EDIT DIALOG */}
+          <Dialog
+            className="dialogbox"
+            open={openEdit}
+            onClose={() => setOpenEdit(false)}
+          >
+            <DialogTitle className="DTital">Edit Locker </DialogTitle>
+            <div className="trance"></div>
+            <DialogContent className="dialog-content">
+              <TextField
+                label="Locker id"
+                name="lockerId"
+                variant="outlined"
+                className="no-border"
+                value={selecteLocker?.lockerId + "     can't change"}
+                disabled
+                InputProps={{
+                  style: { fontStyle: "italic" },
+                }}
+              />
+              <TextField
+                label="Cluster id"
+                name="lockerClusterId"
+                variant="outlined"
+                className="no-border"
+                value={selecteLocker?.lockerClusterId || ""}
+                onChange={handleEditChange}
+                disabled
+                InputProps={{
+                  style: { fontStyle: "italic" },
+                }}
+              />
+              <TextField
+                label="Display Number"
+                name="displayNumber"
+                variant="outlined"
+                className="no-border"
+                value={selecteLocker?.displayNumber || ""}
+                onChange={handleEditChange}
+              />
 
-          <DialogActions className="dialog-actions">
-            <button className="DELETB" onClick={() => setOpenEdit(false)}>
-              <X size={20} />
-            </button>
-            <button
-              className="UNLOCKB"
-              onClick={handleEditSave}
-              variant="contained"
-            >
-              <Save size={20} />
-            </button>
-          </DialogActions>
-        </Dialog>
+              <FormControl>
+                <InputLabel>Role</InputLabel>
+                <Select
+                  name="lockerStatus"
+                  value={selecteLocker?.lockerStatus || ""}
+                  onChange={handleEditChange}
+                  label="Role"
+                >
+                  <MenuItem value="AVAILABLE">AVAILABLE</MenuItem>
+                  <MenuItem value="OCCUPIED">OCCUPIED</MenuItem>
+                  <MenuItem value="BLOCKED">BLOCKED</MenuItem>
+                </Select>
+              </FormControl>
+            </DialogContent>
+
+            <DialogActions className="dialog-actions">
+              <button className="DELETB" onClick={() => setOpenEdit(false)}>
+                <X size={20} />
+              </button>
+              <button
+                className="UNLOCKB"
+                onClick={handleEditSave}
+                variant="contained"
+              >
+                <Save size={20} />
+              </button>
+            </DialogActions>
+          </Dialog>
+        </div>
       </div>
     </div>
   );

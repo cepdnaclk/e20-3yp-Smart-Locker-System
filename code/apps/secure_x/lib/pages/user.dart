@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/pages/locker_logs.dart';
+import 'package:secure_x/pages/settings.dart';
 import 'package:secure_x/pages/user_details.dart';
 import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
@@ -58,8 +59,17 @@ class _UserState extends State<User> {
     return Scaffold(
       backgroundColor: AppColors.mainColor,
       appBar:CustomAppBar(),
-      body:Container(
-        color: AppColors.mainColor,
+     body: Stack(
+        fit: StackFit.expand,
+  children: [
+    Positioned.fill(
+      child: Image.asset(
+        'assets/img/backpattern.jpg', 
+        fit: BoxFit.cover,
+      ),
+    ),
+      Container(
+        color:Colors.transparent,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -85,18 +95,29 @@ class _UserState extends State<User> {
                 child: Container(
                   padding: EdgeInsets.all(40.h),
                   decoration: BoxDecoration(
-                    color: AppColors.textMuted,
                     borderRadius: BorderRadius.circular(30.r),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withAlpha((0.7 * 255).round()), // Top color
+                        Colors.black.withAlpha((0.3 * 255).round()), 
+                        //Colors.transparent,             // Middle (transparent)
+                        Colors.black.withAlpha((0.7 * 255).round()), // Bottom color
+                      ],
+                      stops: [0.0, 0.5, 1.0],
+                    ),
                   ),
+                
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         formattedRegNo,
                         style: TextStyle(
-                        fontSize: 20.sp,
+                        fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textHighlight,
+                        color: AppColors.textInverse,
                         ),
                       ),
                       SizedBox(height: 20.h,),
@@ -104,14 +125,15 @@ class _UserState extends State<User> {
                         onPressed: (){
                           Get.to(() => UserDetails());
                       }, 
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.person_4_outlined,
-                        color: AppColors.textPrimary,
+                        color: AppColors.buttonBackgroundColor1,
+                        size: 25.sp,
                       ),
                       label: Text('User Detail',style: TextStyle(
-                        fontSize: 20.sp,
+                        fontSize: 25.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: AppColors.buttonBackgroundColor1,
                       ),)
                       ),
                       SizedBox(height: 20.h,),
@@ -119,38 +141,41 @@ class _UserState extends State<User> {
                         onPressed: (){
                           Get.to(() => LockerLogs());
                       }, 
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.history,
-                        color: AppColors.textPrimary,
+                        color: AppColors.buttonBackgroundColor1,
+                        size: 25.sp,
                       ),
                       label: Text('User History',style: TextStyle(
-                        fontSize: 20.sp,
+                        fontSize: 25.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: AppColors.buttonBackgroundColor1,
                       ),)
                       ),
                       SizedBox(height: 20.h,),
                       TextButton.icon(
                         onPressed: (){
+                          Get.to(() => Settings());
                       }, 
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.settings,
-                        color: AppColors.textPrimary,
+                        color: AppColors.buttonBackgroundColor1,
+                        size: 25.sp,
                       ),
                       label: Text('Settings',style: TextStyle(
-                        fontSize: 20.sp,
+                        fontSize: 25.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: AppColors.buttonBackgroundColor1,
                       ),)
                       ),
                     ],
                   ),
                 ),
-              ),
-            SizedBox(height: 20.h,)   
-          ],
+      )]),
+           // SizedBox(height: 20.h,)   
+     )],
         ),      
-      ),
-    );    
+    );
+    ;  
   }
 }

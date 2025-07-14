@@ -12,6 +12,12 @@ body {
   font-family: 'Maven Pro', sans-serif;
   line-height: 1.6;
   color: #333;
+  background-image: url('../images/backpatten-wb.png');
+  background-repeat: repeat;
+  background-position: top left;
+  background-attachment: fixed;
+  /* keeps pattern fixed while scrolling */
+  background-size: 592px 333px;
 }
 
 html {
@@ -26,6 +32,14 @@ html {
   padding-bottom: 10px;
   color: #333;
   margin-bottom: 30px;
+}
+
+.inamesub {
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  color: #333;
+
 }
 
 /* Navbar Styles */
@@ -186,6 +200,24 @@ html {
   margin-bottom: 0;
 }
 
+.summarys {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summarys iframe {
+  align-items: center;
+  border: none;
+  height: 480px;
+  width: 640px;
+  border-radius: 10px;
+
+}
+
+
+
 /* Solution Architecture Section Styles */
 .solarc {
   padding: 70px;
@@ -193,11 +225,78 @@ html {
 
 .sim {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: 10px;
   margin-top: 1rem;
   margin-bottom: 2rem;
 }
+
+.sim2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.solarc-img2 {
+  max-width: 55%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.solarc-img2:hover {
+  transform: scale(1.02);
+}
+
+.solarc-img3 {
+  max-width: 90%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.solarc-img3:hover {
+  transform: scale(1.02);
+}
+
+.demo-video {
+  width: 100%;
+  max-width: 480px;
+  height: 360px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.demo-video {
+  width: 100%;
+  max-width: 360px;
+  height: 480px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.solarc-img4 {
+  width: 800px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.solarc-img4:hover {
+  transform: scale(1.02);
+}
+
 
 .solarc-img {
   max-width: 100%;
@@ -207,10 +306,117 @@ html {
   transition: transform 0.3s ease;
 }
 
+
 .solarc-img:hover {
   transform: scale(1.02);
 }
 
+.sim-cent {
+  display: flex;
+  flex-direction: column;
+
+}
+
+/* side show */
+.sim2sid {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+
+
+.slideshow {
+  width: 900px;
+  height: 450px;
+  overflow: hidden;
+  position: relative;
+}
+
+.slide-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide-image.active {
+  opacity: 1;
+}
+
+/*  */
+
+/* tech stac  */
+.section {
+  background-color: #dbd9d9;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #0b1325;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.summary {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/*  */
+/* test vedio  */
+.row {
+  padding-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.video-card {
+  background-image: url('../images/backpatten-wb.png');
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+}
+
+.video-card iframe {
+  width: 100%;
+  height: 360px;
+  border: none;
+  border-radius: 10px;
+}
+
+.video-card h2 {
+  color: #303030;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+@media (max-width: 600px) {
+  .video-card iframe {
+    height: 220px;
+  }
+}
+
+/*  */
 .architecture-desc {
   max-width: 900px;
   margin: 0 auto;
@@ -398,59 +604,59 @@ html {
     flex-direction: column;
     padding: 1rem;
   }
-  
+
   .navlist {
     flex-direction: column;
     gap: 0.5rem;
     margin-top: 1rem;
   }
-  
+
   .bname {
     font-size: 48px;
   }
-  
+
   .htag {
     font-size: 20px;
   }
-  
+
   .glass-box {
     padding: 1.5rem 2rem;
   }
-  
+
   .intro {
     padding: 40px 20px;
     margin: 10px;
   }
-  
+
   .intro .iname {
     font-size: 24px;
   }
-  
+
   .icont {
     padding: 20px;
   }
-  
+
   .icont p {
     font-size: 15px;
   }
-  
+
   .solarc {
     padding: 40px 20px;
   }
-  
+
   .hard {
     padding: 40px 20px;
   }
-  
+
   .test {
     padding: 40px 20px;
     margin: 10px;
   }
-  
+
   .gallery-item {
     flex-direction: row;
   }
-  
+
   .gallery-item.reverse {
     flex-direction: row-reverse;
   }
@@ -460,31 +666,31 @@ html {
   .intro {
     padding: 30px 15px;
   }
-  
+
   .intro .iname {
     font-size: 22px;
   }
-  
+
   .icont {
     padding: 15px;
   }
-  
+
   .solarc {
     padding: 30px 15px;
   }
-  
+
   .hard {
     padding: 30px 15px;
   }
-  
+
   .test {
     padding: 30px 15px;
   }
-  
+
   .gallery-item {
     flex-direction: column;
   }
-  
+
   .gallery-item.reverse {
     flex-direction: column-reverse;
   }
@@ -496,6 +702,7 @@ html {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -588,6 +795,7 @@ html {
   .gallery-item {
     flex-direction: row;
   }
+
   .gallery-item.reverse {
     flex-direction: row-reverse;
   }
@@ -907,7 +1115,7 @@ html {
     max-width: 1200px;
     margin: 0 auto;
   }
-  
+
   /* First 4 members take up the first row normally */
   .team-card:nth-child(1),
   .team-card:nth-child(2),
@@ -915,7 +1123,7 @@ html {
   .team-card:nth-child(4) {
     grid-column: auto;
   }
-  
+
   /* Supervisor (5th member) centered in second row */
   .team-card:nth-child(5) {
     grid-column: 2 / 4;
@@ -930,7 +1138,7 @@ html {
     grid-template-columns: repeat(4, 1fr);
     max-width: 1400px;
   }
-  
+
   /* Keep the same layout - 4 in first row, supervisor centered in second */
   .team-card:nth-child(5) {
     grid-column: 2 / 4;
@@ -1112,11 +1320,25 @@ html {
   transform: translateY(30px);
 }
 
-.team-card:nth-child(1) { animation-delay: 0.1s; }
-.team-card:nth-child(2) { animation-delay: 0.2s; }
-.team-card:nth-child(3) { animation-delay: 0.3s; }
-.team-card:nth-child(4) { animation-delay: 0.4s; }
-.team-card:nth-child(5) { animation-delay: 0.5s; }
+.team-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.team-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.team-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.team-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.team-card:nth-child(5) {
+  animation-delay: 0.5s;
+}
 
 @keyframes fadeInUp {
   to {
@@ -1173,7 +1395,7 @@ html {
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 50px;
   backdrop-filter: blur(15px);
-  box-shadow: 
+  box-shadow:
     0 8px 25px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   cursor: pointer;
@@ -1194,11 +1416,10 @@ html {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(255, 255, 255, 0.3), 
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent);
   transition: left 0.6s ease;
 }
 
@@ -1210,10 +1431,9 @@ html {
   left: 2px;
   right: 2px;
   height: 50%;
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.2) 0%, 
-    transparent 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 100%);
   border-radius: 50px 50px 20px 20px;
   pointer-events: none;
 }
@@ -1221,7 +1441,7 @@ html {
 /* Hover effects */
 .buttonsec button:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 15px 35px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.08));
@@ -1235,7 +1455,7 @@ html {
 /* Active/Click effect */
 .buttonsec button:active {
   transform: translateY(-1px) scale(0.98);
-  box-shadow: 
+  box-shadow:
     0 8px 20px rgba(0, 0, 0, 0.25),
     inset 0 3px 8px rgba(0, 0, 0, 0.1);
 }
@@ -1252,6 +1472,7 @@ html {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1271,7 +1492,7 @@ html {
   .table-container {
     margin: 0 10px;
   }
-  
+
   .header-cell,
   .table-cell {
     padding: 12px 16px;
@@ -1283,49 +1504,49 @@ html {
     padding: 40px 20px;
     margin: 10px;
   }
-  
+
   .budget {
     padding: 15px 10px;
   }
-  
+
   .budget .iname {
     font-size: 24px;
   }
-  
+
   .description {
     font-size: 14px;
     margin-bottom: 20px;
   }
-  
+
   .components-table {
     font-size: 12px;
   }
-  
+
   .header-cell,
   .table-cell {
     padding: 10px 12px;
   }
-  
+
   .component-col {
     width: 35%;
   }
-  
+
   .unit-price-col,
   .units-col,
   .price-col {
     width: 21.67%;
   }
-  
+
   .summary-stats {
     margin-top: 15px;
     padding: 12px;
   }
-  
+
   .stat-item {
     display: block;
     margin: 5px 0;
   }
-  
+
   .stat-item:first-child {
     border-right: none;
     border-bottom: 1px solid #dee2e6;
@@ -1333,14 +1554,14 @@ html {
     padding-bottom: 10px;
     margin-bottom: 10px;
   }
-  
+
   .buttonsec button {
     width: 100%;
     min-width: 200px;
     padding: 12px 25px;
     font-size: 15px;
   }
-  
+
   .link {
     padding: 40px 20px;
     margin: 10px;
@@ -1351,57 +1572,57 @@ html {
   .test {
     padding: 30px 15px;
   }
-  
+
   .budget {
     padding: 10px 5px;
   }
-  
+
   .budget .iname {
     font-size: 20px;
   }
-  
+
   .description {
     font-size: 13px;
   }
-  
+
   .components-table {
     font-size: 10px;
   }
-  
+
   .header-cell,
   .table-cell {
     padding: 8px 6px;
   }
-  
+
   .component-col {
     width: 40%;
   }
-  
+
   .unit-price-col,
   .units-col,
   .price-col {
     width: 20%;
   }
-  
+
   .total-label,
   .grand-total {
     font-size: 11px;
   }
-  
+
   .summary-stats {
     padding: 10px;
   }
-  
+
   .stat-item {
     font-size: 12px;
   }
-  
+
   .buttonsec button {
     padding: 10px 20px;
     font-size: 14px;
     min-width: 180px;
   }
-  
+
   .link {
     padding: 30px 15px;
   }
@@ -1413,16 +1634,16 @@ html {
     background-color: white;
     padding: 0;
   }
-  
+
   .table-header {
     background: #f8f9fa !important;
     color: black !important;
   }
-  
+
   .table-footer {
     background: #f8f9fa !important;
   }
-  
+
   .table-row:hover {
     background-color: transparent !important;
     transform: none !important;
@@ -1440,7 +1661,8 @@ html {
 }
 
 .test-title {
-  font-size: 2.25rem; /* about 36px */
+  font-size: 2.25rem;
+  /* about 36px */
   font-weight: bold;
   margin-bottom: 2rem;
   text-align: center;
@@ -1495,6 +1717,7 @@ html {
   .gallery-item {
     flex-direction: row;
   }
+
   .gallery-item.reverse {
     flex-direction: row-reverse;
   }
@@ -1617,16 +1840,16 @@ html {
   transform: translateY(30px);
 }
 
-.gallery-item:nth-child(1) { 
-  animation-delay: 0.1s; 
+.gallery-item:nth-child(1) {
+  animation-delay: 0.1s;
 }
 
-.gallery-item:nth-child(2) { 
-  animation-delay: 0.2s; 
+.gallery-item:nth-child(2) {
+  animation-delay: 0.2s;
 }
 
-.gallery-item:nth-child(3) { 
-  animation-delay: 0.3s; 
+.gallery-item:nth-child(3) {
+  animation-delay: 0.3s;
 }
 
 @keyframes fadeInUp {
@@ -1642,23 +1865,23 @@ html {
     padding: 40px 20px;
     margin: 10px;
   }
-  
+
   .test-title {
     font-size: 1.75rem;
   }
-  
+
   .gallery-item {
     padding: 20px;
   }
-  
+
   .gallery-title {
     font-size: 1.25rem;
   }
-  
+
   .gallery-description {
     font-size: 0.9rem;
   }
-  
+
   .gallery-image {
     height: 10rem;
   }
@@ -1668,27 +1891,27 @@ html {
   .test {
     padding: 30px 15px;
   }
-  
+
   .test-title {
     font-size: 1.5rem;
   }
-  
+
   .gallery-item {
     padding: 15px;
   }
-  
+
   .gallery-title {
     font-size: 1.1rem;
   }
-  
+
   .gallery-description {
     font-size: 0.85rem;
   }
-  
+
   .gallery-image {
     height: 8rem;
   }
-  
+
   .modal-close-btn {
     font-size: 2rem;
     top: 15px;
@@ -1704,34 +1927,86 @@ html {
     margin: 0;
     padding: 20px;
   }
-  
+
   .test-title {
     color: black;
     text-shadow: none;
   }
-  
+
   .gallery-item {
     background: white;
     border: 1px solid #ccc;
     backdrop-filter: none;
     break-inside: avoid;
   }
-  
+
   .gallery-text {
     color: black;
   }
-  
+
   .gallery-title {
     color: black;
     text-shadow: none;
   }
-  
+
   .gallery-description {
     color: #333;
     text-shadow: none;
   }
-  
+
   .modal-overlay {
     display: none;
   }
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  padding: 20px 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.feature-box {
+  background-color: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.feature-box:hover {
+  transform: translateY(-5px);
+}
+
+.feature-title {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #000000;
+}
+
+.cta {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #023e8a;
+  color: white;
+}
+
+.cta h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+
+
+  .feature-title {
+    font-size: 1.2em;
+  }
+}
+
+.feature-box p {
+  font-size: 16px;
 }

@@ -1,10 +1,13 @@
 import 'package:get/get.dart';
+import 'package:secure_x/pages/change_password.dart';
 import 'package:secure_x/pages/create_user.dart';
 import 'package:secure_x/pages/locker_logs.dart';
 import 'package:secure_x/pages/log_in.dart';
 import 'package:secure_x/pages/login_success.dart';
 import 'package:secure_x/pages/navigation.dart';
 import 'package:secure_x/pages/notifications.dart';
+import 'package:secure_x/pages/reset_password.dart';
+import 'package:secure_x/pages/settings.dart';
 import 'package:secure_x/pages/sign_in.dart';
 import 'package:secure_x/pages/splash_screen.dart';
 import 'package:secure_x/pages/unlock.dart';
@@ -26,7 +29,9 @@ class RouteHelper {
   static const String lockerLogs='/locker-logs';
   static const String editProfile='/edit-profile';
   static const String notifications='/notifications';
-  
+  static const String settings='/settings';
+  static const String changePassword='/change-password';
+  static const String resetPassword='/reset-password';
 
   //static String getInitial()=>'$initial';
   static String getSplashScreen()=>'$splashScreen';
@@ -39,8 +44,11 @@ class RouteHelper {
   static String getNavigation()=>'$navigation';
   static String getUserDetails()=>'$userDetails';
   static String getLockerLogs()=>'$lockerLogs';
-  static String getEditProfile()=>'$EditProfile';
+  static String getEditProfile()=>'$editProfile';
   static String getNotifications()=>'$notifications';
+  static String getSettings()=>'$settings';
+  static String getChangePassword()=>'$ChangePassword';
+  static String getResetPassword()=>'$resetPassword';
 
   static List<GetPage> routes=[
     //GetPage(name:initial,page:()=>Navigation()),
@@ -55,6 +63,9 @@ class RouteHelper {
     GetPage(name: userDetails,page:()=> UserDetails(),),
     GetPage(name: lockerLogs,page: ()=> LockerLogs(),),
     GetPage(name: editProfile,page: ()=>EditProfile(),),
-    GetPage(name: notifications,page: ()=>Notifications(),)
+    GetPage(name: notifications,page: ()=>Notifications(),),
+    GetPage(name: settings,page: ()=>Settings(),),
+    GetPage(name: changePassword,page: ()=>ChangePassword(),),
+    GetPage(name: resetPassword,page: ()=>ResetPassword()),
   ];
 }
