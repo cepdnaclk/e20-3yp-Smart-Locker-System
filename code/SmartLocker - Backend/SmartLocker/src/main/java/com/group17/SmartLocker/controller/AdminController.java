@@ -8,6 +8,7 @@ import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.exception.UnauthorizedActionException;
 import com.group17.SmartLocker.model.*;
 import com.group17.SmartLocker.repsponse.ApiResponse;
+import com.group17.SmartLocker.service.admin.AdminService;
 import com.group17.SmartLocker.service.email.EmailService;
 import com.group17.SmartLocker.service.image.ImageService;
 import com.group17.SmartLocker.service.jwt.JwtService;
@@ -50,6 +51,7 @@ public class AdminController {
     private final LockerLogService lockerLogService;
     private final JwtService jwtService;
     private final ImageService imageService;
+    private final AdminService adminService;
 
     // CRUD operations for Admin
 
@@ -396,6 +398,16 @@ public class AdminController {
         }
     }
 
+    // Get blocked lockers
+    @GetMapping("/getAllBlockedLockers")
+    public ResponseEntity<List<LockerDto>> getAllBlockedLockers(){
+        try {
+            List<LockerDto> lockerClusters = adminService.getBlockedLockersByCluster();
+            return ResponseEntity.ok(lockerClusters);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 
 //    // send and email for a test
