@@ -90,7 +90,7 @@ public class LockerService implements ILockerService{
 //        Locker locker = lockerRepository.findById(lockerId)
 //                .orElseThrow(() -> new ResourceNotFoundException("Locker not found"));
 //
-//        LockerLog lockerLog = lockerLogRepository.findByLocker_LockerIdAndStatus(lockerId, LockerLogStatus.ACTIVE);
+//        LockerLog lockerLog = lockerLogRepository.findByLocker_LockerIdAndStatus(lockerId, LockerLogStatus.BLOCKED);
 //
 //        /*
 //         * send mqtt message to unlock the locker forcefully
