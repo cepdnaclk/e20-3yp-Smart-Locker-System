@@ -11,6 +11,8 @@ public interface ILockerService {
 
     void unlockByAdmin(Long clusterId, Long lockerId, String adminId, String password);
 
+//    void unlockByAdminBlockedLocker(Long clusterId, Long lockerId, String adminId, String password);
+
     void assignLocker(String username, Long clusterId);
 
     String accessLocker(String username, String source);

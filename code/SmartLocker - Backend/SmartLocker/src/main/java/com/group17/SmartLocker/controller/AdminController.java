@@ -74,7 +74,7 @@ public class AdminController {
 
     // to edit own details of the admin
     @PatchMapping("/editProfile")
-    public ResponseEntity<User> patchUser(HttpServletRequest request, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<String> patchUser(HttpServletRequest request, @RequestBody Map<String, Object> updates) {
 
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
@@ -87,7 +87,7 @@ public class AdminController {
         try {
             String id = userService.getUserIdByUsername(jwtService.extractUsername(jwtToken));
             User user = userService.editUserDetails(id, updates);
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok("Details updated successfully!");
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
@@ -432,6 +432,37 @@ public class AdminController {
         }
     }
 
+
+    /*
+    * Change password by using the current password
+    */
+    @PatchMapping("/changePassword")
+    public ResponseEntity<String> changePassword(
+            @RequestBody ChangePasswordDto dto,
+            HttpServletRequest request
+    ) {
+        try {
+            // Get username from JWT token
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+            }
+
+            String token = authHeader.substring(7);
+            String username = jwtService.extractUsername(token); // You must have jwtService injected
+
+            userService.changePassword(username, dto.getCurrentPassword(), dto.getNewPassword());
+
+            return ResponseEntity.ok("Password changed successfully");
+
+        } catch (UnauthorizedActionException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Password change failed");
+        }
+    }
 
 //    // send and email for a test
 //    @PostMapping("/sendEmail")
