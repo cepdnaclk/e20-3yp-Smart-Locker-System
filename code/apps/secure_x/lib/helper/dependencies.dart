@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/controllers/locker_controller.dart';
+import 'package:secure_x/controllers/navigation_controller.dart';
 import 'package:secure_x/controllers/notification_controller.dart';
 import 'package:secure_x/controllers/passwordReset_controller.dart';
 import 'package:secure_x/data/api/dio_client.dart'; // Use DioClient
@@ -46,5 +47,10 @@ Future<void> init() async {
   Get.lazyPut(()=>PasswordResetRepo(dio:Get.find<DioClient>().dio));
 
   //Initialize passwordResetController with passwordResetRepo
-  Get.lazyPut(()=> PasswordresetController(passwordResetRepo: Get.find()));
+  //Get.lazyPut(()=> PasswordresetController(passwordResetRepo: Get.find()));
+  Get.lazyPut(() => PasswordresetController(passwordResetRepo: Get.find()), fenix: true);
+
+  Get.lazyPut(() => NavigationController(), fenix: true);
+
+
 }

@@ -68,6 +68,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "dart_polylabel2",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/dart_polylabel2-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
       "name": "dbus",
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/dbus-0.7.11",
       "packageUri": "lib/",
@@ -128,6 +134,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "fixnum",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/fixnum-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///C:/Users/Dharani/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -159,13 +171,13 @@
     },
     {
       "name": "flutter_local_notifications_windows",
-      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_windows-1.0.0",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_windows-1.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "flutter_map",
-      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_map-8.1.1",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_map-8.2.1",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     },
@@ -201,7 +213,7 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.4.0",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.5.0-beta",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -344,6 +356,24 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "path_provider",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider-2.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "path_provider_android",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_android-2.2.17",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "path_provider_foundation",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "path_provider_linux",
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_linux-2.2.1",
       "packageUri": "lib/",
@@ -378,12 +408,6 @@
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
       "packageUri": "lib/",
       "languageVersion": "3.0"
-    },
-    {
-      "name": "polylabel",
-      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/polylabel-1.0.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.13"
     },
     {
       "name": "proj4dart",
@@ -452,6 +476,12 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "sprintf",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/sprintf-7.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "stack_trace",
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/stack_trace-1.12.1",
       "packageUri": "lib/",
@@ -504,6 +534,12 @@
       "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/unicode-0.3.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "uuid",
+      "rootUri": "file:///C:/Users/Dharani/AppData/Local/Pub/Cache/hosted/pub.dev/uuid-4.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "vector_math",
@@ -560,7 +596,7 @@
       "languageVersion": "3.4"
     }
   ],
-  "generated": "2025-07-13T17:00:07.988755Z",
+  "generated": "2025-07-15T21:03:54.283163Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///C:/Users/Dharani/flutter",

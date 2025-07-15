@@ -19,11 +19,11 @@ class Settings extends StatelessWidget{
       child: SettingsList(
         sections: [
           SettingsSection(
-            title: Text('General'),
+            title: Text('General',style: TextStyle(color: AppColors.appBarColor),),
             tiles:[
               SettingsTile.navigation(
                 leading: Icon(Icons.person),
-                title: Text('Account'),
+                title: Text('Account',style: TextStyle(fontWeight: FontWeight.bold),),
                 onPressed: (context){
                   Get.to(() => UserDetails());
                 },
@@ -38,15 +38,16 @@ class Settings extends StatelessWidget{
             ]
             ),
             SettingsSection(
-              title: Text('Notifications'),
+              title: Text('Notifications',style: TextStyle(color: AppColors.appBarColor),),
               tiles: [
                 SettingsTile.switchTile(
+                  activeSwitchColor: AppColors.buttonBackgroundColor2,
                   initialValue: true, 
                   leading: Icon(Icons.notifications),
                   onToggle: (bool value){
       
                   }, 
-                  title: Text('Enable Notifications'),
+                  title: Text('Enable Notifications',style: TextStyle(fontWeight: FontWeight.bold),),
                 ),
                 /*SettingsTile.switchTile(
                   initialValue: false, 
@@ -67,10 +68,10 @@ class Settings extends StatelessWidget{
               ],
             ),
             SettingsSection(
-              title: Text('Security'),
+              title: Text('Security',style: TextStyle(color: AppColors.appBarColor),),
               tiles: [
                 SettingsTile.navigation(
-                  title: Text('Change Password'),
+                  title: Text('Change Password',style: TextStyle(fontWeight: FontWeight.bold),),
                   leading: Icon(Icons.lock),  
                   onPressed: (context) {
                     Get.to(() => ChangePassword());

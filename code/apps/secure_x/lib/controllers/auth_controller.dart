@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
@@ -12,6 +13,7 @@ import 'package:secure_x/models/user_model.dart';
 import 'package:secure_x/pages/log_in.dart';
 import 'package:secure_x/pages/navigation.dart';
 import 'package:secure_x/pages/sign_in.dart';
+import 'package:secure_x/routes/route_helper.dart';
 import 'package:secure_x/utils/app_constants.dart';
 import 'package:secure_x/data/api/dio_client.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
@@ -19,6 +21,8 @@ import 'package:secure_x/utils/custom_snackbar.dart';
 class AuthController extends GetxController {
   final AuthRepo authRepo;
   final DioClient dioClient = DioClient(); // Add this line
+
+  Rx<Uint8List?> profileImagebytes=Rx<Uint8List?>(null);
 
   AuthController({required this.authRepo});
 
@@ -107,6 +111,11 @@ class AuthController extends GetxController {
           isError: false,
           icon: Icons.check_circle_outline,
         );
+        // Add a short delay to let the user see the Snackbar
+        await Future.delayed(const Duration(seconds: 7));
+
+        // Route to the login page (e.g., using GetX)
+        Get.offNamed(RouteHelper.getSignin());
 
         return ResponseModel<Map<String, dynamic>> (
           isSuccess: true,
@@ -259,6 +268,11 @@ class AuthController extends GetxController {
     }finally{
       isLoading.value=false;
     }
+  }
+
+  //expose active locker log
+  Future<LockerLogsModel?> getActiveLockerLog(){
+    return authRepo.getActiveLockerLog();
   }
 
   //Method to update user profile
@@ -448,32 +462,66 @@ class AuthController extends GetxController {
 
   //Method to upload profile image
   Future<void> uploadProfileImage(File imageFile, BuildContext context) async {
+    print('uploadProfileImage started');
     isUploadingImage.value = true;
+
     final user = userModel.value;
+    print('Current user : ${user.id}');
+
     final token = await authRepo.getUserToken();
 
     if (token == null) {
       isUploadingImage.value = false;
-      Get.snackbar('Error', 'User not authenticated');
+      print('Token is null, user not authenticated');
+      CustomSnackBar.show(
+        context: context, 
+        title: 'Error',
+        message: 'User not authenticated',
+        isError: true,
+      );
+      //Get.snackbar('Error', 'User not authenticated');
       return;
     }
 
     bool success = false;
 
     if(user.id!=null){
+      print('User ID is not null : ${user.id}');
       success = await authRepo.uploadProfileImage(
       userId: user.id!,
       token: token,
       imageFile: imageFile,
     );
+    print('Upload success status : $success');
+    }else{
+      print('User ID is null , skipping upload');
     }
 
     if(success){
-      Get.snackbar('Success', 'Profile image updated!');
+      //Get.snackbar('Success', 'Profile image updated!');
+      print('Profile image updated successfully');
+      CustomSnackBar.show(
+        context: context, 
+        title: 'Success',
+        message:'Profile image updated successfully!',
+        isError: false,
+      );
     }else {
-      Get.snackbar('Error', 'Failed to upload image');
+      //Get.snackbar('Error', 'Failed to upload image');
+      print('Failed to upload image');
+      CustomSnackBar.show(
+        context: context, 
+        title:'Error',
+        message:'Failed to upload image',
+        isError: true,
+      );
     }
     isUploadingImage.value = false;
+  }
+
+  //Method to fetch profile image
+  Future<void> loadProfileImage(String userId, String token) async {
+    profileImagebytes.value=await authRepo.fetchProfileImage(userId, token);
   }
 
   // Method to log out the user

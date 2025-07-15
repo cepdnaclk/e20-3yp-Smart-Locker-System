@@ -285,21 +285,21 @@ class _CreateUserState extends State<CreateUser> {
                     children: [
                       Text('Name',style: TextStyle(
                         color: AppColors.mainColor,
-                        fontSize: 18.sp,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.bold
                       ),),
-                      SizedBox(height: 6.h,),
+                      SizedBox(height: 4.h,),
                       TextFormField(
                         controller: _firstNameController,
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 12.sp,
                           color: AppColors.appBarColor,
                         ),
                         decoration: InputDecoration(
                           hintText: 'First Name',
                           hintStyle: TextStyle(
                             color: AppColors.textSecondary,
-                            fontSize: 16.sp,
+                            fontSize: 12.sp,
                           ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
@@ -318,18 +318,18 @@ class _CreateUserState extends State<CreateUser> {
                         ),
                         keyboardType: TextInputType.text,
                       ),
-                      SizedBox(height :6.h,),
+                      SizedBox(height :4.h,),
                       TextFormField(
                         controller: _lastNameController,
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 12.sp,
                           color: AppColors.appBarColor,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Last Name',
                           hintStyle: TextStyle(
                             color: AppColors.textSecondary,
-                            fontSize: 16.sp,
+                            fontSize: 12.sp,
                           ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
@@ -351,21 +351,21 @@ class _CreateUserState extends State<CreateUser> {
                       SizedBox(height: 6.h,),
                       Text('Registration Number',style: TextStyle(
                         color: AppColors.mainColor,
-                        fontSize: 18.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.bold
                       ),),
                       SizedBox(height: 6.h,),
                       TextFormField(
                         controller: _regNoController,
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 14.sp,
                           color: AppColors.appBarColor,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Enter Reg. No (e.g., EXXYYY)',
                           hintStyle: TextStyle(
                             color: AppColors.textSecondary,
-                            fontSize: 16.sp,
+                            fontSize: 14.sp,
                           ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
@@ -384,24 +384,24 @@ class _CreateUserState extends State<CreateUser> {
                         ),
                         keyboardType: TextInputType.text,
                       ),
-                      SizedBox(height: 6.h,),
+                      SizedBox(height: 4.h,),
                       Text('Contact Number',style: TextStyle(
                         color: AppColors.mainColor,
-                        fontSize: 18.sp,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.bold
                       ),),
-                      SizedBox(height: 6.h,),
+                      SizedBox(height: 4.h,),
                       TextFormField(
-                        controller: _regNoController,
+                        controller: _mobileNoController,
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 12.sp,
                           color: AppColors.appBarColor,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Enter your phone number',
                           hintStyle: TextStyle(
                             color: AppColors.textSecondary,
-                            fontSize: 16.sp,
+                            fontSize: 12.sp,
                           ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
@@ -420,24 +420,24 @@ class _CreateUserState extends State<CreateUser> {
                         ),
                         keyboardType: TextInputType.phone,
                       ),
-                      SizedBox(height: 6.h,),
+                      SizedBox(height: 4.h,),
                       Text('Email',style: TextStyle(
                         color: AppColors.mainColor,
-                        fontSize: 18.sp,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.bold
                       ),),
-                      SizedBox(height: 6.h,),
+                      SizedBox(height: 4.h,),
                       TextFormField(
-                        controller: _regNoController,
+                        controller: _emailController,
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 12.sp,
                           color: AppColors.appBarColor,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Enter your email',
                           hintStyle: TextStyle(
                             color: AppColors.textSecondary,
-                            fontSize: 16.sp,
+                            fontSize: 14.sp,
                           ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
@@ -460,12 +460,12 @@ class _CreateUserState extends State<CreateUser> {
                       Text('Password',style: TextStyle(
                         color: AppColors.mainColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18.sp,
+                        fontSize: 16.sp,
                       ),),
                       SizedBox(height: 6.h,),
                       TextFormField(
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 14.sp,
                           color: AppColors.textPrimary,
                         ),
                         obscureText: true,
@@ -474,7 +474,7 @@ class _CreateUserState extends State<CreateUser> {
                           hintText: 'Enter your Password',
                           hintStyle: TextStyle(
                             color: AppColors.textSecondary,
-                            fontSize: 16.sp,
+                            fontSize: 14.sp,
                           ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
@@ -505,12 +505,12 @@ class _CreateUserState extends State<CreateUser> {
                           color: AppColors.textPrimary,
                         ),
                         obscureText: true,
-                        controller: _passwordController,
+                        controller: _reEnterPasswordController,
                         decoration: InputDecoration(
                           hintText: 'Re-enter Password',
                           hintStyle: TextStyle(
                             color: AppColors.textSecondary,
-                            fontSize: 16.sp,
+                            fontSize: 14.sp,
                           ),
                           filled: true,
                           fillColor: AppColors.formFieldColor,
@@ -534,7 +534,7 @@ class _CreateUserState extends State<CreateUser> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 12.h,),
+                      SizedBox(height: 6.h,),
                       ElevatedButton(
                         onPressed:(){
                           _registration();
@@ -552,7 +552,7 @@ class _CreateUserState extends State<CreateUser> {
                         ), 
                         child: 
                         Text('SIGN UP',style: TextStyle(
-                          fontSize: 20.sp,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -576,7 +576,7 @@ class _CreateUserState extends State<CreateUser> {
                                   color: AppColors.textPrimary,
                                   fontWeight: FontWeight.bold,
                                   //decoration: TextDecoration.underline,
-                                  fontSize: 15.sp,
+                                  fontSize: 12.sp,
                                 ),),
                               ))
                           ]
