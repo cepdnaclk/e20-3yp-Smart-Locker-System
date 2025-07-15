@@ -13,7 +13,7 @@ public class MqttPublisher {
     private final AWSIotMqttClient mqttClient;
 
     public void publish(String topic, String message) throws Exception{
-        AWSIotMessage mqttMessage = new AWSIotMessage(topic, AWSIotQos.QOS1, message);
+        AWSIotMessage mqttMessage = new AWSIotMessage(topic, AWSIotQos.QOS0, message);
         mqttClient.publish(mqttMessage);
     }
 }
