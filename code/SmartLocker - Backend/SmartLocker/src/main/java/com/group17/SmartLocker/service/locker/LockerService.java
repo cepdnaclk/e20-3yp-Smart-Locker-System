@@ -590,7 +590,7 @@ public class LockerService implements ILockerService{
                 * Event : User did not remove all the belongings from the locker or
                 * locker is not properly closed after using
                 */
-                lockerLog.setStatus(LockerLogStatus.OLD);
+                lockerLog.setStatus(LockerLogStatus.UNSAFE);
                 Locker locker = lockerLog.getLocker();
                 locker.setLockerStatus(LockerStatus.BLOCKED); // set the locker status as blocked
 
@@ -606,6 +606,8 @@ public class LockerService implements ILockerService{
                         "WARNING"
                 );
                 // This should be notified to the admin in a notification and the corresponding user by an email.
+
+                sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
 
             }
             else{
