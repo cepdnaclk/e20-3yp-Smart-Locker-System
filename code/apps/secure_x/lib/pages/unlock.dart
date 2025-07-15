@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
+import 'package:secure_x/models/locker_logs_model.dart';
 import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
@@ -10,6 +11,7 @@ class Unlock extends StatelessWidget {
   Unlock({super.key});
 
   final AuthController authController=Get.find<AuthController>();
+
   void _accessLocker(BuildContext context){
     authController.accessLocker();
   }
@@ -29,7 +31,23 @@ class Unlock extends StatelessWidget {
           Image.asset('assets/img/backpattern.jpg',
           fit: BoxFit.cover,
         ),
-        SingleChildScrollView(
+        FutureBuilder<LockerLogsModel?>(
+            future: authController.getActiveLockerLog(),
+            builder: (context, snapshot) {
+              String? location;
+              int? lockerId;
+              bool hasActive = false;
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (snapshot.hasData && snapshot.data != null) {
+                location = snapshot.data!.location;
+                lockerId = snapshot.data!.lockerId;
+                hasActive = true;
+              }
+              return SingleChildScrollView(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -74,7 +92,9 @@ class Unlock extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Location : Department of Computer Engineering ',
+                  hasActive? 'Location : $location' : 'No active locker assigned',
+
+                  //'Location : Department of Computer Engineering ',
                   style: TextStyle(
                     fontSize: 20.sp, 
                     fontWeight: FontWeight.bold),
@@ -85,8 +105,9 @@ class Unlock extends StatelessWidget {
                     fontSize: 20.sp, 
                     fontWeight: FontWeight.bold),
                 ),*/
+                if(hasActive)
                 Text(
-                  'Locker No : 2',
+                  'Locker No : $lockerId',
                   style: TextStyle(
                     fontSize: 20.sp, 
                     fontWeight: FontWeight.bold),
@@ -135,6 +156,6 @@ class Unlock extends StatelessWidget {
           
         ],
       ),
-    )]));
+    );})]));
   }
 }

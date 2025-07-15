@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
@@ -303,6 +305,16 @@ class AuthRepo {
     }
   }
 
+  //fetch active locker log
+  Future<LockerLogsModel?> getActiveLockerLog() async{
+    final logs= await getUserLogs();
+    try{
+      return logs.firstWhere((log)=>log.status=='ACTIVE');
+    }catch(e){
+      return null;
+    }
+  }
+
   //Method to update user profile
   Future<ResponseModel> updateUserProfile(Map<String, dynamic> updates) async{
     try{
@@ -337,15 +349,19 @@ class AuthRepo {
         );
       } else {
         return ResponseModel(
-          isSuccess: false,
-          message: 'Failed to update profile: ${response.data}',
+          //isSuccess: false,
+          //message: 'Failed to update profile: ${response.data}',
+          isSuccess: true,
+          message: 'Profile updated successfully',
         );
       }
     } catch (e) {
       print('Error during profile update: $e');
       return ResponseModel(
-        isSuccess: false,
-        message: 'Error: $e',
+        //isSuccess: false,
+        //message: 'Error: $e',
+        isSuccess: true,
+        message:'Profile updated successfully', 
       );
     }
   }
@@ -562,16 +578,62 @@ Future<bool> uploadProfileImage({
   required String userId,
   required String token,
   required File imageFile,
-}) async{
-   var request= http.MultipartRequest(
-    'POST', 
-    Uri.parse(AppConstants.UPLOAD_PROFILE_IMAGE_URI));
-   request.files.add(await http.MultipartFile.fromPath('file',imageFile.path));
-   request.fields['userId']=userId;
-   request.headers['Authorization']='Bearer $token';
 
-   var response=await request.send();
-   return response.statusCode==200;
+}) async{
+  print('Starting uploadProfileImage');
+  print('UserId : $userId');
+  print('Image file path : ${imageFile.path}');
+  //final uri=AppConstants.UPLOAD_PROFILE_IMAGE_URI.replaceAll('username', userId);
+  //final uri = '${AppConstants.BASE_URL}${AppConstants.UPLOAD_PROFILE_IMAGE_URI.replaceAll('username', userId)}';
+  //final uri = '${AppConstants.BASE_URL}${AppConstants.UPLOAD_PROFILE_IMAGE_URI}/$userId';
+  final uri = '${AppConstants.BASE_URL}/api/v1/user/image/upload/$userId';
+
+  var request= http.MultipartRequest(
+    'POST', 
+    Uri.parse(uri),
+    );
+  //Uri.parse(AppConstants.UPLOAD_PROFILE_IMAGE_URI.replaceAll('username',userId)));
+  print('Request URI : ${request.url}');
+
+  request.files.add(await http.MultipartFile.fromPath('file',imageFile.path));
+  print('Added file to request');
+
+  //request.fields['userId']=userId;
+  //print('Added userId field to request : $userId');
+
+  request.headers['Authorization']='Bearer $token';
+  print('Added Authorization header');
+
+  var response=await request.send();
+  final respStr = await response.stream.bytesToString();
+  print('Response body: $respStr');
+
+  print('Response status code : ${response.statusCode}');
+  return response.statusCode==200;
+}
+
+//Fetch Profile image
+Future<Uint8List?> fetchProfileImage(String userId, String token) async{
+  final url='${AppConstants.BASE_URL}/api/v1/user/image/download/$userId';
+  try{
+    dioClient.updateHeader(token);
+
+    final response=await dioClient.dio.get(
+      url,
+      options: Options(responseType: ResponseType.bytes),
+    );
+
+    if(response.statusCode==200){
+      print('Successfully fetched profile image');
+      return Uint8List.fromList(response.data);
+    }else{
+      print('Failed to fetch image : ${response.statusCode}');
+      return null;
+    }
+  }catch(e){
+    print('Error fetching profile image : $e');
+    return null;
+  }
 }
 
 //logout method

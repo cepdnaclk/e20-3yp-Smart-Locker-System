@@ -5,6 +5,7 @@ import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/pages/locker_logs.dart';
 import 'package:secure_x/pages/settings.dart';
 import 'package:secure_x/pages/user_details.dart';
+import 'package:secure_x/routes/route_helper.dart';
 import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
@@ -27,6 +28,15 @@ class _UserState extends State<User> {
     super.initState();
     // Retrieve registration number when screen loads
     _loadUserRegNo();
+
+    final user=_authController.userModel.value;
+    if(user!=null && _authController.profileImagebytes.value==null){
+      _authController.getUserToken().then((token){
+        if(token!=null){
+          _authController.loadProfileImage(user.id!, token);
+        }
+      });
+    }
   }
   
   // Method to format registration number (E20002 -> E/20/002)
@@ -80,14 +90,31 @@ class _UserState extends State<User> {
                   radius:80.r,
                   backgroundColor:AppColors.mainColor,
                   child:ClipOval(
-                    child: Image.asset('assets/img/userImage.png',
+                    child: Obx((){
+                      final imageBytes =_authController.profileImagebytes.value;
+                      if(imageBytes!=null){
+                        return Image.memory(
+                          imageBytes,
+                          width: 150.w,
+                          height: 150.w,
+                          fit: BoxFit.cover,
+                        );
+                      }else{
+                        return Image.asset(
+                          'assets/img/userImage.png',
+                          width: 150.w,
+                          height: 150.w,
+                          fit: BoxFit.cover,
+                        );
+                      }
+                    }),
+                    /*child: Image.asset('assets/img/userImage.png',
                     width:150.w,
                     height:150.h,
-                    fit:BoxFit.cover,
+                    fit:BoxFit.cover,*/
                     )
                   )
                 ),
-              )
             ),
             SizedBox(height: 20.h,),
             Padding(
@@ -115,7 +142,7 @@ class _UserState extends State<User> {
                       Text(
                         formattedRegNo,
                         style: TextStyle(
-                        fontSize: 30.sp,
+                        fontSize: 25.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.textInverse,
                         ),
@@ -123,15 +150,16 @@ class _UserState extends State<User> {
                       SizedBox(height: 20.h,),
                       TextButton.icon(
                         onPressed: (){
-                          Get.to(() => UserDetails());
+                          //Get.to(() => UserDetails());
+                          Get.toNamed(RouteHelper.getUserDetails());
                       }, 
                       icon: Icon(
                         Icons.person_4_outlined,
                         color: AppColors.buttonBackgroundColor1,
-                        size: 25.sp,
+                        size: 22.sp,
                       ),
                       label: Text('User Detail',style: TextStyle(
-                        fontSize: 25.sp,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.buttonBackgroundColor1,
                       ),)
@@ -140,14 +168,15 @@ class _UserState extends State<User> {
                       TextButton.icon(
                         onPressed: (){
                           Get.to(() => LockerLogs());
+                          Get.toNamed(RouteHelper.getLockerLogs());
                       }, 
                       icon: Icon(
                         Icons.history,
                         color: AppColors.buttonBackgroundColor1,
-                        size: 25.sp,
+                        size: 22.sp,
                       ),
                       label: Text('User History',style: TextStyle(
-                        fontSize: 25.sp,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.buttonBackgroundColor1,
                       ),)
@@ -155,15 +184,16 @@ class _UserState extends State<User> {
                       SizedBox(height: 20.h,),
                       TextButton.icon(
                         onPressed: (){
-                          Get.to(() => Settings());
+                          //Get.to(() => Settings());
+                          Get.toNamed(RouteHelper.getSettings());
                       }, 
                       icon: Icon(
                         Icons.settings,
                         color: AppColors.buttonBackgroundColor1,
-                        size: 25.sp,
+                        size: 22.sp,
                       ),
                       label: Text('Settings',style: TextStyle(
-                        fontSize: 25.sp,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.buttonBackgroundColor1,
                       ),)

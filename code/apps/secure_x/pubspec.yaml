@@ -43,6 +43,7 @@ dependencies:
   another_flushbar: ^1.12.30
   image_picker: ^1.1.2
   settings_ui: ^2.0.2
+  intl: ^0.20.2
 
 
   # The following adds the Cupertino Icons font to your application.
