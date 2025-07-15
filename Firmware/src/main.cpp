@@ -15,9 +15,9 @@
 #define RELAY_PIN 5
 #define RXD2 16                      // ESP32 RX2 pin (connect to sensor TX)
 #define TXD2 17                      // ESP32 TX2 pin (connect to sensor RX)
-#define LOCKER_DISTANCE_THRESHOLD 20 // Distance threshold in cm for abnormal detection
+#define LOCKER_DISTANCE_THRESHOLD 33 // Distance threshold in cm for abnormal detection
 #define clusterId 1
-#define DISTANCE_TOLERANCE 2.00
+#define DISTANCE_TOLERANCE 1.5
 #define I2CADDR 0x24
 
 // define pins for MC38
@@ -57,7 +57,7 @@ uint8_t idS = 1;
 String user = "";
 uint8_t id;
 unsigned long previousTime = 0;
-const unsigned long interval = 5000;
+const unsigned long interval = 20000;
 char key;
 
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial2);
@@ -72,7 +72,7 @@ bool isNearThreshold(float distance)
 
 void read_status()
 {
-  for (int i = 0; i < 1; i++)
+  for (int i = 0; i < 3; i++)
   {
     // Clear the trigPin
     digitalWrite(sensors[i].trigPin, LOW);
@@ -89,6 +89,11 @@ void read_status()
     // Calculate the distance in cm
     lockers[i].sensorDistance = (sensors[i].duration * SOUND_SPEED) / 2;
     lockers[i].doorStatus = digitalRead(DOORSENSOR[i]);
+    /*Serial.print("Locker ");
+    Serial.print(i + 1);
+    Serial.print(" - Distance: ");
+    Serial.print(lockers[i].sensorDistance);
+    Serial.println();*/
   }
 }
 
@@ -99,7 +104,7 @@ void read_status()
 //  3 = abnormal - not assigned and open or something inside
 void updateStatus()
 {
-  // read_status(); // Read the ultrasonic sensor data
+  read_status(); // Read the ultrasonic sensor data
 
   for (int i = 0; i < NUMLOCKERS; i++)
   {
@@ -977,13 +982,13 @@ void codeForTask2(void *parameter)
       unlock(unlockLockerId);                      // Unlock the locker
       lockers[unlockLockerId - 1].assignedId = -1; // Assign the locker ID
       lockers[unlockLockerId - 1].status = 3;      // Set status to abnormal
-      mUnlockLocker = false;                       // Reset the flag
+      mReleaseLocker = false;                       // Reset the flag
     }
 
     unsigned long currentTime = millis();
     if (currentTime - previousTime >= interval)
     {
-      // Serial.println("Checking locker status...");
+      Serial.println("Checking locker status...");
       previousTime = currentTime;
 
       updateStatus(); // Check for abnormal lockers
@@ -992,6 +997,7 @@ void codeForTask2(void *parameter)
 
     if (statusCheck == true)
     {
+      updateStatus();
       publishLockerStatus(checkLockerId, lockers[checkLockerId - 1].status); // Publish locker status
       statusCheck = false;                                                   // Reset the flag
     }
@@ -1010,10 +1016,11 @@ void setup()
   Serial.println("Ultrasonic sensor initialized");
   pcf8574.begin();
   Serial.println("PCF8574 initialized");
+  read_status();
   for (int i = 0; i < NUMLOCKERS; i++)
   {
     lockers[i].lockerId = i + 1;
-    lockers[i].sensorDistance = 20.28;
+    // lockers[i].sensorDistance = 20.28;
     lockers[i].lockerPin = LOCKERPINS[i];
     pcf8574.pinMode(lockers[i].lockerPin, OUTPUT);
     pcf8574.digitalWrite(lockers[i].lockerPin, HIGH); // Activate solenoid
@@ -1021,6 +1028,7 @@ void setup()
     pinMode(LEDPINS[i], OUTPUT);
     digitalWrite(LEDPINS[i], HIGH);
     lockers[i].doorStatus = digitalRead(DOORSENSOR[i]);
+    //Serial.println(lockers[i].sensorDistance);
   }
   initWiFi();
   connectAWS();
