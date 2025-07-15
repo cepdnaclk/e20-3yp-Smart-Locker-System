@@ -12,4 +12,5 @@ public interface LockerLogRepository extends JpaRepository<LockerLog, Long> {
     List<LockerLog> findByUserIdAndStatus(String userId, LockerLogStatus status);
 
     LockerLog findByLocker_LockerIdAndStatus(Long lockerId, LockerLogStatus status);
+
 }

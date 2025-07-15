@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.group17.SmartLocker.dto.LockerDto;
 import com.group17.SmartLocker.enums.LockerLogStatus;
 import com.group17.SmartLocker.enums.LockerStatus;
+import com.group17.SmartLocker.exception.AlreadyExistException;
 import com.group17.SmartLocker.exception.LockerOccupiedException;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.model.Locker;
@@ -222,7 +223,33 @@ public class LockerService implements ILockerService{
         // Check the user is already has assigned to a locker. That locker can be an active locker or and unsafe locker
         LockerLog activeOrUnsafeLog = lockerLogService.findActiveOrUnsafeLog(userId);
 
-        if(activeOrUnsafeLog == null){
+        // find any reserved logs
+        LockerLog reservedLog = lockerLogRepository.findByUserIdAndStatus(username, LockerLogStatus.RESERVED).get(0);
+
+        /*
+        * validate the Reserved locker log
+        * If the locker is reserved more than 15 minutes before the log is discarded
+        * If the log is valid, it is taken as an active locker
+        */
+        boolean isOlderThan15Minutes = reservedLog.getAccessTime().isBefore(LocalDateTime.now().minusMinutes(15));
+
+        if(isOlderThan15Minutes){
+
+            Locker locker = reservedLog.getLocker();
+            locker.setLockerStatus(LockerStatus.AVAILABLE);
+            lockerRepository.save(locker);
+
+            reservedLog.setReleasedTime(LocalDateTime.now());
+            reservedLog.setStatus(LockerLogStatus.OLD);
+            reservedLog.setRemarks("Reservation Expired");
+            lockerLogRepository.save(reservedLog);
+
+            reservedLog = null;
+        }
+
+
+
+        if((reservedLog == null) && (activeOrUnsafeLog == null)){
             /*
             * There should not have any active logs when user come to assign a locker
             */
@@ -273,6 +300,69 @@ public class LockerService implements ILockerService{
             lockerRepository.save(locker);
             lockerLog.setUser(userRepository.findByUsername(userId));
             lockerLogRepository.save(lockerLog);
+
+
+            // Delay execution for 1.5 minutes
+            try {
+                Thread.sleep(30000); // 90000 milliseconds = 1.5 minutes
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // good practice
+                System.err.println("Thread was interrupted");
+            }
+
+            System.out.println("✅ After sleep, sending locker status request..."); // This is a debugging line
+
+            // asking for the locker status
+            sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
+
+//            return "Please use the locker with locker number: " + locker.getDisplayNumber(); // change this accordingly
+        }
+        else if ((reservedLog != null) && (activeOrUnsafeLog == null)) {
+
+            // get the cluster name to send in notifications
+            LockerCluster cluster = lockerClusterRepository.findById(clusterId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Locker cluster not found"));
+            String clusterName = cluster.getClusterName();
+
+            System.out.println("⚡ assignLocker() invoked"); // This is a debugging line
+
+            if(availableLockers.isEmpty()){
+                System.out.println("Sorry, No lockers are available");
+//                return "Sorry, No available lockers!";
+
+                notificationService.sendAndSave(
+                        userId,
+                        "No Available Lockers",
+                        "Sorry, No available lockers in : " + clusterName,
+                        "INFO"
+                );
+            }
+
+            Locker locker = reservedLog.getLocker(); // find an available locker
+            Long lockerId = reservedLog.getLocker().getLockerId();
+//            LockerLog lockerLog = new LockerLog(); // create a locker log
+
+
+
+
+            // send Mqtt message to unlock (Unlocking a new existing locker)
+            sendMqttMessageToLockerUnlock(clusterId, locker.getLockerId(), "0", "0");
+
+            // Todo: make this to send as notifications
+            System.out.println(user.getFirstName() + ", Please use the locker with locker number: " + locker.getDisplayNumber());
+
+            // Send the notification to the user about the locker unlocking
+            notificationService.sendAndSave(
+                    userId,
+                    "Locker Unlocked",
+                    "Use the Locker with Locker Number: " + locker.getDisplayNumber(),
+                    "INFO"
+            );
+
+            // change locker log status
+            reservedLog.setAccessTime(LocalDateTime.now());
+            reservedLog.setStatus(LockerLogStatus.UNSAFE);
+            lockerLogRepository.save(reservedLog);
 
 
             // Delay execution for 1.5 minutes
@@ -711,7 +801,23 @@ public class LockerService implements ILockerService{
         // Check the user is already has assigned to a locker. That locker can be an active locker or and unsafe locker
         LockerLog activeOrUnsafeLog = lockerLogService.findActiveOrUnsafeLog(userId);
 
-        if (activeOrUnsafeLog == null) {
+        // find , if there is any reserved logs
+        List<LockerLog> reservedLog = lockerLogRepository.findByUserIdAndStatus(username, LockerLogStatus.RESERVED);
+
+        if(!reservedLog.isEmpty()){
+            System.out.println("You already reserved a locker");
+
+            notificationService.sendAndSave(
+                    userId,
+                    "Unable to reserve a locker",
+                    "Sorry, you already reserved a locker",
+                    "INFO"
+            );
+
+            throw new AlreadyExistException("Already reserved a locker");
+
+        }
+        else if (activeOrUnsafeLog == null) {
 
             if (availableLockers.isEmpty()) {
                 System.out.println("Sorry, No lockers are available");
@@ -730,7 +836,7 @@ public class LockerService implements ILockerService{
             LockerLog lockerLog = new LockerLog(); // create a locker log
 
             // Todo: make this to send as notifications
-            System.out.println(user.getFirstName() + ", Locker reserved for 5 minutes for you : " + locker.getDisplayNumber());
+            System.out.println(user.getFirstName() + ", Locker reserved for 5 minutes for you. Locker Number:" + locker.getDisplayNumber());
 
             // Send the notification to the user about the locker unlocking
             notificationService.sendAndSave(
@@ -750,6 +856,5 @@ public class LockerService implements ILockerService{
             lockerLog.setUser(userRepository.findByUsername(userId));
             lockerLogRepository.save(lockerLog);
         }
-
     }
 }

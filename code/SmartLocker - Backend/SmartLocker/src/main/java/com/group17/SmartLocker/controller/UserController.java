@@ -4,6 +4,7 @@ import com.group17.SmartLocker.dto.LockerClusterDto;
 import com.group17.SmartLocker.dto.LockerLogDto;
 import com.group17.SmartLocker.dto.UserDetailsDto;
 import com.group17.SmartLocker.enums.OtpType;
+import com.group17.SmartLocker.exception.AlreadyExistException;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.model.Image;
 import com.group17.SmartLocker.model.LockerCluster;
@@ -306,5 +307,32 @@ public class UserController {
         }
     }
 
+
+    /*
+    * Locker reservation for users
+    */
+    @GetMapping("/reserveLocker/{clusterId}")
+    public ResponseEntity<String> reserveLocker(HttpServletRequest request, @PathVariable Long clusterId) {
+
+        // find the username to get the otp code
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        }
+
+        String username = jwtService.extractUsername(jwtToken);
+
+        try {
+            lockerService.reserveLocker(username, clusterId);
+            return ResponseEntity.ok("Locker reserved");
+        } catch (AlreadyExistException ignored){
+            return ResponseEntity.ok("Already reserved a locker");
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }
