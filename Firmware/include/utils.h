@@ -228,7 +228,7 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
         // Extract the locker ID
         if (doc.containsKey("lockerID") && doc["clusterID"] == "1" ) {
             unlockLockerId = doc["lockerID"];
-            if(doc["source"] == "0"){
+            if (doc["source"] == "0"){
                 unlockLocker = true; // Set the flag to true
             } else if (doc["source"] == "1") {
                 mUnlockLocker = true;

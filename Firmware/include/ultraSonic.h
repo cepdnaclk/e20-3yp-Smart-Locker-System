@@ -24,7 +24,7 @@ void init_ultraSonic() {
         sensors[i].trigPin = TRIG_PINS[i];
         sensors[i].echoPin = ECHO_PINS[i];
         
-        pcf8574.pinMode(sensors[i].trigPin, OUTPUT);
+        pinMode(sensors[i].trigPin, OUTPUT);
         pinMode(sensors[i].echoPin, INPUT);
     }
 }
