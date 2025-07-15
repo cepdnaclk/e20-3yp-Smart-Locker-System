@@ -265,7 +265,7 @@ public class LockerService implements ILockerService{
 
             // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(30000); // 90000 milliseconds = 1.5 minutes
+                Thread.sleep(10000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // good practice
                 System.err.println("Thread was interrupted");
@@ -330,7 +330,7 @@ public class LockerService implements ILockerService{
 
             // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(30000); // 90000 milliseconds = 1.5 minutes
+                Thread.sleep(10000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 System.err.println("Thread was interrupted");
@@ -398,7 +398,7 @@ public class LockerService implements ILockerService{
 
              // Delay execution for 1.5 minutes
              try {
-                 Thread.sleep(30000); // 90000 milliseconds = 1.5 minutes
+                 Thread.sleep(10000); // 90000 milliseconds = 1.5 minutes
              } catch (InterruptedException e) {
                  Thread.currentThread().interrupt();
                  System.err.println("Thread was interrupted");

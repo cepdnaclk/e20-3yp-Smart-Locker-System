@@ -181,7 +181,7 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         String otp = user.getOtp();
-//        System.out.println("Otp :" + otp);
+        System.out.println("Otp :" + otp);
 
         try {
 //            System.out.println("message published");
