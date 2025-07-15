@@ -418,4 +418,25 @@ SmartLocker Admin Team
         user.setPassword(encodedPassword);
         userRepository.save(user);
     }
+
+    /*
+    * Password change by using current password
+    */
+    public void changePassword(String username, String currentPassword, String newPassword) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found");
+        }
+
+        // Check current password
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new UnauthorizedActionException("Current password is incorrect");
+        }
+
+        // Update with new encoded password
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+    }
+
 }
