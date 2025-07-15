@@ -433,6 +433,37 @@ public class AdminController {
     }
 
 
+    /*
+    * Change password by using the current password
+    */
+    @PatchMapping("/changePassword")
+    public ResponseEntity<String> changePassword(
+            @RequestBody ChangePasswordDto dto,
+            HttpServletRequest request
+    ) {
+        try {
+            // Get username from JWT token
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+            }
+
+            String token = authHeader.substring(7);
+            String username = jwtService.extractUsername(token); // You must have jwtService injected
+
+            userService.changePassword(username, dto.getCurrentPassword(), dto.getNewPassword());
+
+            return ResponseEntity.ok("Password changed successfully");
+
+        } catch (UnauthorizedActionException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Password change failed");
+        }
+    }
+
 //    // send and email for a test
 //    @PostMapping("/sendEmail")
 //    public ResponseEntity<HttpStatus> sendEmail(@RequestBody String email){
