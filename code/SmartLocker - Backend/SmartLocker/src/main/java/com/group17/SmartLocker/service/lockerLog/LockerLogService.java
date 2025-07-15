@@ -90,7 +90,6 @@ public class LockerLogService implements ILockerLogService{
 
         // therefore this return method will never execute
         return null;
-
     }
 
 }

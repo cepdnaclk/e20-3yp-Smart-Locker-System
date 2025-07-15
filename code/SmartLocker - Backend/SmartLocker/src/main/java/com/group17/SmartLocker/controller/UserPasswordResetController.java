@@ -35,7 +35,6 @@ public class UserPasswordResetController {
         * Generates the otp code for password reset
         * The otp code is valid for 30 minutes
         */
-
         try {
             userOtpService.generateOtp(identifier, PASSWORD_RESET);
             return ResponseEntity.ok("OTP Generated");

@@ -21,6 +21,7 @@ import com.group17.SmartLocker.service.lockerLog.LockerLogService;
 import com.group17.SmartLocker.service.mqtt.MqttPublisher;
 import com.group17.SmartLocker.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,12 +39,19 @@ public class LockerService implements ILockerService{
     private final LockerClusterRepository lockerClusterRepository;
     private final MqttPublisher mqttPublisher;
     private final NotificationService notificationService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void unlockByAdmin(Long clusterId, Long lockerId){
+    public void unlockByAdmin(Long clusterId, Long lockerId, String adminId, String password){
         /*
         * This function forcefully unlock the locker by admin
         */
+
+        // Fetch admin user
+        User admin = userRepository.findByUsername(adminId);
+        if (admin == null || !passwordEncoder.matches(password, admin.getPassword())) {
+            throw new IllegalArgumentException("Invalid admin credentials");
+        }
 
         Locker locker = lockerRepository.findById(lockerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Locker not found"));
@@ -60,11 +68,46 @@ public class LockerService implements ILockerService{
 
         lockerLog.setReleasedTime(LocalDateTime.now());
         lockerLog.setStatus(LockerLogStatus.OLD);
+        lockerLog.setRemarks("Admin unlocked by: " + adminId);
 
         lockerRepository.save(locker);
         lockerLogRepository.save(lockerLog);
 
     }
+
+//    @Override
+//    public void unlockByAdminBlockedLocker(Long clusterId, Long lockerId, String adminId, String password){
+//        /*
+//         * This function forcefully unlock the locker by admin
+//         */
+//
+//        // Fetch admin user
+//        User admin = userRepository.findByUsername(adminId);
+//        if (admin == null || !passwordEncoder.matches(password, admin.getPassword())) {
+//            throw new IllegalArgumentException("Invalid admin credentials");
+//        }
+//
+//        Locker locker = lockerRepository.findById(lockerId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Locker not found"));
+//
+//        LockerLog lockerLog = lockerLogRepository.findByLocker_LockerIdAndStatus(lockerId, LockerLogStatus.BLOCKED);
+//
+//        /*
+//         * send mqtt message to unlock the locker forcefully
+//         * source should be 2
+//         */
+//        sendMqttMessageToLockerUnlock(clusterId, lockerId, "1", "1");
+//
+//        locker.setLockerStatus(LockerStatus.AVAILABLE);
+//
+//        lockerLog.setReleasedTime(LocalDateTime.now());
+//        lockerLog.setStatus(LockerLogStatus.OLD);
+//        lockerLog.setRemarks("Admin unlocked by: " + adminId);
+//
+//        lockerRepository.save(locker);
+//        lockerLogRepository.save(lockerLog);
+//
+//    }
 
 //    @Override
 //    public String unlockLocker(String username, Long clusterId) {
@@ -256,7 +299,7 @@ public class LockerService implements ILockerService{
 
             // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(30000); // 90000 milliseconds = 1.5 minutes
+                Thread.sleep(10000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // good practice
                 System.err.println("Thread was interrupted");
@@ -321,7 +364,7 @@ public class LockerService implements ILockerService{
 
             // Delay execution for 1.5 minutes
             try {
-                Thread.sleep(30000); // 90000 milliseconds = 1.5 minutes
+                Thread.sleep(10000); // 90000 milliseconds = 1.5 minutes
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 System.err.println("Thread was interrupted");
@@ -389,7 +432,7 @@ public class LockerService implements ILockerService{
 
              // Delay execution for 1.5 minutes
              try {
-                 Thread.sleep(30000); // 90000 milliseconds = 1.5 minutes
+                 Thread.sleep(10000); // 90000 milliseconds = 1.5 minutes
              } catch (InterruptedException e) {
                  Thread.currentThread().interrupt();
                  System.err.println("Thread was interrupted");
@@ -581,7 +624,7 @@ public class LockerService implements ILockerService{
                 * Event : User did not remove all the belongings from the locker or
                 * locker is not properly closed after using
                 */
-                lockerLog.setStatus(LockerLogStatus.OLD);
+                lockerLog.setStatus(LockerLogStatus.UNSAFE);
                 Locker locker = lockerLog.getLocker();
                 locker.setLockerStatus(LockerStatus.BLOCKED); // set the locker status as blocked
 
@@ -597,6 +640,15 @@ public class LockerService implements ILockerService{
                         "WARNING"
                 );
                 // This should be notified to the admin in a notification and the corresponding user by an email.
+
+                try {
+                    Thread.sleep(10000); // 90000 milliseconds = 0.5 minutes
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    System.err.println("Thread was interrupted");
+                }
+
+                sendMqttMessageToCheckLockerStatus(clusterId, lockerId);
 
             }
             else{
@@ -631,7 +683,7 @@ public class LockerService implements ILockerService{
 
 
                 try {
-                    Thread.sleep(5000); // 90000 milliseconds = 0.5 minutes
+                    Thread.sleep(10000); // 90000 milliseconds = 0.5 minutes
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     System.err.println("Thread was interrupted");

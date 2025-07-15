@@ -1,13 +1,11 @@
 package com.group17.SmartLocker.controller;
 
-import com.group17.SmartLocker.dto.LockerClusterDto;
-import com.group17.SmartLocker.dto.LockerDto;
-import com.group17.SmartLocker.dto.LockerLogDto;
-import com.group17.SmartLocker.dto.UserDetailsDto;
+import com.group17.SmartLocker.dto.*;
 import com.group17.SmartLocker.exception.ResourceNotFoundException;
 import com.group17.SmartLocker.exception.UnauthorizedActionException;
 import com.group17.SmartLocker.model.*;
 import com.group17.SmartLocker.repsponse.ApiResponse;
+import com.group17.SmartLocker.service.admin.AdminService;
 import com.group17.SmartLocker.service.email.EmailService;
 import com.group17.SmartLocker.service.image.ImageService;
 import com.group17.SmartLocker.service.jwt.JwtService;
@@ -50,6 +48,7 @@ public class AdminController {
     private final LockerLogService lockerLogService;
     private final JwtService jwtService;
     private final ImageService imageService;
+    private final AdminService adminService;
 
     // CRUD operations for Admin
 
@@ -75,7 +74,7 @@ public class AdminController {
 
     // to edit own details of the admin
     @PatchMapping("/editProfile")
-    public ResponseEntity<User> patchUser(HttpServletRequest request, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<String> patchUser(HttpServletRequest request, @RequestBody Map<String, Object> updates) {
 
         String jwtToken = "";
         // Extract token from the http request. No need to check the token in null.
@@ -88,7 +87,7 @@ public class AdminController {
         try {
             String id = userService.getUserIdByUsername(jwtService.extractUsername(jwtToken));
             User user = userService.editUserDetails(id, updates);
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok("Details updated successfully!");
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
@@ -396,7 +395,74 @@ public class AdminController {
         }
     }
 
+    // Get blocked lockers
+    @GetMapping("/getAllBlockedLockers")
+    public ResponseEntity<List<LockerDto>> getAllBlockedLockers(){
+        try {
+            List<LockerDto> lockerClusters = adminService.getBlockedLockersByCluster();
+            return ResponseEntity.ok(lockerClusters);
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
+    // force unlock locker by the admin
+    @PostMapping("/adminLockerUnlock")
+    public ResponseEntity<String> adminLockerUnlock(HttpServletRequest request, @RequestBody AdminLockerUnlockDto dto){
+
+        String jwtToken = "";
+        // Extract token from the http request. No need to check the token in null.
+        // There should be a token to access this endpoint ?
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        }
+
+        try {
+            String username = jwtService.extractUsername(jwtToken);
+
+            lockerService.unlockByAdmin(dto.getLockerClusterId(), dto.getLockerId(), username, dto.getPassword());
+            return ResponseEntity.status(OK).build();
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid admin credentials");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    /*
+    * Change password by using the current password
+    */
+    @PatchMapping("/changePassword")
+    public ResponseEntity<String> changePassword(
+            @RequestBody ChangePasswordDto dto,
+            HttpServletRequest request
+    ) {
+        try {
+            // Get username from JWT token
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+            }
+
+            String token = authHeader.substring(7);
+            String username = jwtService.extractUsername(token); // You must have jwtService injected
+
+            userService.changePassword(username, dto.getCurrentPassword(), dto.getNewPassword());
+
+            return ResponseEntity.ok("Password changed successfully");
+
+        } catch (UnauthorizedActionException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Password change failed");
+        }
+    }
 
 //    // send and email for a test
 //    @PostMapping("/sendEmail")
