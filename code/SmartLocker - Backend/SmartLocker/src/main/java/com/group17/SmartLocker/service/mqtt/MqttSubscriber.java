@@ -22,7 +22,7 @@ public class MqttSubscriber {
             awsIotMqttClient.connect();
         }
 
-        AWSIotTopic topic = new AWSIotTopic(topicName, AWSIotQos.QOS1) {
+        AWSIotTopic topic = new AWSIotTopic(topicName, AWSIotQos.QOS0) {
             @Override
             public void onMessage(AWSIotMessage message) {
                 String payload = message.getStringPayload();
