@@ -2,8 +2,8 @@
 
 #define THINGNAME "3YP-Device" // replace with thing name
 
-const char WIFI_SSID[] = "Pixel6546"; // replace with wifi ssid              
-const char WIFI_PASSWORD[] = "12345679"; // replace with wifi password
+const char WIFI_SSID[] = "vsk"; // replace with wifi ssid              
+const char WIFI_PASSWORD[] = "150150150"; // replace with wifi password
 
 const char AWS_IOT_ENDPOINT[] = "a1u0d4dqvjvus1-ats.iot.ap-southeast-1.amazonaws.com"; // replace with iot endpoint
 

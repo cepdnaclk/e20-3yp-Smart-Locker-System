@@ -52,13 +52,15 @@ bool statusCheck = false; // Flag to check if the locker is assigned
 uint8_t checkLockerId;  // Locker ID
 
 
-uint8_t unlockLockerId ; // Locker ID to unlock
-bool unlockLocker = false; // Flag to unlock the locker
-uint8_t alreadyAssign;
+volatile uint8_t unlockLockerId ; // Locker ID to unlock
+volatile bool unlockLocker = false; // Flag to unlock the locker
+volatile int8_t alreadyAssign;
+
 
 // mobile unlock
 uint8_t mUnlockLockerId ; // Locker ID to unlock
 bool mUnlockLocker = false; // Flag to unlock the locker
+volatile int8_t mReleaseLocker = false; // Flag to release the locker
 
 // Release Locker;
 uint8_t releaseLockerId ; // Locker ID to unlock
@@ -148,16 +150,16 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
 
 
     // Convert payload to a string
-    String message;
-    for (int i = 0; i < length; i++) {
-        message += (char)payload[i];
-    }
+    StaticJsonDocument<200> doc;
+    DeserializationError error = deserializeJson(doc, payload, length);
+
 
     // Check if the message is from the password topic
     if (strcmp(topic, AWS_IOT_PASSWORD_TOPIC) == 0) {
         // Parse the JSON payload
         StaticJsonDocument<200> doc;
-        DeserializationError error = deserializeJson(doc, message);
+        deserializeJson(doc, payload, length);
+
 
         if (error) {
             Serial.print("Failed to parse JSON: ");
@@ -174,9 +176,9 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
             Serial.println("No password found in the message.");
         }
     }else if (strcmp(topic, AWS_IOT_SUBSCRIBE_CHECK_LOCKER_TOPIC) == 0) {
-        // Parse the JSON payload
         StaticJsonDocument<200> doc;
-        DeserializationError error = deserializeJson(doc, message);
+        deserializeJson(doc, payload, length);
+
 
         if (error) {
             Serial.print("Failed to parse JSON: ");
@@ -184,18 +186,20 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
             return;
         }
 
-        // Extract the locker ID
         if (doc.containsKey("lockerId") && doc["clusterId"] == "1" ) {
             checkLockerId = doc["lockerId"];
-            statusCheck = true; // Set the flag to true
+            statusCheck = true;
             Serial.println("Locker ID received: " + String(checkLockerId));
+            Serial.println("Status Check: " + checkLockerId);
         } else {
             Serial.println("No locker ID found in the message.");
         }
-    }else if (strcmp(topic, AWS_IOT_REGID_TOPIC) == 0) {
+    }
+    else if (strcmp(topic, AWS_IOT_REGID_TOPIC) == 0) {
         // Parse the JSON payload
         StaticJsonDocument<200> doc;
-        DeserializationError error = deserializeJson(doc, message);
+        deserializeJson(doc, payload, length);
+
 
         if (error) {
             Serial.print("Failed to parse JSON: ");
@@ -214,7 +218,8 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
     } else if(strcmp(topic, AWS_IOT_ASSIGNED_LOCKER_TOPIC) == 0) {
         // Parse the JSON payload
         StaticJsonDocument<200> doc;
-        DeserializationError error = deserializeJson(doc, message);
+        deserializeJson(doc, payload, length);
+
 
         if (error) {
             Serial.print("Failed to parse JSON: ");
@@ -225,21 +230,25 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
         // Extract the locker ID
         if (doc.containsKey("lockerID") && doc["clusterID"] == "1" ) {
             unlockLockerId = doc["lockerID"];
-            if(doc["source"] == "0"){
+            if (doc["source"] == "0"){
                 unlockLocker = true; // Set the flag to true
-            } else{
+            } else if (doc["source"] == "1") {
                 mUnlockLocker = true;
+            }else if (doc["source"] == "2") {
+                mReleaseLocker = true;
             }
             alreadyAssign = doc["alreadyAssign"];
             Serial.println("Locker ID received: " + String(checkLockerId));
             Serial.println("unlockLocker" + String(unlockLocker));
+            Serial.println("Status Check: " + checkLockerId);
         } else {
             Serial.println("No locker ID found in the message.");
         }
     }else if (strcmp(topic, AWS_IOT_MOBILE_UNLOCK_TOPIC) == 0) {
         // Parse the JSON payload
         StaticJsonDocument<200> doc;
-        DeserializationError error = deserializeJson(doc, message);
+        deserializeJson(doc, payload, length);
+
 
         if (error) {
             Serial.print("Failed to parse JSON: ");
@@ -258,7 +267,7 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
     }else if( strcmp(topic, AWS_IOT_RELEASE_LOCKER_TOPIC) == 0) {
         // Parse the JSON payload
         StaticJsonDocument<200> doc;
-        DeserializationError error = deserializeJson(doc, message);
+        deserializeJson(doc, payload, length);
 
         if (error) {
             Serial.print("Failed to parse JSON: ");
@@ -277,7 +286,7 @@ void messageHandler(char* topic, byte* payload, unsigned int length) {
     }
 
     else {
-        Serial.println("Received message: " + message);
+        Serial.println("Received message: " );
     }
 }
 
