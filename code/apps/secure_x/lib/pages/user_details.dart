@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
 import 'package:secure_x/models/user_model.dart';
 import 'package:secure_x/pages/edit_profile.dart';
+import 'package:secure_x/routes/route_helper.dart';
 import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 
@@ -15,6 +17,14 @@ class UserDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserModel? user = _authController.userModel.value;
+
+    if(user!=null && _authController.profileImagebytes.value==null){
+      _authController.getUserToken().then((token){
+        if(token!=null){
+          _authController.loadProfileImage(user.id!, token);
+        }
+      });
+    }
 
     return Scaffold(
       appBar: CustomAppBar(),
@@ -34,12 +44,35 @@ class UserDetails extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   //User Image
-                  ClipOval(
+                  /*ClipOval(
                     child: Image.asset('assets/img/userImage.png',
                     width:160.w,
                     height:160.w,
                     fit:BoxFit.cover,),
-                  ),
+                  ),*/
+
+                  Obx((){
+                    final ImageBytes=_authController.profileImagebytes.value;
+                    if(ImageBytes==null){
+                      return ClipOval(
+                        child:  Image.asset(
+                          'assets/img/userImage.png',
+                          width: 160.w,
+                          height: 160.w,
+                          fit: BoxFit.cover,
+                      ),
+                    );
+                  }else{
+                    return ClipOval(
+                      child: Image.memory(
+                        ImageBytes,
+                        width: 160.w,
+                        height: 160.w,
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  }
+                }),
               
                   SizedBox(height: 24.h,),
 
@@ -66,7 +99,8 @@ class UserDetails extends StatelessWidget {
                         )
                       ),
                       onPressed: (){
-                        Get.to(() => EditProfile()); 
+                        //Get.to(() => EditProfile()); 
+                          Get.toNamed(RouteHelper.getEditProfile());
                       }, 
                       child: Text('Edit Profile',
                       style: TextStyle(

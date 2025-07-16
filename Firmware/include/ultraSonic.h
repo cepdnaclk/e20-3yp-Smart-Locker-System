@@ -7,8 +7,8 @@
 PCF8574 pcf8574(0x20);
 
 // Define pins
-const int TRIG_PINS[NUMLOCKERS] = {27, 32, 4};
-const int ECHO_PINS[NUMLOCKERS] = {26,23, 18};
+const int TRIG_PINS[NUMLOCKERS] = {27,32,4};
+const int ECHO_PINS[NUMLOCKERS] = {26,23,18};
 
 typedef struct {
     long duration;
@@ -24,7 +24,7 @@ void init_ultraSonic() {
         sensors[i].trigPin = TRIG_PINS[i];
         sensors[i].echoPin = ECHO_PINS[i];
         
-        pcf8574.pinMode(sensors[i].trigPin, OUTPUT);
+        pinMode(sensors[i].trigPin, OUTPUT);
         pinMode(sensors[i].echoPin, INPUT);
     }
 }

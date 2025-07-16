@@ -89,7 +89,7 @@ class _LogInState extends State<LogIn> {
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 0.04.sw, vertical: 0.02.sh),
               child: Container(
-                height: 0.45.sh,
+                height: 0.5.sh,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.r),
                 ),
@@ -229,7 +229,7 @@ class _LogInState extends State<LogIn> {
                         ), 
                         child: 
                         Text('SIGN IN',style: TextStyle(
-                          fontSize: 20.sp,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                           ),
                         ),

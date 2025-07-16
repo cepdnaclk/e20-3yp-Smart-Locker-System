@@ -24,9 +24,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.find<AuthController>(); // Initialize AuthController
-
+    //Size size = MediaQuery.of(context).size;
+    //print('Screen width: ${size.width}, height: ${size.height}');
     return ScreenUtilInit(
       designSize: const Size(411.4, 914.3),
+      //A11 Screen width: 411.42857142857144, height: 843.4285714285714
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,

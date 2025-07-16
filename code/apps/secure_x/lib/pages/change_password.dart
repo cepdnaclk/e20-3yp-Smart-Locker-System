@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:secure_x/controllers/auth_controller.dart';
+import 'package:secure_x/utils/appcolors.dart';
 import 'package:secure_x/utils/custom_app_bar.dart';
 import 'package:secure_x/utils/custom_snackbar.dart';
 
@@ -89,8 +90,13 @@ class _ChangePasswordState extends State<ChangePassword> {
                   : SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.buttonBackgroundColor2,
+                          foregroundColor: AppColors.buttonBackgroundColor1,
+                        ),
                         onPressed: _submitChange,
-                        child: Text('Change Password', style: TextStyle(fontSize: 18)),
+                        child: Text('Change Password', 
+                        style: TextStyle(fontSize: 18)),
                       ),
                     ),
             ],

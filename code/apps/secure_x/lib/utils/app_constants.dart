@@ -2,7 +2,7 @@ class AppConstants {
   static const String APP_NAME='Securex';
 
   //mobile phone
-  //static const String BASE_URL='http://192.168.8.185:9090';
+  //static const String BASE_URL='http://192.168.8.185:9191';
   //emulator
   //static const String BASE_URL='http://10.0.2.2:9191';
   //deployed on azure
@@ -22,7 +22,7 @@ class AppConstants {
   static const String GET_OTP_CODE_URI='/api/v1/user/getOtpCode';
   static const String GENERATE_NEW_OTP_CODE_URI='/api/v1/user/generateNewOtpCode';
   static const String LOCKER_AVAILABILITY_URI='/api/v1/user/lockerAvailability/{clusterId}';
-  static const String UPLOAD_PROFILE_IMAGE_URI='/api/v1/user/uploadProfileImage';
+  static const String UPLOAD_PROFILE_IMAGE_URI='/api/v1/user/image/upload/{username}';
   static const String NOTIFICATION_URI='/api/v1/user/getAllNotifications';
   static const String CHANGE_PASSWORD_URI='/api/v1/user/changePassword';
   static const String GENERATE_OTP_TO_RESET_PASSWORD='/api/v1/forgotPassword/generateOtpCode';
