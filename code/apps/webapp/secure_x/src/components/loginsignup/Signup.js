@@ -11,25 +11,48 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(""); // for inline error
   const navigate = useNavigate();
+
+  const isStrongPassword = (pw) => {
+    const regex = /^(?=.*[A-Z])(?=.*[@#$%&()?\/\\!]).{8,}$/;
+    return regex.test(pw);
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+
+    // Check password strength live
+    if (!isStrongPassword(value)) {
+      setPasswordError(
+        "ℹ️ Password must be ≥ 8 chars, 1 uppercase & 1 special (@#$%&()?/\\!)"
+      );
+    } else {
+      setPasswordError("");
+    }
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
+
+    if (!isStrongPassword(password)) {
+      setPasswordError(
+        "ℹ️ Password must be ≥ 8 chars, 1 uppercase & 1 special (@#$%&()?/\\!)"
+      );
+      return;
+    }
+
     if (password !== confirmPassword) {
+      setPasswordError(""); // clear password error
       alert("Passwords do not match!");
       return;
     }
+
     try {
-      const response = await signup(
-        regNo,
-        firstName,
-        lastName,
-        contactNumber,
-        email,
-        password
-      );
+      await signup(regNo, firstName, lastName, contactNumber, email, password);
       alert("Signup Successful!");
-      navigate("/success"); // Change the route as needed
+      navigate("/success");
     } catch (error) {
       console.error("Signup failed:", error);
       alert("Invalid credentials");
@@ -98,9 +121,13 @@ const Signup = () => {
               type="password"
               placeholder="Enter your password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
               required
             />
+            {/* Inline password error */}
+            {passwordError && (
+              <p className="error-msg">{passwordError}</p>
+            )}
           </div>
 
           <div className="input-group">

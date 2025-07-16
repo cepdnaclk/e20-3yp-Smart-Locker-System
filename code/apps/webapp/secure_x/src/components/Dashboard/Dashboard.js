@@ -135,15 +135,19 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {logs.map((entry) => (
-                  <tr key={entry.logId}>
-                    <td>{entry.logId}</td>
-                    <td>{entry.lockerId}</td>
-                    <td>{new Date(entry.accessTime).toLocaleString()}</td>
-                    <td>{new Date(entry.releasedTime).toLocaleString()}</td>
-                    <td>{entry.status}</td>
-                  </tr>
-                ))}
+                {logs
+                  .sort(
+                    (a, b) => new Date(b.accessTime) - new Date(a.accessTime)
+                  )
+                  .map((entry) => (
+                    <tr key={entry.logId}>
+                      <td>{entry.logId}</td>
+                      <td>{entry.lockerId}</td>
+                      <td>{new Date(entry.accessTime).toLocaleString()}</td>
+                      <td>{new Date(entry.releasedTime).toLocaleString()}</td>
+                      <td>{entry.status}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

@@ -12,10 +12,13 @@
 
 .user-details {
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
+  width: 400px;
+  height: 500px;
+  
+
   /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
 }
 
@@ -27,4 +30,34 @@
 
 .user-details strong {
   color: #555;
+
 }
+
+.delailpalet{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-items: center;
+}
+
+
+.avatar {
+  width: 200px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  border: solid 3px;
+}
+
+.profile-picture {
+  text-align: center;
+  
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+
+
