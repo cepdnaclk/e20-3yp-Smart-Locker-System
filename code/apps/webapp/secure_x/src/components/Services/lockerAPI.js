@@ -1,10 +1,10 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const API_URL = "http://localhost:9090/api/v1/admin";
-// "https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net/api/v1/admin";
+const API_URL =
+  "https://smartlocker-backend-bkf3bydrfbfjf4g8.southindia-01.azurewebsites.net/api/v1/admin"; //
 //"https://ec2-3-88-237-151.compute-1.amazonaws.com:9090/api/v1/admin";
-
+//"http://localhost:9090/api/v1/admin";
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -116,15 +116,17 @@ export const updateLockers = async (id, data) => {
   });
 };
 
-export const unlockeLocker = async (id) => {
-  if (!localStorage.getItem("token")) {
-    console.error("JWT Token is missing! Check localStorage.sesion expire ");
-    <Link to="/home"></Link>;
-    return;
+export const unlockLocker = async (data) => {
+  const token = localStorage.getItem("token")?.trim();
+
+  if (!token) {
+    console.error("JWT Token is missing! Session may have expired.");
+    throw new Error("Unauthorized");
   }
-  return await api.post(`/unlockLocker/${id}`, {
+
+  return await api.post("/adminLockerUnlock", data, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")?.trim()}`,
+      Authorization: `Bearer ${token}`,
     },
   });
 };
